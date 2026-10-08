@@ -1,5 +1,0 @@
-{
-  "extends": "./tsconfig.seed.json",
-  "compilerOptions": { "outDir": "./node_modules/.cache/dealpatch-reviews" },
-  "include": ["tests/reviews.test.ts", "tests/approval.test.ts"]
-}
