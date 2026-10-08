@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.seed.json",
+  "compilerOptions": {
+    "outDir": "./node_modules/.cache/dealpatch-repositories"
+  },
+  "include": ["tests/repositories.test.ts"]
+}

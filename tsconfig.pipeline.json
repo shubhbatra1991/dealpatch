@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.seed.json",
+  "compilerOptions": { "outDir": "./node_modules/.cache/dealpatch-pipeline" },
+  "include": ["tests/pipeline.test.ts"]
+}

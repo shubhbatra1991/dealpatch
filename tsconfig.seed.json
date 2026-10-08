@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "incremental": false,
+    "rootDir": ".",
+    "outDir": "./node_modules/.cache/dealpatch-seed"
+  },
+  "include": ["scripts/validate-seed.ts", "tests/seed.test.ts"],
+  "exclude": ["node_modules"]
+}

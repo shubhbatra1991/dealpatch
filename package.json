@@ -1,0 +1,41 @@
+{
+  "name": "dealpatch",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "validate:seed": "tsc -p tsconfig.seed.json && node node_modules/.cache/dealpatch-seed/scripts/validate-seed.js",
+    "test:seed": "tsc -p tsconfig.seed.json && node node_modules/.cache/dealpatch-seed/tests/seed.test.js",
+    "test:db": "tsc -p tsconfig.db.json && node node_modules/.cache/dealpatch-db/tests/db.test.js",
+    "test:repositories": "tsc -p tsconfig.repositories.json && node node_modules/.cache/dealpatch-repositories/tests/repositories.test.js",
+    "test:query": "tsc -p tsconfig.query.json && node node_modules/.cache/dealpatch-query/tests/query.test.js",
+    "test:pipeline": "tsc -p tsconfig.pipeline.json && node node_modules/.cache/dealpatch-pipeline/tests/pipeline.test.js",
+    "test:reviews": "tsc -p tsconfig.reviews.json && node node_modules/.cache/dealpatch-reviews/tests/reviews.test.js",
+    "test:simulation": "tsc -p tsconfig.simulation.json && node node_modules/.cache/dealpatch-simulation/tests/simulation.test.js",
+    "test:keyboard": "tsc -p tsconfig.keyboard.json && node node_modules/.cache/dealpatch-keyboard/tests/keyboard.test.js"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.104.1",
+    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-virtual": "^3.14.13",
+    "dexie": "^4.4.6",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.8",
+    "fake-indexeddb": "^6.2.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

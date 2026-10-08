@@ -1,0 +1,492 @@
+[
+  {
+    "id": "proposal_001",
+    "accountId": "account_001",
+    "dealId": "deal_001",
+    "sourceActivityId": "activity_003",
+    "status": "Pending",
+    "confidence": 72,
+    "createdAt": "2026-09-22T09:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_001_1",
+        "entityType": "Deal",
+        "entityId": "deal_001",
+        "field": "stage",
+        "before": "Discovery",
+        "after": "Evaluation",
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_001_2",
+        "entityType": "Deal",
+        "entityId": "deal_001",
+        "field": "probability",
+        "before": 20,
+        "after": 45,
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_003",
+        "text": "The sponsor confirmed that discovery is complete and IT will begin the technical assessment."
+      }
+    ]
+  },
+  {
+    "id": "proposal_002",
+    "accountId": "account_001",
+    "dealId": "deal_002",
+    "sourceActivityId": "activity_005",
+    "status": "Pending",
+    "confidence": 79,
+    "createdAt": "2026-09-30T09:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_002_1",
+        "entityType": "Deal",
+        "entityId": "deal_002",
+        "field": "expectedCloseDate",
+        "before": "2026-10-19",
+        "after": "2026-12-04",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_005",
+        "text": "Procurement advised that the budget committee now meets on 2 December. The sponsor expects a decision by 4 December rather than the previously discussed date."
+      }
+    ]
+  },
+  {
+    "id": "proposal_003",
+    "accountId": "account_002",
+    "dealId": "deal_003",
+    "sourceActivityId": "activity_008",
+    "status": "Pending",
+    "confidence": 86,
+    "createdAt": "2026-09-23T10:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_003_1",
+        "entityType": "Deal",
+        "entityId": "deal_003",
+        "field": "nextStep",
+        "before": "Complete the integration assessment with IT.",
+        "after": "Send the revised rollout plan and seat estimate to the commercial sponsor.",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_008",
+        "text": "The commercial sponsor asked for a revised rollout plan and a seat estimate before arranging the next internal review."
+      }
+    ]
+  },
+  {
+    "id": "proposal_004",
+    "accountId": "account_002",
+    "dealId": "deal_004",
+    "sourceActivityId": "activity_010",
+    "status": "Pending",
+    "confidence": 93,
+    "createdAt": "2026-10-01T10:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_004_1",
+        "entityType": "Deal",
+        "entityId": "deal_004",
+        "field": "probability",
+        "before": 85,
+        "after": 70,
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_010",
+        "text": "The sponsor reported that the project is competing with an infrastructure renewal for funding. Budget approval remains unresolved and the decision may be deferred."
+      }
+    ]
+  },
+  {
+    "id": "proposal_005",
+    "accountId": "account_003",
+    "dealId": "deal_005",
+    "sourceActivityId": "activity_013",
+    "status": "Pending",
+    "confidence": 75,
+    "createdAt": "2026-09-24T11:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_005_1",
+        "entityType": "Contact",
+        "entityId": "contact_007",
+        "field": "role",
+        "before": "Procurement Manager",
+        "after": "Head of Revenue Systems",
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_005_2",
+        "entityType": "Contact",
+        "entityId": "contact_007",
+        "field": "email",
+        "before": "celia.brenlow@ternwick-materials.example",
+        "after": "revenue.systems@ternwick-materials.example",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_013",
+        "text": "Celia confirmed a move to Head of Revenue Systems and asked that future project correspondence use revenue.systems@ternwick-materials.example."
+      }
+    ]
+  },
+  {
+    "id": "proposal_006",
+    "accountId": "account_004",
+    "dealId": "deal_007",
+    "sourceActivityId": "activity_018",
+    "status": "Pending",
+    "confidence": 82,
+    "createdAt": "2026-09-22T12:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_006_1",
+        "entityType": "Deal",
+        "entityId": "deal_007",
+        "field": "probability",
+        "before": 85,
+        "after": 90,
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_018",
+        "text": "The sponsor confirmed procurement has cleared the remaining commercial terms. Signature is still pending, so the opportunity remains open."
+      }
+    ]
+  },
+  {
+    "id": "proposal_007",
+    "accountId": "account_005",
+    "dealId": "deal_010",
+    "sourceActivityId": "activity_025",
+    "status": "Pending",
+    "confidence": 89,
+    "createdAt": "2026-10-01T13:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_007_1",
+        "entityType": "Deal",
+        "entityId": "deal_010",
+        "field": "expectedCloseDate",
+        "before": "2026-10-23",
+        "after": "2026-12-04",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_025",
+        "text": "Procurement advised that the budget committee now meets on 2 December. The sponsor expects a decision by 4 December rather than the previously discussed date."
+      }
+    ]
+  },
+  {
+    "id": "proposal_008",
+    "accountId": "account_006",
+    "dealId": "deal_012",
+    "sourceActivityId": "activity_030",
+    "status": "Pending",
+    "confidence": 96,
+    "createdAt": "2026-10-02T14:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_008_1",
+        "entityType": "Deal",
+        "entityId": "deal_012",
+        "field": "nextStep",
+        "before": "Complete the integration assessment with IT.",
+        "after": "Send the revised rollout plan and seat estimate to the commercial sponsor.",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_030",
+        "text": "The commercial sponsor asked for a revised rollout plan and a seat estimate before arranging the next internal review."
+      }
+    ]
+  },
+  {
+    "id": "proposal_009",
+    "accountId": "account_007",
+    "dealId": "deal_013",
+    "sourceActivityId": "activity_033",
+    "status": "Pending",
+    "confidence": 78,
+    "createdAt": "2026-09-22T15:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_009_1",
+        "entityType": "Deal",
+        "entityId": "deal_013",
+        "field": "probability",
+        "before": 20,
+        "after": 10,
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_009_2",
+        "entityType": "Deal",
+        "entityId": "deal_013",
+        "field": "risk",
+        "before": "Low",
+        "after": "High",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_033",
+        "text": "The sponsor reported that the project is competing with an infrastructure renewal for funding. Budget approval remains unresolved and the decision may be deferred."
+      }
+    ]
+  },
+  {
+    "id": "proposal_010",
+    "accountId": "account_007",
+    "dealId": "deal_014",
+    "sourceActivityId": "activity_035",
+    "status": "Pending",
+    "confidence": 85,
+    "createdAt": "2026-09-30T15:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_010_1",
+        "entityType": "Contact",
+        "entityId": "contact_019",
+        "field": "role",
+        "before": "Director of Revenue Operations",
+        "after": "Head of Revenue Systems",
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_010_2",
+        "entityType": "Contact",
+        "entityId": "contact_019",
+        "field": "email",
+        "before": "alina.pendrick@brindale-components.example",
+        "after": "revenue.systems@brindale-components.example",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_035",
+        "text": "Alina confirmed a move to Head of Revenue Systems and asked that future project correspondence use revenue.systems@brindale-components.example."
+      }
+    ]
+  },
+  {
+    "id": "proposal_011",
+    "accountId": "account_008",
+    "dealId": "deal_015",
+    "sourceActivityId": "activity_038",
+    "status": "Pending",
+    "confidence": 92,
+    "createdAt": "2026-09-23T09:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_011_1",
+        "entityType": "Deal",
+        "entityId": "deal_015",
+        "field": "stage",
+        "before": "Evaluation",
+        "after": "Proposal",
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_011_2",
+        "entityType": "Deal",
+        "entityId": "deal_015",
+        "field": "probability",
+        "before": 45,
+        "after": 65,
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_038",
+        "text": "The sponsor confirmed that the assessment is complete and procurement has requested a formal proposal."
+      }
+    ]
+  },
+  {
+    "id": "proposal_012",
+    "accountId": "account_008",
+    "dealId": "deal_016",
+    "sourceActivityId": "activity_040",
+    "status": "Pending",
+    "confidence": 74,
+    "createdAt": "2026-10-01T09:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_012_1",
+        "entityType": "Deal",
+        "entityId": "deal_016",
+        "field": "expectedCloseDate",
+        "before": "2026-10-26",
+        "after": "2026-12-04",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_040",
+        "text": "Procurement advised that the budget committee now meets on 2 December. The sponsor expects a decision by 4 December rather than the previously discussed date."
+      }
+    ]
+  },
+  {
+    "id": "proposal_013",
+    "accountId": "account_009",
+    "dealId": "deal_017",
+    "sourceActivityId": "activity_043",
+    "status": "Pending",
+    "confidence": 81,
+    "createdAt": "2026-09-24T10:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_013_1",
+        "entityType": "Deal",
+        "entityId": "deal_017",
+        "field": "nextStep",
+        "before": "Review the commercial proposal with procurement.",
+        "after": "Send the revised rollout plan and seat estimate to the commercial sponsor.",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_043",
+        "text": "The commercial sponsor asked for a revised rollout plan and a seat estimate before arranging the next internal review."
+      }
+    ]
+  },
+  {
+    "id": "proposal_014",
+    "accountId": "account_010",
+    "dealId": "deal_019",
+    "sourceActivityId": "activity_048",
+    "status": "Pending",
+    "confidence": 88,
+    "createdAt": "2026-09-22T11:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_014_1",
+        "entityType": "Deal",
+        "entityId": "deal_019",
+        "field": "probability",
+        "before": 85,
+        "after": 70,
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_014_2",
+        "entityType": "Deal",
+        "entityId": "deal_019",
+        "field": "risk",
+        "before": "Low",
+        "after": "High",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_048",
+        "text": "The sponsor reported that the project is competing with an infrastructure renewal for funding. Budget approval remains unresolved and the decision may be deferred."
+      }
+    ]
+  },
+  {
+    "id": "proposal_015",
+    "accountId": "account_011",
+    "dealId": "deal_022",
+    "sourceActivityId": "activity_055",
+    "status": "Pending",
+    "confidence": 95,
+    "createdAt": "2026-10-01T12:45:00.000Z",
+    "changes": [
+      {
+        "id": "change_015_1",
+        "entityType": "Contact",
+        "entityId": "contact_031",
+        "field": "role",
+        "before": "Sales Operations Manager",
+        "after": "Head of Revenue Systems",
+        "selected": true,
+        "status": "Pending"
+      },
+      {
+        "id": "change_015_2",
+        "entityType": "Contact",
+        "entityId": "contact_031",
+        "field": "email",
+        "before": "nora.ardenby@norvessa-packaging.example",
+        "after": "revenue.systems@norvessa-packaging.example",
+        "selected": true,
+        "status": "Pending"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "activity_excerpt",
+        "sourceActivityId": "activity_055",
+        "text": "Nora confirmed a move to Head of Revenue Systems and asked that future project correspondence use revenue.systems@norvessa-packaging.example."
+      }
+    ]
+  }
+]
