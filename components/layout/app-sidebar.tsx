@@ -16,20 +16,27 @@ const navigation = [
 export function AppSidebar() {
   const pathname = usePathname();
   const pending = usePendingProposals();
+  const groups = [
+    { label: "Workspace", items: navigation.filter(item => item.href === "/") },
+    { label: "Workflow", items: navigation.filter(item => ["/pipeline", "/reviews", "/activity"].includes(item.href)) },
+    { label: "Relationships", items: navigation.filter(item => ["/accounts", "/contacts"].includes(item.href)) },
+  ];
 
   return (
-    <aside className="flex w-16 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50 sm:w-52">
-      <div className="flex h-14 shrink-0 items-center justify-center border-b border-zinc-200 px-3 sm:justify-start sm:gap-2.5">
+    <aside className="flex w-14 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50 sm:w-48">
+      <div className="flex h-12 shrink-0 items-center justify-center border-b border-zinc-200 px-3 sm:justify-start sm:gap-2.5">
         <span aria-hidden="true" className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-zinc-900 text-xs font-bold text-white">DP</span>
-        <span className="hidden text-xs font-medium text-zinc-600 sm:inline">Local workspace</span>
+        <div className="hidden min-w-0 sm:block"><p className="text-xs font-semibold text-zinc-900">DealPatch</p><p className="mt-0.5 text-[10px] text-zinc-500">Demo workspace</p></div>
       </div>
-      <nav aria-label="Main navigation" className="min-h-0 flex-1 overflow-y-auto px-2 py-3">
-        <ul className="space-y-1">
-          {navigation.map(({ href, label, icon }) => {
+      <nav aria-label="Main navigation" className="min-h-0 flex-1 space-y-5 overflow-y-auto px-2 py-3">
+        {groups.map(group => <div key={group.label}>
+        <p className="sr-only mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500 sm:not-sr-only">{group.label}</p>
+        <ul aria-label={group.label} className="space-y-0.5">
+          {group.items.map(({ href, label, icon }) => {
             const active = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
             return (
               <li key={href}>
-                <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`relative flex h-9 items-center justify-center gap-2.5 rounded-sm px-2 sm:justify-start ${active ? "bg-zinc-200/70 font-medium text-zinc-950" : "text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-950"}`}>
+                <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`relative flex h-8 items-center justify-center gap-2.5 rounded-sm px-2 text-xs sm:justify-start ${active ? "bg-white font-semibold text-zinc-950 ring-1 ring-zinc-200" : "text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-950"}`}>
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-4 shrink-0"><path d={icon} /></svg>
                   <span className="sr-only sm:not-sr-only">{label}</span>
                   {href === "/reviews" && (
@@ -42,9 +49,13 @@ export function AppSidebar() {
               </li>
             );
           })}
-        </ul>
+        </ul></div>)}
+        <section aria-labelledby="saved-views-label" className="hidden border-t border-zinc-200 pt-4 sm:block">
+          <h2 id="saved-views-label" className="px-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Saved views</h2>
+          <p className="px-2 pt-2 text-xs text-zinc-500">No saved views yet</p>
+        </section>
       </nav>
-      <div className="hidden border-t border-zinc-200 px-4 py-3 text-xs text-zinc-500 sm:block">Local demo · No services required</div>
+      <div className="hidden border-t border-zinc-200 px-4 py-3 sm:block"><p className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-600"><span aria-hidden="true" className="size-1.5 rounded-full bg-zinc-400" />Local workspace</p><p className="mt-1 text-[10px] text-zinc-500">Fictional data · Human-reviewed</p></div>
     </aside>
   );
 }
