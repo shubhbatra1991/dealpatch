@@ -1,0 +1,1858 @@
+[
+  {
+    "id": "activity_001",
+    "accountId": "account_001",
+    "dealId": "deal_001",
+    "type": "Meeting",
+    "title": "Discovery meeting — Avelmere Systems",
+    "summary": "Discussed replacing spreadsheet handoffs at Avelmere Systems. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T09:00:00.000Z",
+    "participants": [
+      "contact_001"
+    ]
+  },
+  {
+    "id": "activity_002",
+    "accountId": "account_001",
+    "dealId": "deal_001",
+    "type": "Email",
+    "title": "Requirements email — Avelmere Systems",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T09:00:00.000Z",
+    "participants": [
+      "contact_001",
+      "contact_002"
+    ]
+  },
+  {
+    "id": "activity_003",
+    "accountId": "account_001",
+    "dealId": "deal_001",
+    "type": "Call",
+    "title": "Decision call — Avelmere Systems",
+    "summary": "Reviewed the current discovery workstream. Mara will coordinate feedback from the commercial team; Confirm the buying committee and discovery agenda. The sponsor confirmed that discovery is complete and IT will begin the technical assessment.",
+    "occurredAt": "2026-09-22T09:00:00.000Z",
+    "participants": [
+      "contact_001"
+    ]
+  },
+  {
+    "id": "activity_004",
+    "accountId": "account_001",
+    "dealId": "deal_002",
+    "type": "Note",
+    "title": "Expansion discovery note — Avelmere Systems",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T09:00:00.000Z",
+    "participants": [
+      "contact_001",
+      "contact_002"
+    ]
+  },
+  {
+    "id": "activity_005",
+    "accountId": "account_001",
+    "dealId": "deal_002",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Avelmere Systems",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to review the commercial proposal with procurement. Procurement advised that the budget committee now meets on 2 December. The sponsor expects a decision by 4 December rather than the previously discussed date.",
+    "occurredAt": "2026-09-30T09:00:00.000Z",
+    "participants": [
+      "contact_001"
+    ]
+  },
+  {
+    "id": "activity_006",
+    "accountId": "account_002",
+    "dealId": "deal_003",
+    "type": "Email",
+    "title": "Discovery email — Corvellan Logistics",
+    "summary": "Discussed replacing spreadsheet handoffs at Corvellan Logistics. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T10:00:00.000Z",
+    "participants": [
+      "contact_004"
+    ]
+  },
+  {
+    "id": "activity_007",
+    "accountId": "account_002",
+    "dealId": "deal_003",
+    "type": "Call",
+    "title": "Requirements call — Corvellan Logistics",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T10:00:00.000Z",
+    "participants": [
+      "contact_004",
+      "contact_005"
+    ]
+  },
+  {
+    "id": "activity_008",
+    "accountId": "account_002",
+    "dealId": "deal_003",
+    "type": "Note",
+    "title": "Decision note — Corvellan Logistics",
+    "summary": "Reviewed the current evaluation workstream. Tomas will coordinate feedback from the commercial team; Complete the integration assessment with IT. The commercial sponsor asked for a revised rollout plan and a seat estimate before arranging the next internal review.",
+    "occurredAt": "2026-09-23T10:00:00.000Z",
+    "participants": [
+      "contact_004"
+    ]
+  },
+  {
+    "id": "activity_009",
+    "accountId": "account_002",
+    "dealId": "deal_004",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Corvellan Logistics",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T10:00:00.000Z",
+    "participants": [
+      "contact_004",
+      "contact_005"
+    ]
+  },
+  {
+    "id": "activity_010",
+    "accountId": "account_002",
+    "dealId": "deal_004",
+    "type": "Email",
+    "title": "Expansion follow-up email — Corvellan Logistics",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to resolve contract redlines and confirm signature date. The sponsor reported that the project is competing with an infrastructure renewal for funding. Budget approval remains unresolved and the decision may be deferred.",
+    "occurredAt": "2026-10-01T10:00:00.000Z",
+    "participants": [
+      "contact_004"
+    ]
+  },
+  {
+    "id": "activity_011",
+    "accountId": "account_003",
+    "dealId": "deal_005",
+    "type": "Call",
+    "title": "Discovery call — Ternwick Materials",
+    "summary": "Discussed replacing spreadsheet handoffs at Ternwick Materials. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T11:00:00.000Z",
+    "participants": [
+      "contact_007"
+    ]
+  },
+  {
+    "id": "activity_012",
+    "accountId": "account_003",
+    "dealId": "deal_005",
+    "type": "Note",
+    "title": "Requirements note — Ternwick Materials",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T11:00:00.000Z",
+    "participants": [
+      "contact_007",
+      "contact_008"
+    ]
+  },
+  {
+    "id": "activity_013",
+    "accountId": "account_003",
+    "dealId": "deal_005",
+    "type": "Email",
+    "title": "Decision email — Ternwick Materials",
+    "summary": "Reviewed the current proposal workstream. Celia will coordinate feedback from the commercial team; Review the commercial proposal with procurement. Celia confirmed a move to Head of Revenue Systems and asked that future project correspondence use revenue.systems@ternwick-materials.example.",
+    "occurredAt": "2026-09-24T11:00:00.000Z",
+    "participants": [
+      "contact_007"
+    ]
+  },
+  {
+    "id": "activity_014",
+    "accountId": "account_003",
+    "dealId": "deal_006",
+    "type": "Email",
+    "title": "Expansion discovery email — Ternwick Materials",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T11:00:00.000Z",
+    "participants": [
+      "contact_007",
+      "contact_008"
+    ]
+  },
+  {
+    "id": "activity_015",
+    "accountId": "account_003",
+    "dealId": "deal_006",
+    "type": "Call",
+    "title": "Expansion follow-up call — Ternwick Materials",
+    "summary": "Confirmed the expansion order and agreed the handover agenda with the regional sponsor. The delivery team will own the next update.",
+    "occurredAt": "2026-10-02T11:00:00.000Z",
+    "participants": [
+      "contact_007"
+    ]
+  },
+  {
+    "id": "activity_016",
+    "accountId": "account_004",
+    "dealId": "deal_007",
+    "type": "Note",
+    "title": "Discovery note — Ordelis Health",
+    "summary": "Discussed replacing spreadsheet handoffs at Ordelis Health. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T12:00:00.000Z",
+    "participants": [
+      "contact_010"
+    ]
+  },
+  {
+    "id": "activity_017",
+    "accountId": "account_004",
+    "dealId": "deal_007",
+    "type": "Meeting",
+    "title": "Requirements meeting — Ordelis Health",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T12:00:00.000Z",
+    "participants": [
+      "contact_010",
+      "contact_011"
+    ]
+  },
+  {
+    "id": "activity_018",
+    "accountId": "account_004",
+    "dealId": "deal_007",
+    "type": "Email",
+    "title": "Decision email — Ordelis Health",
+    "summary": "Reviewed the current negotiation workstream. Felix will coordinate feedback from the commercial team; Resolve contract redlines and confirm signature date. The sponsor confirmed procurement has cleared the remaining commercial terms. Signature is still pending, so the opportunity remains open.",
+    "occurredAt": "2026-09-22T12:00:00.000Z",
+    "participants": [
+      "contact_010"
+    ]
+  },
+  {
+    "id": "activity_019",
+    "accountId": "account_004",
+    "dealId": "deal_008",
+    "type": "Call",
+    "title": "Expansion discovery call — Ordelis Health",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T12:00:00.000Z",
+    "participants": [
+      "contact_010",
+      "contact_011"
+    ]
+  },
+  {
+    "id": "activity_020",
+    "accountId": "account_004",
+    "dealId": "deal_008",
+    "type": "Note",
+    "title": "Expansion follow-up note — Ordelis Health",
+    "summary": "The regional team will retain its existing process for this budget period. Documented the decision and agreed to reconnect at the next annual review.",
+    "occurredAt": "2026-09-30T12:00:00.000Z",
+    "participants": [
+      "contact_010"
+    ]
+  },
+  {
+    "id": "activity_021",
+    "accountId": "account_005",
+    "dealId": "deal_009",
+    "type": "Meeting",
+    "title": "Discovery meeting — Merriton Analytics",
+    "summary": "Discussed replacing spreadsheet handoffs at Merriton Analytics. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T13:00:00.000Z",
+    "participants": [
+      "contact_014"
+    ]
+  },
+  {
+    "id": "activity_022",
+    "accountId": "account_005",
+    "dealId": "deal_009",
+    "type": "Email",
+    "title": "Requirements email — Merriton Analytics",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T13:00:00.000Z",
+    "participants": [
+      "contact_014",
+      "contact_015"
+    ]
+  },
+  {
+    "id": "activity_023",
+    "accountId": "account_005",
+    "dealId": "deal_009",
+    "type": "Call",
+    "title": "Decision call — Merriton Analytics",
+    "summary": "The commercial sponsor confirmed the agreement is signed. Procurement has issued the purchase reference; implementation planning can begin.",
+    "occurredAt": "2026-09-23T13:00:00.000Z",
+    "participants": [
+      "contact_014"
+    ]
+  },
+  {
+    "id": "activity_024",
+    "accountId": "account_005",
+    "dealId": "deal_010",
+    "type": "Note",
+    "title": "Expansion discovery note — Merriton Analytics",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T13:00:00.000Z",
+    "participants": [
+      "contact_014",
+      "contact_015"
+    ]
+  },
+  {
+    "id": "activity_025",
+    "accountId": "account_005",
+    "dealId": "deal_010",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Merriton Analytics",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to confirm the buying committee and discovery agenda. Procurement advised that the budget committee now meets on 2 December. The sponsor expects a decision by 4 December rather than the previously discussed date.",
+    "occurredAt": "2026-10-01T13:00:00.000Z",
+    "participants": [
+      "contact_014"
+    ]
+  },
+  {
+    "id": "activity_026",
+    "accountId": "account_006",
+    "dealId": "deal_011",
+    "type": "Email",
+    "title": "Discovery email — Selvarden Energy",
+    "summary": "Discussed replacing spreadsheet handoffs at Selvarden Energy. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T14:00:00.000Z",
+    "participants": [
+      "contact_016"
+    ]
+  },
+  {
+    "id": "activity_027",
+    "accountId": "account_006",
+    "dealId": "deal_011",
+    "type": "Call",
+    "title": "Requirements call — Selvarden Energy",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T14:00:00.000Z",
+    "participants": [
+      "contact_016",
+      "contact_017"
+    ]
+  },
+  {
+    "id": "activity_028",
+    "accountId": "account_006",
+    "dealId": "deal_011",
+    "type": "Note",
+    "title": "Decision note — Selvarden Energy",
+    "summary": "The sponsor confirmed that funding has been redirected to an operational programme. No agreement will be signed this quarter; revisit during the next planning cycle.",
+    "occurredAt": "2026-09-24T14:00:00.000Z",
+    "participants": [
+      "contact_016"
+    ]
+  },
+  {
+    "id": "activity_029",
+    "accountId": "account_006",
+    "dealId": "deal_012",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Selvarden Energy",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T14:00:00.000Z",
+    "participants": [
+      "contact_016",
+      "contact_017"
+    ]
+  },
+  {
+    "id": "activity_030",
+    "accountId": "account_006",
+    "dealId": "deal_012",
+    "type": "Email",
+    "title": "Expansion follow-up email — Selvarden Energy",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to complete the integration assessment with IT. The commercial sponsor asked for a revised rollout plan and a seat estimate before arranging the next internal review.",
+    "occurredAt": "2026-10-02T14:00:00.000Z",
+    "participants": [
+      "contact_016"
+    ]
+  },
+  {
+    "id": "activity_031",
+    "accountId": "account_007",
+    "dealId": "deal_013",
+    "type": "Call",
+    "title": "Discovery call — Brindale Components",
+    "summary": "Discussed replacing spreadsheet handoffs at Brindale Components. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T15:00:00.000Z",
+    "participants": [
+      "contact_019"
+    ]
+  },
+  {
+    "id": "activity_032",
+    "accountId": "account_007",
+    "dealId": "deal_013",
+    "type": "Note",
+    "title": "Requirements note — Brindale Components",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T15:00:00.000Z",
+    "participants": [
+      "contact_019",
+      "contact_020"
+    ]
+  },
+  {
+    "id": "activity_033",
+    "accountId": "account_007",
+    "dealId": "deal_013",
+    "type": "Meeting",
+    "title": "Decision meeting — Brindale Components",
+    "summary": "Reviewed the current discovery workstream. Alina will coordinate feedback from the commercial team; Confirm the buying committee and discovery agenda. The sponsor reported that the project is competing with an infrastructure renewal for funding. Budget approval remains unresolved and the decision may be deferred.",
+    "occurredAt": "2026-09-22T15:00:00.000Z",
+    "participants": [
+      "contact_019"
+    ]
+  },
+  {
+    "id": "activity_034",
+    "accountId": "account_007",
+    "dealId": "deal_014",
+    "type": "Email",
+    "title": "Expansion discovery email — Brindale Components",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T15:00:00.000Z",
+    "participants": [
+      "contact_019",
+      "contact_020"
+    ]
+  },
+  {
+    "id": "activity_035",
+    "accountId": "account_007",
+    "dealId": "deal_014",
+    "type": "Email",
+    "title": "Expansion follow-up email — Brindale Components",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to review the commercial proposal with procurement. Alina confirmed a move to Head of Revenue Systems and asked that future project correspondence use revenue.systems@brindale-components.example.",
+    "occurredAt": "2026-09-30T15:00:00.000Z",
+    "participants": [
+      "contact_019"
+    ]
+  },
+  {
+    "id": "activity_036",
+    "accountId": "account_008",
+    "dealId": "deal_015",
+    "type": "Note",
+    "title": "Discovery note — Veylora Networks",
+    "summary": "Discussed replacing spreadsheet handoffs at Veylora Networks. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T09:00:00.000Z",
+    "participants": [
+      "contact_022"
+    ]
+  },
+  {
+    "id": "activity_037",
+    "accountId": "account_008",
+    "dealId": "deal_015",
+    "type": "Meeting",
+    "title": "Requirements meeting — Veylora Networks",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T09:00:00.000Z",
+    "participants": [
+      "contact_022",
+      "contact_023"
+    ]
+  },
+  {
+    "id": "activity_038",
+    "accountId": "account_008",
+    "dealId": "deal_015",
+    "type": "Email",
+    "title": "Decision email — Veylora Networks",
+    "summary": "Reviewed the current evaluation workstream. Elias will coordinate feedback from the commercial team; Complete the integration assessment with IT. The sponsor confirmed that the assessment is complete and procurement has requested a formal proposal.",
+    "occurredAt": "2026-09-23T09:00:00.000Z",
+    "participants": [
+      "contact_022"
+    ]
+  },
+  {
+    "id": "activity_039",
+    "accountId": "account_008",
+    "dealId": "deal_016",
+    "type": "Call",
+    "title": "Expansion discovery call — Veylora Networks",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T09:00:00.000Z",
+    "participants": [
+      "contact_022",
+      "contact_023"
+    ]
+  },
+  {
+    "id": "activity_040",
+    "accountId": "account_008",
+    "dealId": "deal_016",
+    "type": "Note",
+    "title": "Expansion follow-up note — Veylora Networks",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to resolve contract redlines and confirm signature date. Procurement advised that the budget committee now meets on 2 December. The sponsor expects a decision by 4 December rather than the previously discussed date.",
+    "occurredAt": "2026-10-01T09:00:00.000Z",
+    "participants": [
+      "contact_022"
+    ]
+  },
+  {
+    "id": "activity_041",
+    "accountId": "account_009",
+    "dealId": "deal_017",
+    "type": "Meeting",
+    "title": "Discovery meeting — Caldrin Foods",
+    "summary": "Discussed replacing spreadsheet handoffs at Caldrin Foods. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T10:00:00.000Z",
+    "participants": [
+      "contact_025"
+    ]
+  },
+  {
+    "id": "activity_042",
+    "accountId": "account_009",
+    "dealId": "deal_017",
+    "type": "Email",
+    "title": "Requirements email — Caldrin Foods",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T10:00:00.000Z",
+    "participants": [
+      "contact_025",
+      "contact_027"
+    ]
+  },
+  {
+    "id": "activity_043",
+    "accountId": "account_009",
+    "dealId": "deal_017",
+    "type": "Call",
+    "title": "Decision call — Caldrin Foods",
+    "summary": "Reviewed the current proposal workstream. Leona will coordinate feedback from the commercial team; Review the commercial proposal with procurement. The commercial sponsor asked for a revised rollout plan and a seat estimate before arranging the next internal review.",
+    "occurredAt": "2026-09-24T10:00:00.000Z",
+    "participants": [
+      "contact_025"
+    ]
+  },
+  {
+    "id": "activity_044",
+    "accountId": "account_009",
+    "dealId": "deal_018",
+    "type": "Note",
+    "title": "Expansion discovery note — Caldrin Foods",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T10:00:00.000Z",
+    "participants": [
+      "contact_025",
+      "contact_027"
+    ]
+  },
+  {
+    "id": "activity_045",
+    "accountId": "account_009",
+    "dealId": "deal_018",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Caldrin Foods",
+    "summary": "Confirmed the expansion order and agreed the handover agenda with the regional sponsor. The delivery team will own the next update.",
+    "occurredAt": "2026-10-02T10:00:00.000Z",
+    "participants": [
+      "contact_025"
+    ]
+  },
+  {
+    "id": "activity_046",
+    "accountId": "account_010",
+    "dealId": "deal_019",
+    "type": "Email",
+    "title": "Discovery email — Estrelan Advisory",
+    "summary": "Discussed replacing spreadsheet handoffs at Estrelan Advisory. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T11:00:00.000Z",
+    "participants": [
+      "contact_028"
+    ]
+  },
+  {
+    "id": "activity_047",
+    "accountId": "account_010",
+    "dealId": "deal_019",
+    "type": "Call",
+    "title": "Requirements call — Estrelan Advisory",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T11:00:00.000Z",
+    "participants": [
+      "contact_028",
+      "contact_029"
+    ]
+  },
+  {
+    "id": "activity_048",
+    "accountId": "account_010",
+    "dealId": "deal_019",
+    "type": "Note",
+    "title": "Decision note — Estrelan Advisory",
+    "summary": "Reviewed the current negotiation workstream. Ronan will coordinate feedback from the commercial team; Resolve contract redlines and confirm signature date. The sponsor reported that the project is competing with an infrastructure renewal for funding. Budget approval remains unresolved and the decision may be deferred.",
+    "occurredAt": "2026-09-22T11:00:00.000Z",
+    "participants": [
+      "contact_028"
+    ]
+  },
+  {
+    "id": "activity_049",
+    "accountId": "account_010",
+    "dealId": "deal_020",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Estrelan Advisory",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T11:00:00.000Z",
+    "participants": [
+      "contact_028",
+      "contact_029"
+    ]
+  },
+  {
+    "id": "activity_050",
+    "accountId": "account_010",
+    "dealId": "deal_020",
+    "type": "Email",
+    "title": "Expansion follow-up email — Estrelan Advisory",
+    "summary": "The regional team will retain its existing process for this budget period. Documented the decision and agreed to reconnect at the next annual review.",
+    "occurredAt": "2026-09-30T11:00:00.000Z",
+    "participants": [
+      "contact_028"
+    ]
+  },
+  {
+    "id": "activity_051",
+    "accountId": "account_011",
+    "dealId": "deal_021",
+    "type": "Call",
+    "title": "Discovery call — Norvessa Packaging",
+    "summary": "Discussed replacing spreadsheet handoffs at Norvessa Packaging. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T12:00:00.000Z",
+    "participants": [
+      "contact_031"
+    ]
+  },
+  {
+    "id": "activity_052",
+    "accountId": "account_011",
+    "dealId": "deal_021",
+    "type": "Note",
+    "title": "Requirements note — Norvessa Packaging",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T12:00:00.000Z",
+    "participants": [
+      "contact_031",
+      "contact_032"
+    ]
+  },
+  {
+    "id": "activity_053",
+    "accountId": "account_011",
+    "dealId": "deal_021",
+    "type": "Meeting",
+    "title": "Decision meeting — Norvessa Packaging",
+    "summary": "The commercial sponsor confirmed the agreement is signed. Procurement has issued the purchase reference; implementation planning can begin.",
+    "occurredAt": "2026-09-23T12:00:00.000Z",
+    "participants": [
+      "contact_031"
+    ]
+  },
+  {
+    "id": "activity_054",
+    "accountId": "account_011",
+    "dealId": "deal_022",
+    "type": "Email",
+    "title": "Expansion discovery email — Norvessa Packaging",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T12:00:00.000Z",
+    "participants": [
+      "contact_031",
+      "contact_032"
+    ]
+  },
+  {
+    "id": "activity_055",
+    "accountId": "account_011",
+    "dealId": "deal_022",
+    "type": "Email",
+    "title": "Expansion follow-up email — Norvessa Packaging",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to confirm the buying committee and discovery agenda. Nora confirmed a move to Head of Revenue Systems and asked that future project correspondence use revenue.systems@norvessa-packaging.example.",
+    "occurredAt": "2026-10-01T12:00:00.000Z",
+    "participants": [
+      "contact_031"
+    ]
+  },
+  {
+    "id": "activity_056",
+    "accountId": "account_012",
+    "dealId": "deal_023",
+    "type": "Note",
+    "title": "Discovery note — Dalmere Instruments",
+    "summary": "Discussed replacing spreadsheet handoffs at Dalmere Instruments. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T13:00:00.000Z",
+    "participants": [
+      "contact_034"
+    ]
+  },
+  {
+    "id": "activity_057",
+    "accountId": "account_012",
+    "dealId": "deal_023",
+    "type": "Meeting",
+    "title": "Requirements meeting — Dalmere Instruments",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T13:00:00.000Z",
+    "participants": [
+      "contact_034",
+      "contact_035"
+    ]
+  },
+  {
+    "id": "activity_058",
+    "accountId": "account_012",
+    "dealId": "deal_023",
+    "type": "Email",
+    "title": "Decision email — Dalmere Instruments",
+    "summary": "The sponsor confirmed that funding has been redirected to an operational programme. No agreement will be signed this quarter; revisit during the next planning cycle.",
+    "occurredAt": "2026-09-24T13:00:00.000Z",
+    "participants": [
+      "contact_034"
+    ]
+  },
+  {
+    "id": "activity_059",
+    "accountId": "account_012",
+    "dealId": "deal_024",
+    "type": "Call",
+    "title": "Expansion discovery call — Dalmere Instruments",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T13:00:00.000Z",
+    "participants": [
+      "contact_034",
+      "contact_035"
+    ]
+  },
+  {
+    "id": "activity_060",
+    "accountId": "account_012",
+    "dealId": "deal_024",
+    "type": "Note",
+    "title": "Expansion follow-up note — Dalmere Instruments",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to complete the integration assessment with IT.",
+    "occurredAt": "2026-10-02T13:00:00.000Z",
+    "participants": [
+      "contact_034"
+    ]
+  },
+  {
+    "id": "activity_061",
+    "accountId": "account_013",
+    "dealId": "deal_025",
+    "type": "Meeting",
+    "title": "Discovery meeting — Kestovan Retail",
+    "summary": "Discussed replacing spreadsheet handoffs at Kestovan Retail. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T14:00:00.000Z",
+    "participants": [
+      "contact_037"
+    ]
+  },
+  {
+    "id": "activity_062",
+    "accountId": "account_013",
+    "dealId": "deal_025",
+    "type": "Email",
+    "title": "Requirements email — Kestovan Retail",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T14:00:00.000Z",
+    "participants": [
+      "contact_037",
+      "contact_038"
+    ]
+  },
+  {
+    "id": "activity_063",
+    "accountId": "account_013",
+    "dealId": "deal_025",
+    "type": "Call",
+    "title": "Decision call — Kestovan Retail",
+    "summary": "Reviewed the current discovery workstream. Mina will coordinate feedback from the commercial team; Confirm the buying committee and discovery agenda.",
+    "occurredAt": "2026-09-22T14:00:00.000Z",
+    "participants": [
+      "contact_037"
+    ]
+  },
+  {
+    "id": "activity_064",
+    "accountId": "account_013",
+    "dealId": "deal_026",
+    "type": "Note",
+    "title": "Expansion discovery note — Kestovan Retail",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T14:00:00.000Z",
+    "participants": [
+      "contact_037",
+      "contact_038"
+    ]
+  },
+  {
+    "id": "activity_065",
+    "accountId": "account_013",
+    "dealId": "deal_026",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Kestovan Retail",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to review the commercial proposal with procurement.",
+    "occurredAt": "2026-09-30T14:00:00.000Z",
+    "participants": [
+      "contact_037"
+    ]
+  },
+  {
+    "id": "activity_066",
+    "accountId": "account_014",
+    "dealId": "deal_027",
+    "type": "Email",
+    "title": "Discovery email — Arvenlis Learning",
+    "summary": "Discussed replacing spreadsheet handoffs at Arvenlis Learning. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T15:00:00.000Z",
+    "participants": [
+      "contact_040"
+    ]
+  },
+  {
+    "id": "activity_067",
+    "accountId": "account_014",
+    "dealId": "deal_027",
+    "type": "Call",
+    "title": "Requirements call — Arvenlis Learning",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T15:00:00.000Z",
+    "participants": [
+      "contact_040",
+      "contact_041"
+    ]
+  },
+  {
+    "id": "activity_068",
+    "accountId": "account_014",
+    "dealId": "deal_027",
+    "type": "Note",
+    "title": "Decision note — Arvenlis Learning",
+    "summary": "Reviewed the current evaluation workstream. Luca will coordinate feedback from the commercial team; Complete the integration assessment with IT.",
+    "occurredAt": "2026-09-23T15:00:00.000Z",
+    "participants": [
+      "contact_040"
+    ]
+  },
+  {
+    "id": "activity_069",
+    "accountId": "account_014",
+    "dealId": "deal_028",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Arvenlis Learning",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T15:00:00.000Z",
+    "participants": [
+      "contact_040",
+      "contact_041"
+    ]
+  },
+  {
+    "id": "activity_070",
+    "accountId": "account_014",
+    "dealId": "deal_028",
+    "type": "Email",
+    "title": "Expansion follow-up email — Arvenlis Learning",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to resolve contract redlines and confirm signature date.",
+    "occurredAt": "2026-10-01T15:00:00.000Z",
+    "participants": [
+      "contact_040"
+    ]
+  },
+  {
+    "id": "activity_071",
+    "accountId": "account_015",
+    "dealId": "deal_029",
+    "type": "Call",
+    "title": "Discovery call — Reldoran Infrastructure",
+    "summary": "Discussed replacing spreadsheet handoffs at Reldoran Infrastructure. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T09:00:00.000Z",
+    "participants": [
+      "contact_043"
+    ]
+  },
+  {
+    "id": "activity_072",
+    "accountId": "account_015",
+    "dealId": "deal_029",
+    "type": "Note",
+    "title": "Requirements note — Reldoran Infrastructure",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T09:00:00.000Z",
+    "participants": [
+      "contact_043",
+      "contact_044"
+    ]
+  },
+  {
+    "id": "activity_073",
+    "accountId": "account_015",
+    "dealId": "deal_029",
+    "type": "Meeting",
+    "title": "Decision meeting — Reldoran Infrastructure",
+    "summary": "Reviewed the current proposal workstream. Nadia will coordinate feedback from the commercial team; Review the commercial proposal with procurement.",
+    "occurredAt": "2026-09-24T09:00:00.000Z",
+    "participants": [
+      "contact_043"
+    ]
+  },
+  {
+    "id": "activity_074",
+    "accountId": "account_015",
+    "dealId": "deal_030",
+    "type": "Email",
+    "title": "Expansion discovery email — Reldoran Infrastructure",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T09:00:00.000Z",
+    "participants": [
+      "contact_043",
+      "contact_044"
+    ]
+  },
+  {
+    "id": "activity_075",
+    "accountId": "account_015",
+    "dealId": "deal_030",
+    "type": "Call",
+    "title": "Expansion follow-up call — Reldoran Infrastructure",
+    "summary": "Confirmed the expansion order and agreed the handover agenda with the regional sponsor. The delivery team will own the next update.",
+    "occurredAt": "2026-10-02T09:00:00.000Z",
+    "participants": [
+      "contact_043"
+    ]
+  },
+  {
+    "id": "activity_076",
+    "accountId": "account_016",
+    "dealId": "deal_031",
+    "type": "Note",
+    "title": "Discovery note — Silvethor Mobility",
+    "summary": "Discussed replacing spreadsheet handoffs at Silvethor Mobility. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T10:00:00.000Z",
+    "participants": [
+      "contact_046"
+    ]
+  },
+  {
+    "id": "activity_077",
+    "accountId": "account_016",
+    "dealId": "deal_031",
+    "type": "Meeting",
+    "title": "Requirements meeting — Silvethor Mobility",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T10:00:00.000Z",
+    "participants": [
+      "contact_046",
+      "contact_047"
+    ]
+  },
+  {
+    "id": "activity_078",
+    "accountId": "account_016",
+    "dealId": "deal_031",
+    "type": "Email",
+    "title": "Decision email — Silvethor Mobility",
+    "summary": "Reviewed the current negotiation workstream. Adrian will coordinate feedback from the commercial team; Resolve contract redlines and confirm signature date.",
+    "occurredAt": "2026-09-22T10:00:00.000Z",
+    "participants": [
+      "contact_046"
+    ]
+  },
+  {
+    "id": "activity_079",
+    "accountId": "account_016",
+    "dealId": "deal_032",
+    "type": "Call",
+    "title": "Expansion discovery call — Silvethor Mobility",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T10:00:00.000Z",
+    "participants": [
+      "contact_046",
+      "contact_047"
+    ]
+  },
+  {
+    "id": "activity_080",
+    "accountId": "account_016",
+    "dealId": "deal_032",
+    "type": "Note",
+    "title": "Expansion follow-up note — Silvethor Mobility",
+    "summary": "The regional team will retain its existing process for this budget period. Documented the decision and agreed to reconnect at the next annual review.",
+    "occurredAt": "2026-09-30T10:00:00.000Z",
+    "participants": [
+      "contact_046"
+    ]
+  },
+  {
+    "id": "activity_081",
+    "accountId": "account_017",
+    "dealId": "deal_033",
+    "type": "Meeting",
+    "title": "Discovery meeting — Fenlora Supply",
+    "summary": "Discussed replacing spreadsheet handoffs at Fenlora Supply. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T11:00:00.000Z",
+    "participants": [
+      "contact_049"
+    ]
+  },
+  {
+    "id": "activity_082",
+    "accountId": "account_017",
+    "dealId": "deal_033",
+    "type": "Email",
+    "title": "Requirements email — Fenlora Supply",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T11:00:00.000Z",
+    "participants": [
+      "contact_049",
+      "contact_050"
+    ]
+  },
+  {
+    "id": "activity_083",
+    "accountId": "account_017",
+    "dealId": "deal_033",
+    "type": "Call",
+    "title": "Decision call — Fenlora Supply",
+    "summary": "The commercial sponsor confirmed the agreement is signed. Procurement has issued the purchase reference; implementation planning can begin.",
+    "occurredAt": "2026-09-23T11:00:00.000Z",
+    "participants": [
+      "contact_049"
+    ]
+  },
+  {
+    "id": "activity_084",
+    "accountId": "account_017",
+    "dealId": "deal_034",
+    "type": "Note",
+    "title": "Expansion discovery note — Fenlora Supply",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T11:00:00.000Z",
+    "participants": [
+      "contact_049",
+      "contact_050"
+    ]
+  },
+  {
+    "id": "activity_085",
+    "accountId": "account_017",
+    "dealId": "deal_034",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Fenlora Supply",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to confirm the buying committee and discovery agenda.",
+    "occurredAt": "2026-10-01T11:00:00.000Z",
+    "participants": [
+      "contact_049"
+    ]
+  },
+  {
+    "id": "activity_086",
+    "accountId": "account_018",
+    "dealId": "deal_035",
+    "type": "Email",
+    "title": "Discovery email — Ostrelis Finance",
+    "summary": "Discussed replacing spreadsheet handoffs at Ostrelis Finance. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T12:00:00.000Z",
+    "participants": [
+      "contact_053"
+    ]
+  },
+  {
+    "id": "activity_087",
+    "accountId": "account_018",
+    "dealId": "deal_035",
+    "type": "Call",
+    "title": "Requirements call — Ostrelis Finance",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T12:00:00.000Z",
+    "participants": [
+      "contact_053",
+      "contact_054"
+    ]
+  },
+  {
+    "id": "activity_088",
+    "accountId": "account_018",
+    "dealId": "deal_035",
+    "type": "Note",
+    "title": "Decision note — Ostrelis Finance",
+    "summary": "The sponsor confirmed that funding has been redirected to an operational programme. No agreement will be signed this quarter; revisit during the next planning cycle.",
+    "occurredAt": "2026-09-24T12:00:00.000Z",
+    "participants": [
+      "contact_053"
+    ]
+  },
+  {
+    "id": "activity_089",
+    "accountId": "account_018",
+    "dealId": "deal_036",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Ostrelis Finance",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T12:00:00.000Z",
+    "participants": [
+      "contact_053",
+      "contact_054"
+    ]
+  },
+  {
+    "id": "activity_090",
+    "accountId": "account_018",
+    "dealId": "deal_036",
+    "type": "Email",
+    "title": "Expansion follow-up email — Ostrelis Finance",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to complete the integration assessment with IT.",
+    "occurredAt": "2026-10-02T12:00:00.000Z",
+    "participants": [
+      "contact_053"
+    ]
+  },
+  {
+    "id": "activity_091",
+    "accountId": "account_019",
+    "dealId": "deal_037",
+    "type": "Call",
+    "title": "Discovery call — Marvellan Textiles",
+    "summary": "Discussed replacing spreadsheet handoffs at Marvellan Textiles. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T13:00:00.000Z",
+    "participants": [
+      "contact_055"
+    ]
+  },
+  {
+    "id": "activity_092",
+    "accountId": "account_019",
+    "dealId": "deal_037",
+    "type": "Note",
+    "title": "Requirements note — Marvellan Textiles",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T13:00:00.000Z",
+    "participants": [
+      "contact_055",
+      "contact_056"
+    ]
+  },
+  {
+    "id": "activity_093",
+    "accountId": "account_019",
+    "dealId": "deal_037",
+    "type": "Meeting",
+    "title": "Decision meeting — Marvellan Textiles",
+    "summary": "Reviewed the current discovery workstream. Clara will coordinate feedback from the commercial team; Confirm the buying committee and discovery agenda.",
+    "occurredAt": "2026-09-22T13:00:00.000Z",
+    "participants": [
+      "contact_055"
+    ]
+  },
+  {
+    "id": "activity_094",
+    "accountId": "account_019",
+    "dealId": "deal_038",
+    "type": "Email",
+    "title": "Expansion discovery email — Marvellan Textiles",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T13:00:00.000Z",
+    "participants": [
+      "contact_055",
+      "contact_056"
+    ]
+  },
+  {
+    "id": "activity_095",
+    "accountId": "account_019",
+    "dealId": "deal_038",
+    "type": "Call",
+    "title": "Expansion follow-up call — Marvellan Textiles",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to review the commercial proposal with procurement.",
+    "occurredAt": "2026-09-30T13:00:00.000Z",
+    "participants": [
+      "contact_055"
+    ]
+  },
+  {
+    "id": "activity_096",
+    "accountId": "account_020",
+    "dealId": "deal_039",
+    "type": "Note",
+    "title": "Discovery note — Caldovet Research",
+    "summary": "Discussed replacing spreadsheet handoffs at Caldovet Research. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T14:00:00.000Z",
+    "participants": [
+      "contact_058"
+    ]
+  },
+  {
+    "id": "activity_097",
+    "accountId": "account_020",
+    "dealId": "deal_039",
+    "type": "Meeting",
+    "title": "Requirements meeting — Caldovet Research",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T14:00:00.000Z",
+    "participants": [
+      "contact_058",
+      "contact_059"
+    ]
+  },
+  {
+    "id": "activity_098",
+    "accountId": "account_020",
+    "dealId": "deal_039",
+    "type": "Email",
+    "title": "Decision email — Caldovet Research",
+    "summary": "Reviewed the current evaluation workstream. Owen will coordinate feedback from the commercial team; Complete the integration assessment with IT.",
+    "occurredAt": "2026-09-23T14:00:00.000Z",
+    "participants": [
+      "contact_058"
+    ]
+  },
+  {
+    "id": "activity_099",
+    "accountId": "account_020",
+    "dealId": "deal_040",
+    "type": "Call",
+    "title": "Expansion discovery call — Caldovet Research",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T14:00:00.000Z",
+    "participants": [
+      "contact_058",
+      "contact_059"
+    ]
+  },
+  {
+    "id": "activity_100",
+    "accountId": "account_020",
+    "dealId": "deal_040",
+    "type": "Note",
+    "title": "Expansion follow-up note — Caldovet Research",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to resolve contract redlines and confirm signature date.",
+    "occurredAt": "2026-10-01T14:00:00.000Z",
+    "participants": [
+      "contact_058"
+    ]
+  },
+  {
+    "id": "activity_101",
+    "accountId": "account_021",
+    "dealId": "deal_041",
+    "type": "Meeting",
+    "title": "Discovery meeting — Valderis Facilities",
+    "summary": "Discussed replacing spreadsheet handoffs at Valderis Facilities. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T15:00:00.000Z",
+    "participants": [
+      "contact_061"
+    ]
+  },
+  {
+    "id": "activity_102",
+    "accountId": "account_021",
+    "dealId": "deal_041",
+    "type": "Email",
+    "title": "Requirements email — Valderis Facilities",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T15:00:00.000Z",
+    "participants": [
+      "contact_061",
+      "contact_062"
+    ]
+  },
+  {
+    "id": "activity_103",
+    "accountId": "account_021",
+    "dealId": "deal_041",
+    "type": "Call",
+    "title": "Decision call — Valderis Facilities",
+    "summary": "Reviewed the current proposal workstream. Mara will coordinate feedback from the commercial team; Review the commercial proposal with procurement.",
+    "occurredAt": "2026-09-24T15:00:00.000Z",
+    "participants": [
+      "contact_061"
+    ]
+  },
+  {
+    "id": "activity_104",
+    "accountId": "account_021",
+    "dealId": "deal_042",
+    "type": "Note",
+    "title": "Expansion discovery note — Valderis Facilities",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T15:00:00.000Z",
+    "participants": [
+      "contact_061",
+      "contact_062"
+    ]
+  },
+  {
+    "id": "activity_105",
+    "accountId": "account_021",
+    "dealId": "deal_042",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Valderis Facilities",
+    "summary": "Confirmed the expansion order and agreed the handover agenda with the regional sponsor. The delivery team will own the next update.",
+    "occurredAt": "2026-10-02T15:00:00.000Z",
+    "participants": [
+      "contact_061"
+    ]
+  },
+  {
+    "id": "activity_106",
+    "accountId": "account_022",
+    "dealId": "deal_043",
+    "type": "Email",
+    "title": "Discovery email — Brevanton Security",
+    "summary": "Discussed replacing spreadsheet handoffs at Brevanton Security. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T09:00:00.000Z",
+    "participants": [
+      "contact_063"
+    ]
+  },
+  {
+    "id": "activity_107",
+    "accountId": "account_022",
+    "dealId": "deal_043",
+    "type": "Call",
+    "title": "Requirements call — Brevanton Security",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T09:00:00.000Z",
+    "participants": [
+      "contact_063",
+      "contact_064"
+    ]
+  },
+  {
+    "id": "activity_108",
+    "accountId": "account_022",
+    "dealId": "deal_043",
+    "type": "Note",
+    "title": "Decision note — Brevanton Security",
+    "summary": "Reviewed the current negotiation workstream. Nadia will coordinate feedback from the commercial team; Resolve contract redlines and confirm signature date.",
+    "occurredAt": "2026-09-22T09:00:00.000Z",
+    "participants": [
+      "contact_063"
+    ]
+  },
+  {
+    "id": "activity_109",
+    "accountId": "account_022",
+    "dealId": "deal_044",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Brevanton Security",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T09:00:00.000Z",
+    "participants": [
+      "contact_063",
+      "contact_064"
+    ]
+  },
+  {
+    "id": "activity_110",
+    "accountId": "account_022",
+    "dealId": "deal_044",
+    "type": "Email",
+    "title": "Expansion follow-up email — Brevanton Security",
+    "summary": "The regional team will retain its existing process for this budget period. Documented the decision and agreed to reconnect at the next annual review.",
+    "occurredAt": "2026-09-30T09:00:00.000Z",
+    "participants": [
+      "contact_063"
+    ]
+  },
+  {
+    "id": "activity_111",
+    "accountId": "account_023",
+    "dealId": "deal_045",
+    "type": "Call",
+    "title": "Discovery call — Elnovar Water",
+    "summary": "Discussed replacing spreadsheet handoffs at Elnovar Water. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T10:00:00.000Z",
+    "participants": [
+      "contact_066"
+    ]
+  },
+  {
+    "id": "activity_112",
+    "accountId": "account_023",
+    "dealId": "deal_045",
+    "type": "Note",
+    "title": "Requirements note — Elnovar Water",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T10:00:00.000Z",
+    "participants": [
+      "contact_066"
+    ]
+  },
+  {
+    "id": "activity_113",
+    "accountId": "account_023",
+    "dealId": "deal_045",
+    "type": "Meeting",
+    "title": "Decision meeting — Elnovar Water",
+    "summary": "The commercial sponsor confirmed the agreement is signed. Procurement has issued the purchase reference; implementation planning can begin.",
+    "occurredAt": "2026-09-23T10:00:00.000Z",
+    "participants": [
+      "contact_066"
+    ]
+  },
+  {
+    "id": "activity_114",
+    "accountId": "account_023",
+    "dealId": "deal_046",
+    "type": "Email",
+    "title": "Expansion discovery email — Elnovar Water",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T10:00:00.000Z",
+    "participants": [
+      "contact_066"
+    ]
+  },
+  {
+    "id": "activity_115",
+    "accountId": "account_023",
+    "dealId": "deal_046",
+    "type": "Call",
+    "title": "Expansion follow-up call — Elnovar Water",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to confirm the buying committee and discovery agenda.",
+    "occurredAt": "2026-10-01T10:00:00.000Z",
+    "participants": [
+      "contact_066"
+    ]
+  },
+  {
+    "id": "activity_116",
+    "accountId": "account_024",
+    "dealId": "deal_047",
+    "type": "Note",
+    "title": "Discovery note — Thesselin Media",
+    "summary": "Discussed replacing spreadsheet handoffs at Thesselin Media. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T11:00:00.000Z",
+    "participants": [
+      "contact_067"
+    ]
+  },
+  {
+    "id": "activity_117",
+    "accountId": "account_024",
+    "dealId": "deal_047",
+    "type": "Meeting",
+    "title": "Requirements meeting — Thesselin Media",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T11:00:00.000Z",
+    "participants": [
+      "contact_067",
+      "contact_068"
+    ]
+  },
+  {
+    "id": "activity_118",
+    "accountId": "account_024",
+    "dealId": "deal_047",
+    "type": "Email",
+    "title": "Decision email — Thesselin Media",
+    "summary": "The sponsor confirmed that funding has been redirected to an operational programme. No agreement will be signed this quarter; revisit during the next planning cycle.",
+    "occurredAt": "2026-09-24T11:00:00.000Z",
+    "participants": [
+      "contact_067"
+    ]
+  },
+  {
+    "id": "activity_119",
+    "accountId": "account_024",
+    "dealId": "deal_048",
+    "type": "Call",
+    "title": "Expansion discovery call — Thesselin Media",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T11:00:00.000Z",
+    "participants": [
+      "contact_067",
+      "contact_068"
+    ]
+  },
+  {
+    "id": "activity_120",
+    "accountId": "account_024",
+    "dealId": "deal_048",
+    "type": "Note",
+    "title": "Expansion follow-up note — Thesselin Media",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to complete the integration assessment with IT.",
+    "occurredAt": "2026-10-02T11:00:00.000Z",
+    "participants": [
+      "contact_067"
+    ]
+  },
+  {
+    "id": "activity_121",
+    "accountId": "account_025",
+    "dealId": "deal_049",
+    "type": "Meeting",
+    "title": "Discovery meeting — Rovemere Aerospace",
+    "summary": "Discussed replacing spreadsheet handoffs at Rovemere Aerospace. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T12:00:00.000Z",
+    "participants": [
+      "contact_069"
+    ]
+  },
+  {
+    "id": "activity_122",
+    "accountId": "account_025",
+    "dealId": "deal_049",
+    "type": "Email",
+    "title": "Requirements email — Rovemere Aerospace",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T12:00:00.000Z",
+    "participants": [
+      "contact_069",
+      "contact_070"
+    ]
+  },
+  {
+    "id": "activity_123",
+    "accountId": "account_025",
+    "dealId": "deal_049",
+    "type": "Call",
+    "title": "Decision call — Rovemere Aerospace",
+    "summary": "Reviewed the current discovery workstream. Anika will coordinate feedback from the commercial team; Confirm the buying committee and discovery agenda.",
+    "occurredAt": "2026-09-22T12:00:00.000Z",
+    "participants": [
+      "contact_069"
+    ]
+  },
+  {
+    "id": "activity_124",
+    "accountId": "account_025",
+    "dealId": "deal_050",
+    "type": "Note",
+    "title": "Expansion discovery note — Rovemere Aerospace",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T12:00:00.000Z",
+    "participants": [
+      "contact_069",
+      "contact_070"
+    ]
+  },
+  {
+    "id": "activity_125",
+    "accountId": "account_025",
+    "dealId": "deal_050",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Rovemere Aerospace",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to review the commercial proposal with procurement.",
+    "occurredAt": "2026-09-30T12:00:00.000Z",
+    "participants": [
+      "contact_069"
+    ]
+  },
+  {
+    "id": "activity_126",
+    "accountId": "account_026",
+    "dealId": "deal_051",
+    "type": "Email",
+    "title": "Discovery email — Istraven Consulting",
+    "summary": "Discussed replacing spreadsheet handoffs at Istraven Consulting. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T13:00:00.000Z",
+    "participants": [
+      "contact_071"
+    ]
+  },
+  {
+    "id": "activity_127",
+    "accountId": "account_026",
+    "dealId": "deal_051",
+    "type": "Call",
+    "title": "Requirements call — Istraven Consulting",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T13:00:00.000Z",
+    "participants": [
+      "contact_071",
+      "contact_072"
+    ]
+  },
+  {
+    "id": "activity_128",
+    "accountId": "account_026",
+    "dealId": "deal_051",
+    "type": "Note",
+    "title": "Decision note — Istraven Consulting",
+    "summary": "Reviewed the current evaluation workstream. Nora will coordinate feedback from the commercial team; Complete the integration assessment with IT.",
+    "occurredAt": "2026-09-23T13:00:00.000Z",
+    "participants": [
+      "contact_071"
+    ]
+  },
+  {
+    "id": "activity_129",
+    "accountId": "account_026",
+    "dealId": "deal_052",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Istraven Consulting",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T13:00:00.000Z",
+    "participants": [
+      "contact_071",
+      "contact_072"
+    ]
+  },
+  {
+    "id": "activity_130",
+    "accountId": "account_026",
+    "dealId": "deal_052",
+    "type": "Email",
+    "title": "Expansion follow-up email — Istraven Consulting",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to resolve contract redlines and confirm signature date.",
+    "occurredAt": "2026-10-01T13:00:00.000Z",
+    "participants": [
+      "contact_071"
+    ]
+  },
+  {
+    "id": "activity_131",
+    "accountId": "account_027",
+    "dealId": "deal_053",
+    "type": "Call",
+    "title": "Discovery call — Pendovra Storage",
+    "summary": "Discussed replacing spreadsheet handoffs at Pendovra Storage. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T14:00:00.000Z",
+    "participants": [
+      "contact_073"
+    ]
+  },
+  {
+    "id": "activity_132",
+    "accountId": "account_027",
+    "dealId": "deal_053",
+    "type": "Note",
+    "title": "Requirements note — Pendovra Storage",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T14:00:00.000Z",
+    "participants": [
+      "contact_073",
+      "contact_074"
+    ]
+  },
+  {
+    "id": "activity_133",
+    "accountId": "account_027",
+    "dealId": "deal_053",
+    "type": "Meeting",
+    "title": "Decision meeting — Pendovra Storage",
+    "summary": "Reviewed the current proposal workstream. Sofia will coordinate feedback from the commercial team; Review the commercial proposal with procurement.",
+    "occurredAt": "2026-09-24T14:00:00.000Z",
+    "participants": [
+      "contact_073"
+    ]
+  },
+  {
+    "id": "activity_134",
+    "accountId": "account_027",
+    "dealId": "deal_054",
+    "type": "Email",
+    "title": "Expansion discovery email — Pendovra Storage",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T14:00:00.000Z",
+    "participants": [
+      "contact_073",
+      "contact_074"
+    ]
+  },
+  {
+    "id": "activity_135",
+    "accountId": "account_027",
+    "dealId": "deal_054",
+    "type": "Call",
+    "title": "Expansion follow-up call — Pendovra Storage",
+    "summary": "Confirmed the expansion order and agreed the handover agenda with the regional sponsor. The delivery team will own the next update.",
+    "occurredAt": "2026-10-02T14:00:00.000Z",
+    "participants": [
+      "contact_073"
+    ]
+  },
+  {
+    "id": "activity_136",
+    "accountId": "account_028",
+    "dealId": "deal_055",
+    "type": "Note",
+    "title": "Discovery note — Velmoran Devices",
+    "summary": "Discussed replacing spreadsheet handoffs at Velmoran Devices. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-14T15:00:00.000Z",
+    "participants": [
+      "contact_075"
+    ]
+  },
+  {
+    "id": "activity_137",
+    "accountId": "account_028",
+    "dealId": "deal_055",
+    "type": "Meeting",
+    "title": "Requirements meeting — Velmoran Devices",
+    "summary": "Shared the workflow outline and confirmed 2 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-18T15:00:00.000Z",
+    "participants": [
+      "contact_075",
+      "contact_076"
+    ]
+  },
+  {
+    "id": "activity_138",
+    "accountId": "account_028",
+    "dealId": "deal_055",
+    "type": "Email",
+    "title": "Decision email — Velmoran Devices",
+    "summary": "Reviewed the current negotiation workstream. Clara will coordinate feedback from the commercial team; Resolve contract redlines and confirm signature date.",
+    "occurredAt": "2026-09-22T15:00:00.000Z",
+    "participants": [
+      "contact_075"
+    ]
+  },
+  {
+    "id": "activity_139",
+    "accountId": "account_028",
+    "dealId": "deal_056",
+    "type": "Call",
+    "title": "Expansion discovery call — Velmoran Devices",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-26T15:00:00.000Z",
+    "participants": [
+      "contact_075",
+      "contact_076"
+    ]
+  },
+  {
+    "id": "activity_140",
+    "accountId": "account_028",
+    "dealId": "deal_056",
+    "type": "Note",
+    "title": "Expansion follow-up note — Velmoran Devices",
+    "summary": "The regional team will retain its existing process for this budget period. Documented the decision and agreed to reconnect at the next annual review.",
+    "occurredAt": "2026-09-30T15:00:00.000Z",
+    "participants": [
+      "contact_075"
+    ]
+  },
+  {
+    "id": "activity_141",
+    "accountId": "account_029",
+    "dealId": "deal_057",
+    "type": "Meeting",
+    "title": "Discovery meeting — Trenalis Construction",
+    "summary": "Discussed replacing spreadsheet handoffs at Trenalis Construction. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-15T09:00:00.000Z",
+    "participants": [
+      "contact_077"
+    ]
+  },
+  {
+    "id": "activity_142",
+    "accountId": "account_029",
+    "dealId": "deal_057",
+    "type": "Email",
+    "title": "Requirements email — Trenalis Construction",
+    "summary": "Shared the workflow outline and confirmed 3 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-19T09:00:00.000Z",
+    "participants": [
+      "contact_077"
+    ]
+  },
+  {
+    "id": "activity_143",
+    "accountId": "account_029",
+    "dealId": "deal_057",
+    "type": "Call",
+    "title": "Decision call — Trenalis Construction",
+    "summary": "The commercial sponsor confirmed the agreement is signed. Procurement has issued the purchase reference; implementation planning can begin.",
+    "occurredAt": "2026-09-23T09:00:00.000Z",
+    "participants": [
+      "contact_077"
+    ]
+  },
+  {
+    "id": "activity_144",
+    "accountId": "account_029",
+    "dealId": "deal_058",
+    "type": "Note",
+    "title": "Expansion discovery note — Trenalis Construction",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-27T09:00:00.000Z",
+    "participants": [
+      "contact_077"
+    ]
+  },
+  {
+    "id": "activity_145",
+    "accountId": "account_029",
+    "dealId": "deal_058",
+    "type": "Meeting",
+    "title": "Expansion follow-up meeting — Trenalis Construction",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to confirm the buying committee and discovery agenda.",
+    "occurredAt": "2026-10-01T09:00:00.000Z",
+    "participants": [
+      "contact_077"
+    ]
+  },
+  {
+    "id": "activity_146",
+    "accountId": "account_030",
+    "dealId": "deal_059",
+    "type": "Email",
+    "title": "Discovery email — Asterovan Services",
+    "summary": "Discussed replacing spreadsheet handoffs at Asterovan Services. The team needs clearer ownership of open opportunities and a consistent weekly review process.",
+    "occurredAt": "2026-09-16T10:00:00.000Z",
+    "participants": [
+      "contact_079"
+    ]
+  },
+  {
+    "id": "activity_147",
+    "accountId": "account_030",
+    "dealId": "deal_059",
+    "type": "Call",
+    "title": "Requirements call — Asterovan Services",
+    "summary": "Shared the workflow outline and confirmed 4 regional teams are in scope. IT requested an overview of access controls and the proposed import format before approving a pilot.",
+    "occurredAt": "2026-09-20T10:00:00.000Z",
+    "participants": [
+      "contact_079",
+      "contact_080"
+    ]
+  },
+  {
+    "id": "activity_148",
+    "accountId": "account_030",
+    "dealId": "deal_059",
+    "type": "Note",
+    "title": "Decision note — Asterovan Services",
+    "summary": "The sponsor confirmed that funding has been redirected to an operational programme. No agreement will be signed this quarter; revisit during the next planning cycle.",
+    "occurredAt": "2026-09-24T10:00:00.000Z",
+    "participants": [
+      "contact_079"
+    ]
+  },
+  {
+    "id": "activity_149",
+    "accountId": "account_030",
+    "dealId": "deal_060",
+    "type": "Meeting",
+    "title": "Expansion discovery meeting — Asterovan Services",
+    "summary": "Discussed extending the workflow to the regional sales team. The manager wants a separate cost estimate and confirmation that existing reporting can be retained.",
+    "occurredAt": "2026-09-28T10:00:00.000Z",
+    "participants": [
+      "contact_079",
+      "contact_080"
+    ]
+  },
+  {
+    "id": "activity_150",
+    "accountId": "account_030",
+    "dealId": "deal_060",
+    "type": "Email",
+    "title": "Expansion follow-up email — Asterovan Services",
+    "summary": "Followed up on the regional scope and implementation capacity. The next action is to complete the integration assessment with IT.",
+    "occurredAt": "2026-10-02T10:00:00.000Z",
+    "participants": [
+      "contact_079"
+    ]
+  }
+]

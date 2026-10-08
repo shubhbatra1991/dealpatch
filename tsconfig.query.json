@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.seed.json",
+  "compilerOptions": {
+    "outDir": "./node_modules/.cache/dealpatch-query"
+  },
+  "include": ["tests/query.test.ts"]
+}
