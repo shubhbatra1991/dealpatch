@@ -151,8 +151,9 @@ test("stale sources, changed values and foreign relationships cannot queue draft
   try {
     const repo = createProposalRepository(db);
     await repo.getPending();
-    const generated = await draft();
-    const source = input().activity;
+    const source = { ...input().activity, id: "activity_stale_test" };
+    await db.activities.add(source);
+    const generated = { ...await draft(), sourceActivityId: source.id, evidence: (await draft()).evidence.map(evidence => ({ ...evidence, sourceActivityId: source.id })) };
     await db.activities.update(source.id, { summary: "Updated source" });
     await assert.rejects(repo.queueGenerated(generated), /source activity changed/);
     await db.activities.put(source);

@@ -39,11 +39,11 @@ function ApprovalToast({ notice, onDismiss }: { notice: Notice; onDismiss: () =>
     : undo.isError ? `Undo failed. No saved changes were made. ${undo.error.message}`
     : undo.isPending ? `Restoring original values for ${account}…`
     : notice.status === "pending" ? `Applying changes for ${account}… Saving locally.`
-    : `Approved ${notice.receipt?.changeIds.length ?? 0} changes for ${account}.`;
-  return <div ref={panel} tabIndex={-1} className={`rounded-sm border bg-white p-3 shadow-sm ${failure ? "border-red-300" : "border-zinc-300"}`}>
-    <p role={failure ? "alert" : "status"} aria-atomic="true" className={`text-xs leading-5 ${failure ? "text-red-900" : "text-zinc-800"}`}>{message}</p>
+    : `Approved ${notice.receipt?.changeIds.length ?? 0} ${(notice.receipt?.changeIds.length ?? 0) === 1 ? "change" : "changes"} for ${account}.`;
+  return <div ref={panel} tabIndex={-1} className={`workspace-notice rounded-sm border bg-surface p-3 shadow-sm ${failure ? "border-danger-border" : "border-border-strong"}`}>
+    <p role={failure ? "alert" : "status"} aria-atomic="true" className={`text-xs leading-5 ${failure ? "text-danger" : "text-text"}`}>{message}</p>
     {notice.status === "success" && notice.receipt && !undo.isSuccess && <ReviewOutcome proposal={notice.receipt.after} changeIds={notice.receipt.changeIds} />}
-    {notice.status === "success" && !undo.isSuccess && newerDecision && !undo.isPending && <p className="mt-2 text-[11px] text-amber-900">Undo unavailable: this proposal has a newer review decision. Undo the most recent approval first.</p>}
+    {notice.status === "success" && !undo.isSuccess && newerDecision && !undo.isPending && <p className="mt-2 text-[11px] text-warning">Undo unavailable: this proposal has a newer review decision. Undo the most recent approval first.</p>}
     <div className="mt-2 flex items-center gap-2">
       {notice.status === "success" && !undo.isSuccess && <button type="button" disabled={busy || newerDecision} onClick={() => void restore()} className={reviewButton}>{undo.isPending ? "Undoing…" : "Undo"}</button>}
       <button type="button" disabled={saving} onClick={onDismiss} className={`${reviewButton} ml-auto`} aria-label={`Dismiss review notification for ${account}`}>Dismiss</button>

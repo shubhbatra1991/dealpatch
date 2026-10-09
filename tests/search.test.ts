@@ -134,7 +134,8 @@ test("search targets open deal details and select account-related activity witho
     assert.match(render(createElement(ActivityWorkspace, { targetActivityId: "missing" })), /selected activity is no longer/);
     client.setQueryData(queryKeys.proposals.queue, []);
     client.setQueryData(queryKeys.proposals.list, [{ ...data.proposals[0], status: "Approved" }]);
-    assert.match(render(createElement(ReviewWorkspace, { targetProposalId: data.proposals[0].id })), /Selected proposal: Approved/);
+    client.setQueryData(queryKeys.proposals.reviewItems, [{ proposal: { ...data.proposals[0], status: "Approved" }, account: data.accounts[0].name, changes: data.proposals[0].changes.map(change => ({ change: { ...change, status: "Approved" }, current: change.after, target: change.entityId, conflict: false })) }]);
+    assert.match(render(createElement(ReviewWorkspace, { targetProposalId: data.proposals[0].id })), /Approval complete/);
     assert.match(render(createElement(ReviewWorkspace, { targetProposalId: "missing" })), /selected proposal is no longer/);
   } finally { client.clear(); }
 });

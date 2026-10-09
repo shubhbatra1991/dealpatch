@@ -17,7 +17,7 @@ export function SelectionCheckbox({ label, checked, indeterminate = false, disab
       disabled={disabled}
       onChange={onChange}
       ref={(node) => { if (node) node.indeterminate = indeterminate; }}
-      className="size-4 cursor-pointer rounded-sm accent-indigo-700 disabled:cursor-default"
+      className="size-4 cursor-pointer rounded-sm accent-focus-ring disabled:cursor-default"
     />
   );
 }

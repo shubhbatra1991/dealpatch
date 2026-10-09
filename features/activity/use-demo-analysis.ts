@@ -1,33 +1,28 @@
 "use client";
 
-import { useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { useIsMutating, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { IntelligenceInput, IntelligenceProvider } from "../../lib/simulation/intelligence-provider";
 import { mockIntelligenceProvider } from "../../lib/simulation/mock-intelligence-provider";
-import { proposalRepository } from "../../lib/repositories/proposals";
-import { acquireReviewWrite, finishReviewWrite, reviewWriteKey } from "../reviews/approval-mutations";
+import { useAllProposals } from "../reviews/use-proposals";
+import { queueProposalOptions } from "./queue-proposal";
+import { reviewWriteKey } from "../reviews/approval-mutations";
 import { analysisReducer, idleAnalysis } from "./analysis-state";
 
-export function useDemoAnalysis(provider: IntelligenceProvider = mockIntelligenceProvider) {
+export function useDemoAnalysis(provider: IntelligenceProvider = mockIntelligenceProvider, sourceActivityId?: string) {
   const [state, dispatch] = useReducer(analysisReducer, idleAnalysis);
   const active = useRef<AbortController | null>(null);
   const client = useQueryClient();
   const reviewBusy = useIsMutating({ mutationKey: reviewWriteKey }) > 0;
-  const queue = useMutation({
-    mutationKey: [...reviewWriteKey, "generated"],
-    mutationFn: proposalRepository.queueGenerated,
-    onMutate: () => { acquireReviewWrite(client); return true; },
-    onSettled: async (_data, _error, _variables, acquired) => {
-      if (acquired) {
-        await finishReviewWrite(client);
-      }
-    },
-  });
+  const proposals = useAllProposals();
+  const existingProposal = proposals.data?.find(proposal => proposal.sourceActivityId === sourceActivityId);
+  const queue = useMutation(queueProposalOptions(client));
   useEffect(() => () => { active.current?.abort(); active.current = null; }, []);
-  function reset() {
+  const resetQueue = queue.reset;
+  const reset = useCallback(() => {
     active.current?.abort(); active.current = null;
-    dispatch({ type: "reset" }); queue.reset();
-  }
+    dispatch({ type: "reset" }); resetQueue();
+  }, [resetQueue]);
   async function start(input: IntelligenceInput) {
     active.current?.abort();
     const controller = new AbortController();
@@ -55,5 +50,5 @@ export function useDemoAnalysis(provider: IntelligenceProvider = mockIntelligenc
   }
   const generated = state.events.find(event => event.type === "proposal_generated");
   const proposal = state.status === "completed" && generated?.type === "proposal_generated" ? generated.proposal : undefined;
-  return { state, start, cancel, reset, proposal, queue, reviewBusy };
+  return { state, start, cancel, reset, proposal, queue, reviewBusy, existingProposal, proposals, checkingSource: Boolean(sourceActivityId) && (proposals.data === undefined || proposals.isError) };
 }

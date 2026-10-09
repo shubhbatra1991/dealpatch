@@ -105,7 +105,7 @@ test("route and query states remain SSR-safe, recover from errors and derive fro
     client.setQueryData(queryKeys.audit.forAccount(deal.accountId), []);
     client.setQueryData(queryKeys.favorites.list, []);
     const html = render(deal.id);
-    assert.match(html, /aria-label="Deal summary"/); assert.match(html, /aria-label="Add to favorites"/);
+    assert.match(html, /aria-label="Deal summary"/); assert.match(html, /aria-label="Add .* to favorites"/);
     for (const tab of dealTabs) assert.ok(html.includes(`id="deal-tab-${tab}"`));
     assert.ok(html.includes(`/accounts/${deal.accountId}`));
     client.setQueryData(queryKeys.deals.list, [{ ...deal, title: "<script>escaped</script>", nextStep: "Updated from shared cache" }]);

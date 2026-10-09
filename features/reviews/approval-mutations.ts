@@ -21,12 +21,16 @@ export function acquireReviewWrite(client: QueryClient) {
   if (busyClients.has(client)) throw new Error("Another review is being saved. Please try again when it finishes.");
   busyClients.add(client);
 }
-export async function finishReviewWrite(client: QueryClient) {
-  try { await Promise.all(cacheKeys.map(queryKey => client.invalidateQueries({ queryKey }))); }
+function affectedKeys(changes: readonly ProposalChange[], accountId: string) {
+  const roots = { Deal: queryKeys.deals.all, Account: queryKeys.accounts.all, Contact: queryKeys.contacts.all, Activity: queryKeys.activities.all };
+  return [queryKeys.proposals.list, queryKeys.proposals.pending, queryKeys.proposals.queue, queryKeys.proposals.reviewItems, queryKeys.proposals.forAccount(accountId), queryKeys.audit.forAccount(accountId), ...[...new Set(changes.map(change => change.entityType))].map(type => roots[type])];
+}
+export async function finishReviewWrite(client: QueryClient, changes?: readonly ProposalChange[], accountId?: string) {
+  try { await Promise.all((changes && accountId ? affectedKeys(changes, accountId) : cacheKeys).map(queryKey => client.invalidateQueries({ queryKey }))); }
   finally { busyClients.delete(client); }
 }
-async function cancelReads(client: QueryClient) {
-  await Promise.all(cacheKeys.map(queryKey => client.cancelQueries({ queryKey })));
+async function cancelReads(client: QueryClient, proposal: Proposal, ids: string[]) {
+  await Promise.all(affectedKeys(proposal.changes.filter(change => ids.includes(change.id)), proposal.accountId).map(queryKey => client.cancelQueries({ queryKey })));
 }
 
 export interface ApprovalContext { receipt: ApprovalReceipt; item: ReviewItem }
@@ -50,11 +54,11 @@ export function applyApprovalCache(client: QueryClient, context: ApprovalContext
     }
     return updated;
   }
-  client.setQueryData<Deal[]>(queryKeys.deals.list, data => data?.map(record => patchRecord(record, "Deal")));
-  client.setQueryData<Account[]>(queryKeys.accounts.list, data => data?.map(record => patchRecord(record, "Account")));
-  client.setQueryData<Activity[]>(queryKeys.activities.list, data => data?.map(record => patchRecord(record, "Activity")));
-  client.setQueriesData<Contact[]>({ queryKey: queryKeys.contacts.all }, data => data?.map(record => patchRecord(record, "Contact")));
-  client.setQueriesData<Proposal[]>({ queryKey: queryKeys.proposals.all, predicate: query => query.queryKey[1] !== "queue" && query.queryKey[1] !== "pending" }, data => data?.map(record => record.id === proposal.id ? proposal : record));
+  if (changes.some(c => c.entityType === "Deal")) client.setQueryData<Deal[]>(queryKeys.deals.list, data => data?.map(record => patchRecord(record, "Deal")));
+  if (changes.some(c => c.entityType === "Account")) client.setQueryData<Account[]>(queryKeys.accounts.list, data => data?.map(record => patchRecord(record, "Account")));
+  if (changes.some(c => c.entityType === "Activity")) client.setQueryData<Activity[]>(queryKeys.activities.list, data => data?.map(record => patchRecord(record, "Activity")));
+  if (changes.some(c => c.entityType === "Contact")) client.setQueriesData<Contact[]>({ queryKey: queryKeys.contacts.all }, data => data?.map(record => patchRecord(record, "Contact")));
+  client.setQueriesData<Proposal[]>({ queryKey: queryKeys.proposals.all, predicate: query => !["queue", "pending", "reviewItems"].includes(String(query.queryKey[1])) }, data => data?.map(record => record.id === proposal.id ? proposal : record));
   const actionable = (p: Proposal) => ["Pending", "PartiallyApproved"].includes(p.status) && p.changes.some(isUnreviewed);
   client.setQueryData<Proposal[]>(queryKeys.proposals.pending, data => {
     if (!data) return data;
@@ -62,11 +66,12 @@ export function applyApprovalCache(client: QueryClient, context: ApprovalContext
     if (actionable(proposal)) updated.push(proposal);
     return updated.sort((a,b) => a.createdAt.localeCompare(b.createdAt));
   });
-  client.setQueryData<ReviewItem[]>(queryKeys.proposals.queue, data => {
+  function patchItems(data: ReviewItem[] | undefined, onlyPending: boolean) {
     if (!data) return data;
     let updated = data;
     if (!updated.some(row => row.proposal.id === proposal.id) && actionable(proposal)) updated = [...updated, item];
     return updated.map(row => {
+      if (row.proposal.id !== proposal.id && !changes.some(c => c.entityType === "Account" && c.entityId === row.proposal.accountId || c.entityType === "Deal" && c.entityId === row.proposal.dealId || c.entityType === "Activity" && c.entityId === row.proposal.sourceActivityId || row.changes.some(previous => previous.change.entityType === c.entityType && previous.change.entityId === c.entityId))) return row;
       const nextProposal = row.proposal.id === proposal.id ? proposal : row.proposal;
       const contextChange = (entity: ProposalChange["entityType"], id: string | undefined, field: string) => changes.find(c => c.entityType === entity && c.entityId === id && c.field === field);
       const accountName = contextChange("Account", row.proposal.accountId, "name");
@@ -83,8 +88,10 @@ export function applyApprovalCache(client: QueryClient, context: ApprovalContext
           return { ...previous, change, current, conflict: isUnreviewed(change) && (patch ? !equal(current, change.before) : previous.conflict) };
         }),
       };
-    }).filter(row => actionable(row.proposal)).sort((a,b) => a.proposal.createdAt.localeCompare(b.proposal.createdAt));
-  });
+    }).filter(row => !onlyPending || actionable(row.proposal)).sort((a,b) => a.proposal.createdAt.localeCompare(b.proposal.createdAt));
+  }
+  client.setQueryData<ReviewItem[]>(queryKeys.proposals.queue, data => patchItems(data, true));
+  client.setQueryData<ReviewItem[]>(queryKeys.proposals.reviewItems, data => patchItems(data, false));
 }
 
 export function approvalMutationOptions(client: QueryClient, persistence: Persistence = reviewRepository) {
@@ -96,7 +103,7 @@ export function approvalMutationOptions(client: QueryClient, persistence: Persis
     onMutate: async ({ id, changeIds, expectedProposal }): Promise<ApprovalContext> => {
       acquireReviewWrite(client);
       try {
-        await cancelReads(client);
+        await cancelReads(client, expectedProposal, changeIds);
         const item = client.getQueryData<ReviewItem[]>(queryKeys.proposals.queue)?.find(row => row.proposal.id === id);
         if (!item) throw new Error("The proposal is no longer in the queue. Refresh and try again.");
         if (item.changes.some(c => changeIds.includes(c.change.id) && c.conflict)) throw new Error("Resolve the current-value conflict before approval.");
@@ -105,10 +112,10 @@ export function approvalMutationOptions(client: QueryClient, persistence: Persis
         const context = { receipt, item };
         applyApprovalCache(client, context);
         return context;
-      } catch (error) { await finishReviewWrite(client); throw error; }
+      } catch (error) { await finishReviewWrite(client, expectedProposal.changes.filter(c => changeIds.includes(c.id)), expectedProposal.accountId); throw error; }
     },
     onError: (_error, _variables, context) => { if (context) applyApprovalCache(client, context, true); },
-    onSettled: async (_data, _error, _variables, context) => { if (context) await finishReviewWrite(client); },
+    onSettled: async (_data, _error, _variables, context) => { if (context) await finishReviewWrite(client, selectedChanges(context.receipt, false), context.receipt.before.accountId); },
   });
 }
 
@@ -121,7 +128,7 @@ export function undoMutationOptions(client: QueryClient, persistence: Persistenc
     onMutate: async (request: UndoRequest) => {
       acquireReviewWrite(client);
       try {
-        await cancelReads(client);
+        await cancelReads(client, request.receipt.before, request.receipt.changeIds);
         const current = client.getQueryData<ReviewItem[]>(queryKeys.proposals.queue)?.find(row => row.proposal.id === request.receipt.after.id);
         if (current && !equal(current.proposal, request.receipt.after) || !current && request.receipt.after.changes.some(isUnreviewed)) throw new Error("The proposal was reviewed again. Undo the most recent approval first.");
         applyApprovalCache(client, request, true);
@@ -130,6 +137,6 @@ export function undoMutationOptions(client: QueryClient, persistence: Persistenc
       catch (error) { busyClients.delete(client); throw error; }
     },
     onError: (_error, _variables, context) => { if (context) applyApprovalCache(client, context); },
-    onSettled: async (_data, _error, _variables, context) => { if (context) await finishReviewWrite(client); },
+    onSettled: async (_data, _error, _variables, context) => { if (context) await finishReviewWrite(client, selectedChanges(context.receipt, false), context.receipt.before.accountId); },
   });
 }

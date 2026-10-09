@@ -68,7 +68,7 @@ test("150+ activities render as semantic feed buttons with one tab stop, selecte
   assert.match(html, /aria-label="Activity feed"/);
 });
 
-test("workspace has useful unselected, loading, empty, missing and storage-error states without starting analysis", async () => {
+test("workspace has newest default selection, loading, empty, missing and storage-error states without starting analysis", async () => {
   const client = createQueryClient();
   const render = (targetActivityId?: string) => renderWithKeyboard(createElement(QueryClientProvider, { client }, createElement(ActivityWorkspace, { targetActivityId })));
   try {
@@ -77,14 +77,20 @@ test("workspace has useful unselected, loading, empty, missing and storage-error
     client.setQueryData(queryKeys.accounts.list, seed.accounts);
     client.setQueryData(queryKeys.contacts.list, seed.contacts);
     client.setQueryData(queryKeys.deals.list, seed.deals);
+    client.setQueryData(queryKeys.proposals.list, seed.proposals);
     const html = render();
-    assert.match(html, /Select an activity/);
+    assert.match(html, new RegExp(`data-activity-id="${rows[0].activity.id}"[^>]*aria-current="true"`));
+    assert.ok(html.includes(rows[0].activity.title));
+    assert.match(html, /Waiting \u00b7 Ready to analyze/);
     assert.match(html, /150 of 150 activities/);
-    assert.doesNotMatch(html, /Choose activity|Simulated analysis events|Draft proposal ready/);
+    assert.doesNotMatch(html, /Choose activity|Draft proposal ready/);
     const selected = render("activity_003");
     assert.match(selected, /Waiting · Ready to analyze/);
     assert.match(selected, /Run simulated analysis/);
     assert.match(selected, /href="\/contacts\//);
+    assert.match(selected, /href="\/deals\//);
+    assert.match(selected, /Already in Review Queue/);
+    assert.match(selected, /href="\/reviews\?proposal=proposal_001"/);
     assert.match(render("missing"), /selected activity is no longer/);
     client.setQueryData(queryKeys.activities.list, []);
     assert.match(render(), /No activities yet/);
@@ -93,10 +99,10 @@ test("workspace has useful unselected, loading, empty, missing and storage-error
   } finally { client.clear(); }
 });
 
-function AnalysisHarness({ state }: { state: AnalysisState }) {
-  const analysis = useDemoAnalysis();
+function AnalysisHarness({ state, sourceId }: { state: AnalysisState; sourceId?: string }) {
+  const analysis = useDemoAnalysis(undefined, sourceId);
   const generated = state.events.find(event => event.type === "proposal_generated");
-  return createElement(AgentPanel, { analysis: { ...analysis, state, proposal: state.status === "completed" && generated?.type === "proposal_generated" ? generated.proposal : undefined } });
+  return createElement(AgentPanel, { row: rows.find(row => row.activity.id === "activity_003"), analysis: { ...analysis, state, proposal: state.status === "completed" && generated?.type === "proposal_generated" ? generated.proposal : undefined } });
 }
 
 test("analysis panel renders running, failed and completed drafts with confidence, evidence and explicit queue action", async () => {
@@ -111,9 +117,27 @@ test("analysis panel renders running, failed and completed drafts with confidenc
     const failed = render({ status: "error", events: events.slice(0, 2), error: "Demo failure" });
     assert.match(failed, /Failed · Analysis failed/);
     assert.match(failed, /Demo failure/);
+    assert.equal((failed.match(/>Failed<\/span>/g) ?? []).length, 1);
+    assert.equal((failed.match(/>Complete<\/span>/g) ?? []).length, 2);
+    assert.equal((failed.match(/>Waiting<\/span>/g) ?? []).length, 4);
     assert.doesNotMatch(failed, /Send to Review Queue/);
+    for (let index = 0; index < events.length; index++) {
+      const progressing = render({ status: "running", events: events.slice(0, index) });
+      assert.equal((progressing.match(/aria-current="step"/g) ?? []).length, 1);
+      assert.equal((progressing.match(/>Complete<\/span>/g) ?? []).length, index);
+      assert.equal((progressing.match(/>Running<\/span>/g) ?? []).length, 1);
+      const failure = render({ status: "error", events: events.slice(0, index), error: "Stage failed" });
+      assert.equal((failure.match(/>Failed<\/span>/g) ?? []).length, 1);
+      assert.equal((failure.match(/>Complete<\/span>/g) ?? []).length, index);
+    }
     const completed = render({ status: "completed", events });
     for (const text of ["Complete · Analysis complete", "Generated proposal", "demo confidence", "Source evidence", "Current value:", "Proposed value:", "Send to Review Queue"]) assert.ok(completed.includes(text), text);
+    assert.match(completed, /href="\/accounts\/account_001"/);
+    assert.match(completed, /href="\/deals\//);
+    client.setQueryData(queryKeys.proposals.list, seed.proposals);
+    const existing = renderWithKeyboard(createElement(QueryClientProvider, { client }, createElement(AnalysisHarness, { state: { status: "idle", events: [] }, sourceId: activity.id })));
+    assert.match(existing, /Already in Review Queue/);
+    assert.match(existing, /href="\/reviews\?proposal=proposal_001"/);
     assert.doesNotMatch(render({ status: "cancelled", events: events.slice(0, 5) }), /Send to Review Queue/);
   } finally { client.clear(); }
 });

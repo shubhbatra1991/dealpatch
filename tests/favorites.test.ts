@@ -183,7 +183,7 @@ test("sidebar renders five live records, all-favorites action, empty state, type
       assert.ok(list.includes(`/deals/${deals[0].id}`));
       assert.match(list, /Unavailable account/);
       assert.doesNotMatch(list, /href="\/accounts\/missing"/);
-      assert.equal((list.match(/aria-label="Remove from favorites"/g) ?? []).length, 3);
+      assert.equal((list.match(/aria-label="Remove .*? from favorites"/g) ?? []).length, 3);
     } finally { client.clear(); }
   });
 });

@@ -14,7 +14,7 @@ import { dealHref } from "../deals/deal-detail-model";
 import type { PipelineViewConfig } from "../../domain/saved-views/saved-view";
 import { capturePipelineView, restorePipelineView } from "./pipeline-view-state";
 
-const controlClass = "h-8 rounded-sm border border-zinc-300 bg-white px-2 text-xs text-zinc-700";
+const controlClass = "h-8 rounded-sm border border-border-strong bg-surface px-2 text-xs text-text";
 const ROW_HEIGHT = 36;
 const HEADER_HEIGHT = 36;
 const OVERSCAN = 8;
@@ -83,11 +83,6 @@ export function PipelineTable({ deals, accounts, initialDealId, initialView, onS
     const pageSize = Math.max(1, Math.floor(((scrollRef.current?.clientHeight ?? 360) - HEADER_HEIGHT) / ROW_HEIGHT));
     let next: number;
     switch (event.key) {
-      case "Tab":
-        if (index < 0) return;
-        next = index + (event.shiftKey ? -1 : 1);
-        if (next < 0 || next >= rows.length) return; // Preserve native entry/exit.
-        break;
       case "ArrowDown": next = Math.min(rows.length - 1, index + 1); break;
       case "ArrowUp": next = Math.max(0, index - 1); break;
       case "Home": next = 0; break;
@@ -118,48 +113,48 @@ export function PipelineTable({ deals, accounts, initialDealId, initialView, onS
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="flex flex-wrap items-end gap-2">
+      <div className="workspace-toolbar flex flex-wrap items-end gap-2">
         {onSaveView && <button type="button" onClick={() => onSaveView(capturePipelineView(search, columnFilters, sorting, columnVisibility))} className={controlClass}>Save view</button>}
-        {highlighted ? <Link ref={openLink} href={dealHref(highlighted.id)} className={`${controlClass} flex items-center`}>Open deal</Link> : <button type="button" disabled className={`${controlClass} opacity-40`}>Open deal</button>}
-        <label className="flex min-w-48 flex-1 flex-col gap-1 text-xs font-medium text-zinc-600">
+        {highlighted ? <Link ref={openLink} href={dealHref(highlighted.id)} className={`${controlClass} flex items-center`}>Open deal</Link> : <button type="button" disabled className={`${controlClass} border-dashed`}>Open deal</button>}
+        <label className="flex min-w-48 flex-1 flex-col gap-1 text-xs font-medium text-text-muted">
           Search deals
           <input type="search" maxLength={1000} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Account, deal, owner or next step…" className={`${controlClass} w-full sm:max-w-96`} />
         </label>
-        <label className="flex flex-col gap-1 text-xs font-medium text-zinc-600">Stage
+        <label className="flex flex-col gap-1 text-xs font-medium text-text-muted">Stage
           <select value={(table.getColumn("stage")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("stage")?.setFilterValue(event.target.value || undefined)} className={controlClass}>
             <option value="">All stages</option>{stageOrder.map((stage) => <option key={stage} value={stage}>{stageLabels[stage]}</option>)}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-xs font-medium text-zinc-600">Risk
+        <label className="flex flex-col gap-1 text-xs font-medium text-text-muted">Risk
           <select value={(table.getColumn("risk")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("risk")?.setFilterValue(event.target.value || undefined)} className={controlClass}>
             <option value="">All risks</option>{riskOrder.map((risk) => <option key={risk} value={risk}>{risk}</option>)}
           </select>
         </label>
-        <button type="button" onClick={clearFilters} disabled={!filtered} className={`${controlClass} disabled:opacity-40 hover:enabled:bg-zinc-50`}>Clear filters</button>
+        <button type="button" onClick={clearFilters} disabled={!filtered} className={`${controlClass} disabled:border-dashed hover:enabled:bg-bg-subtle`}>Clear filters</button>
         <details className="relative" onKeyDown={(event) => { if (event.key === "Escape") { event.currentTarget.open = false; event.currentTarget.querySelector("summary")?.focus(); } }}>
-          <summary className={`${controlClass} flex cursor-pointer list-none items-center gap-2 hover:bg-zinc-50`}>Columns <span aria-hidden="true">⌄</span></summary>
-          <fieldset className="absolute left-0 z-30 mt-1 max-h-[70dvh] w-48 space-y-1 overflow-y-auto sm:right-0 sm:left-auto rounded-sm border border-zinc-200 bg-white p-3 shadow-sm">
+          <summary className={`${controlClass} flex cursor-pointer list-none items-center gap-2 hover:bg-bg-subtle`}>Columns <span aria-hidden="true">⌄</span></summary>
+          <fieldset className="absolute left-0 z-30 mt-1 max-h-[70dvh] w-48 space-y-1 overflow-y-auto sm:right-0 sm:left-auto rounded-sm border border-border bg-surface p-3 shadow-sm">
             <legend className="sr-only">Visible pipeline columns</legend>
-            {table.getAllLeafColumns().filter((column) => column.getCanHide()).map((column) => <label key={column.id} className="flex cursor-pointer items-center gap-2 py-1 text-xs text-zinc-700"><input type="checkbox" checked={column.getIsVisible()} onChange={column.getToggleVisibilityHandler()} className="size-4 accent-indigo-700" />{String(column.columnDef.header)}</label>)}
+            {table.getAllLeafColumns().filter((column) => column.getCanHide()).map((column) => <label key={column.id} className="flex cursor-pointer items-center gap-2 py-1 text-xs text-text"><input type="checkbox" checked={column.getIsVisible()} onChange={column.getToggleVisibilityHandler()} className="size-4 accent-focus-ring" />{String(column.columnDef.header)}</label>)}
             <button type="button" onClick={() => setColumnVisibility({})} className="mt-2 text-xs font-medium underline underline-offset-4">Restore columns</button>
           </fieldset>
         </details>
       </div>
-      <div className="flex min-h-6 flex-wrap items-center justify-between gap-2 text-xs text-zinc-500">
+      <div className="flex min-h-6 flex-wrap items-center justify-between gap-2 text-xs text-text-muted">
         <p role="status">{rows.length} of {data.length} deals · {selectedCount} selected{selectedCount !== matchingSelectedCount ? ` (${selectedCount - matchingSelectedCount} hidden by filters)` : ""}</p>
-        {selectedCount > 0 && <button type="button" onClick={() => setRowSelection({})} className="text-zinc-700 underline underline-offset-4">Clear selection</button>}
+        {selectedCount > 0 && <button type="button" onClick={() => setRowSelection({})} className="text-text underline underline-offset-4">Clear selection</button>}
       </div>
       <div ref={scrollRef} role="region" aria-label="Pipeline deals, scroll horizontally for more columns" tabIndex={0} onKeyDown={handleRowNavigation}
         onFocusCapture={(event) => setFocusedRowId((event.target as HTMLElement).closest<HTMLTableRowElement>("tr[data-row-id]")?.dataset.rowId)}
-        className="min-h-48 flex-1 overflow-auto rounded-sm border border-zinc-200 [overflow-anchor:none]">
-        <table aria-rowcount={rows.length + 1} className="w-full table-fixed border-collapse text-left text-xs" style={{ minWidth: table.getTotalSize() }}>
-          <caption className="sr-only">Sales pipeline. Sort using column header buttons. Values sort by currency, then amount. Selection applies to matching deals. Rows are virtualized. Use Tab or arrow keys between row checkboxes, Home or End for the first or last deal, and Page Up or Page Down to move a viewport.</caption>
-          <thead className="sticky top-0 z-10 bg-zinc-50">
+        className="workspace-table-scroll min-h-48 flex-1 overflow-auto rounded-sm border border-border [overflow-anchor:none]">
+        <table aria-rowcount={rows.length + 1} className="workspace-table w-full table-fixed border-collapse text-left text-xs" style={{ minWidth: table.getTotalSize() }}>
+          <caption className="sr-only">Sales pipeline. Sort using column header buttons. Values sort by currency, then amount. Selection applies to matching deals. Rows are virtualized. Use Tab for row actions and links, arrow keys between row checkboxes, Home or End for the first or last deal, and Page Up or Page Down to move a viewport.</caption>
+          <thead className="sticky top-0 z-10 bg-bg-subtle">
             {table.getHeaderGroups().map((group) => <tr key={group.id} aria-rowindex={1} className="h-9">{group.headers.map((header) => {
               const direction = header.column.getIsSorted();
-              return <th key={header.id} scope="col" aria-sort={header.column.getCanSort() ? direction === "asc" ? "ascending" : direction === "desc" ? "descending" : "none" : undefined} style={{ width: header.getSize() }} className="h-9 border-b border-zinc-200 px-3 py-0 font-medium text-zinc-600">
-                {header.column.getCanSort() ? <button type="button" onClick={header.column.getToggleSortingHandler()} className="flex w-full items-center gap-2 whitespace-nowrap rounded-sm text-left hover:text-zinc-950" title={header.column.id === "value" ? "Sort by currency, then amount" : undefined}>
-                  {flexRender(header.column.columnDef.header, header.getContext())}<span aria-hidden="true" className={direction ? "text-zinc-900" : "text-zinc-400"}>{direction === "asc" ? "↑" : direction === "desc" ? "↓" : "↕"}</span>
+              return <th key={header.id} scope="col" aria-sort={header.column.getCanSort() ? direction === "asc" ? "ascending" : direction === "desc" ? "descending" : "none" : undefined} style={{ width: header.getSize() }} className="h-9 border-b border-border px-3 py-0 font-medium text-text-muted">
+                {header.column.getCanSort() ? <button type="button" onClick={header.column.getToggleSortingHandler()} className="flex w-full items-center gap-2 whitespace-nowrap rounded-sm text-left hover:text-text" title={header.column.id === "value" ? "Sort by currency, then amount" : undefined}>
+                  {flexRender(header.column.columnDef.header, header.getContext())}<span aria-hidden="true" className={direction ? "text-text" : "text-text-subtle"}>{direction === "asc" ? "↑" : direction === "desc" ? "↓" : "↕"}</span>
                 </button> : flexRender(header.column.columnDef.header, header.getContext())}
               </th>;
             })}</tr>)}
@@ -170,23 +165,23 @@ export function PipelineTable({ deals, accounts, initialDealId, initialView, onS
               const previousEnd = index === 0 ? HEADER_HEIGHT : virtualRows[index - 1].end;
               return <Fragment key={row.id}>
                 {spacer(`${row.id}-gap`, item.start - previousEnd)}
-                <tr data-row-id={row.id} onDoubleClick={event => { if (!(event.target as HTMLElement).closest("input, button, a")) event.currentTarget.querySelector<HTMLAnchorElement>(`a[href]`)?.click(); }} aria-rowindex={item.index + 2} className={`h-9 ${focusedRowId === row.id ? "bg-indigo-50 outline-1 -outline-offset-1 outline-indigo-500" : row.getIsSelected() ? "bg-indigo-50 hover:bg-indigo-100/60" : "hover:bg-zinc-50"}`}>
-                  {row.getVisibleCells().map((cell) => <td key={cell.id} className="h-9 border-b border-zinc-100 p-0 text-zinc-700">
+                <tr data-row-id={row.id} data-selected={row.getIsSelected()} onDoubleClick={event => { if (!(event.target as HTMLElement).closest("input, button, a")) event.currentTarget.querySelector<HTMLAnchorElement>(`a[href]`)?.click(); }} aria-rowindex={item.index + 2} className={`h-9 ${focusedRowId === row.id ? "bg-accent-soft outline-1 -outline-offset-1 outline-focus-ring" : row.getIsSelected() ? "bg-accent-soft hover:bg-accent-soft/60" : "hover:bg-bg-subtle"}`}>
+                  {row.getVisibleCells().map((cell) => <td key={cell.id} className="h-9 border-b border-border p-0 text-text">
                     <div className="flex h-[35px] items-center overflow-hidden px-3"><span className="block min-w-0 truncate" title={cell.getValue() == null ? undefined : String(cell.getValue())}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</span></div>
                   </td>)}
                 </tr>
               </Fragment>;
             })}
             {spacer("end-gap", virtualizer.getTotalSize() - ((virtualRows.at(-1)?.end ?? HEADER_HEIGHT) - HEADER_HEIGHT))}
-            {rows.length === 0 && <tr><td colSpan={table.getVisibleLeafColumns().length} className="p-8 text-center text-zinc-500">
-              <p className="font-medium text-zinc-800">{data.length === 0 ? "No deals yet" : "No matching deals"}</p>
+            {rows.length === 0 && <tr><td colSpan={table.getVisibleLeafColumns().length} className="p-8 text-center text-text-muted">
+              <p className="font-medium text-text">{data.length === 0 ? "No deals yet" : "No matching deals"}</p>
               <p className="mt-1">{data.length === 0 ? "Deals will appear here when added to the workspace." : "Try a different search, stage or risk filter."}</p>
-              {filtered && <button type="button" onClick={clearFilters} className="mt-3 font-medium text-zinc-700 underline underline-offset-4">Clear all filters</button>}
+              {filtered && <button type="button" onClick={clearFilters} className="mt-3 font-medium text-text underline underline-offset-4">Clear all filters</button>}
             </td></tr>}
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-zinc-500">J / K or arrow keys to navigate · Enter opens a highlighted deal · Space toggles its checkbox. Scroll horizontally for all columns.</p>
+      <p className="text-xs text-text-muted">J / K or arrow keys to navigate · Enter opens a highlighted deal · Space toggles its checkbox. Scroll horizontally for all columns.</p>
 
     </div>
   );

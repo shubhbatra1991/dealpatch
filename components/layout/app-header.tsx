@@ -2,20 +2,22 @@
 
 import { useWorkspaceKeyboard } from "./workspace-keyboard";
 import { usePathname } from "next/navigation";
+import { ThemeControl } from "./theme-control";
 
 export function AppHeader() {
   const keyboard = useWorkspaceKeyboard();
   const pathname = usePathname();
   const page = ({ "/": "Overview", "/pipeline": "Pipeline", "/accounts": "Accounts", "/contacts": "Contacts", "/reviews": "Review Queue", "/activity": "Activity" } as Record<string, string>)[pathname] ?? (pathname.startsWith("/accounts/") ? "Accounts" : pathname.startsWith("/contacts/") ? "Contacts" : pathname.startsWith("/deals/") ? "Deal" : "Workspace");
   return (
-    <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-zinc-200 bg-white px-3 sm:px-5">
-      <div className="flex shrink-0 items-center gap-2 text-xs" aria-label={`Sales workspace, ${page}`}>
-        <span className="hidden shrink-0 text-zinc-500 md:inline">Sales workspace</span><span aria-hidden="true" className="hidden text-zinc-300 md:inline">/</span>
-        <span className="truncate font-medium text-zinc-800">{page}</span>
+    <header className="workspace-header flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border bg-surface px-3 sm:px-5">
+      <div className="flex min-w-0 flex-1 items-center gap-2 text-xs" aria-label={`Sales workspace, ${page}`}>
+        <span className="hidden shrink-0 text-text-muted lg:inline">Sales workspace</span><span aria-hidden="true" className="hidden text-text-subtle lg:inline">/</span>
+        <span className="truncate font-medium text-text">{page}</span>
       </div>
-      <div className="flex min-w-0 w-full max-w-72 items-center gap-2">
-        <button type="button" onClick={keyboard.showCommands} aria-keyshortcuts="Control+k Meta+k" aria-haspopup="dialog" className="flex h-8 min-w-0 flex-1 items-center justify-between gap-2 rounded-sm border border-zinc-200 bg-zinc-50 px-2.5 text-xs text-zinc-600"><span className="truncate">Search workspace</span><kbd className="hidden whitespace-nowrap text-[10px] text-zinc-500 sm:inline">Ctrl / ⌘ K</kbd></button>
-        <button type="button" onClick={keyboard.showHelp} aria-label="Keyboard shortcuts" aria-haspopup="dialog" className="h-8 rounded-sm border border-zinc-200 px-2 text-xs">?</button>
+      <div className="flex w-auto shrink-0 max-w-[30rem] items-center gap-2 sm:w-full sm:shrink">
+        <ThemeControl />
+        <button type="button" onClick={keyboard.showCommands} aria-label="Search workspace" title="Search workspace" aria-keyshortcuts="Control+k Meta+k" aria-haspopup="dialog" className="workspace-search flex h-8 min-w-8 shrink-0 items-center justify-between gap-2 rounded-sm border border-border bg-bg-subtle px-2 text-xs text-text-muted sm:min-w-0 sm:flex-1 sm:px-2.5"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-3.5 shrink-0"><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5" /></svg><span className="hidden truncate sm:inline">Search workspace</span><kbd className="hidden whitespace-nowrap text-[10px] text-text-muted lg:inline">Ctrl / ⌘ K</kbd></button>
+        <button type="button" onClick={keyboard.showHelp} aria-label="Keyboard shortcuts" aria-haspopup="dialog" className="h-8 rounded-sm border border-border px-2 text-xs">?</button>
       </div>
     </header>
   );
