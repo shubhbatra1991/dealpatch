@@ -58,7 +58,7 @@ export function AccountDetailWorkspace({ accountId }: { accountId: string }) {
   const queries = [accounts, deals, activities, contacts, proposals, audit];
   const missing = accounts.data !== undefined && !account;
   return <section aria-labelledby={account && data ? "account-title" : "account-state-title"} className="mx-auto max-w-[1440px] space-y-3">
-    <Link href="/accounts" className="inline-block rounded-sm text-xs font-medium text-text-muted underline-offset-4 hover:text-accent hover:underline">← All accounts</Link>
+    <Link href="/workspace/accounts" className="inline-block rounded-sm text-xs font-medium text-text-muted underline-offset-4 hover:text-accent hover:underline">← All accounts</Link>
     {!(account && data) && <h1 id="account-state-title" className="text-lg font-semibold">{missing ? "Account not found" : "Account details"}</h1>}
     <AccountQueryState failed={queries.some(query => query.isError)} ready={ready || missing} fetching={queries.some(query => query.isFetching)} retry={() => { setNow(new Date()); for (const query of queries) void query.refetch(); }} />
     {missing && <p className="text-sm text-text-muted">This account does not exist in your local workspace. Return to Accounts to choose another company.</p>}

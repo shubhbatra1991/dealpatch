@@ -1,6 +1,6 @@
 # Accounts
 
-`/accounts` uses the existing account, deal, activity and pending-proposal query
+`/workspace/accounts` uses the existing account, deal, activity and pending-proposal query
 caches. Search matches all terms across name, status, industry, region and owner;
 status and region filters are exact and compose with search and sorting. Missing
 regions have a separate filter. Pipeline totals exclude both terminal stages and
@@ -11,7 +11,7 @@ rest of a row open the same route. Tab, J/K, up/down and Home/End navigate links
 Enter opens details. Workspace shortcuts already pause while typing. The table
 uses a bounded scroll area with sticky headers and horizontal overflow.
 
-`/accounts/[accountId]` reuses accounts/deals/activities and adds account-scoped
+`/workspace/accounts/[accountId]` reuses accounts/deals/activities and adds account-scoped
 contact, complete proposal-history and audit reads. All displayed relationships are
 filtered by accountId. The five tabs use roving focus and arrow/Home/End controls.
 An unknown account is handled client-side because its existence is browser-local.

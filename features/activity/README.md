@@ -12,7 +12,7 @@ account boundaries checked before displaying related deals or participant names.
 Missing references remain readable without broken navigation links.
 
 Selection is local UI state. No activity is selected by default; existing
-`/activity?activity=...` links select and focus that source without starting a run.
+`/workspace/activity?activity=...` links select and focus that source without starting a run.
 Filtering preserves the selected detail and explains when it is outside the
 filtered feed. Arrow keys, J/K, Home/End and Enter support selection and detail
 focus. The feed has one roving tab stop rather than 150 sequential tab stops.

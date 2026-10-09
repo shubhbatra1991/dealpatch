@@ -43,10 +43,12 @@ export function createProposalRepository(database?: DealPatchDatabase): Proposal
     async getPending() {
       // Oldest first, so earlier proposals are reviewed before newer ones.
       return (await (await ready()).proposals.where("status").anyOf("Pending", "PartiallyApproved").sortBy("createdAt"))
+        .map(proposal => proposalSchema.parse(proposal))
         .filter(proposal => proposal.changes.some(change => change.status === "Pending" || change.status === "Edited"));
     },
     async getById(id) {
-      return (await ready()).proposals.get(id);
+      const record = await (await ready()).proposals.get(id);
+      return record === undefined ? undefined : proposalSchema.parse(record);
     },
     async updateStatus(id, status) {
       return update(id, { status: proposalSchema.shape.status.parse(status) });

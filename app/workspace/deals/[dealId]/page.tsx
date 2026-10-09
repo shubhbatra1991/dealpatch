@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DealDetailWorkspace } from "../../../features/deals/deal-detail-workspace";
+import { DealDetailWorkspace } from "../../../../features/deals/deal-detail-workspace";
 
 export const metadata: Metadata = { title: "Deal" };
 

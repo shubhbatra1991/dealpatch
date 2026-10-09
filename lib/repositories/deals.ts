@@ -22,10 +22,11 @@ export function createDealRepository(database?: DealPatchDatabase): DealReposito
 
   return {
     async getAll() {
-      return (await ready()).deals.toArray();
+      return (await (await ready()).deals.toArray()).map(record => dealSchema.parse(record));
     },
     async getById(id) {
-      return (await ready()).deals.get(id);
+      const record = await (await ready()).deals.get(id);
+      return record === undefined ? undefined : dealSchema.parse(record);
     },
     async update(id, changes) {
       const patch = updateSchema.parse(changes);

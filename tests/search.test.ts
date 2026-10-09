@@ -60,7 +60,7 @@ test("search caps visible results per group without losing total counts and buil
   const id = "opaque/id ?&#";
   const renamed = buildSearchIndex({ accounts: [{ ...data.accounts[0], id }], contacts: [{ ...data.contacts[0], id }], deals: [{ ...data.deals[0], id }], activities: [{ ...data.activities[0], id }], proposals: [{ ...data.proposals[0], id }] });
   const encoded = encodeURIComponent(id);
-  assert.deepEqual(renamed.map(entry => entry.href), [`/accounts/${encoded}`, `/contacts/${encoded}`, `/deals/${encoded}`, `/reviews?proposal=${encoded}`, `/activity?activity=${encoded}`]);
+  assert.deepEqual(renamed.map(entry => entry.href), [`/workspace/accounts/${encoded}`, `/workspace/contacts/${encoded}`, `/workspace/deals/${encoded}`, `/workspace/reviews?proposal=${encoded}`, `/workspace/activity?activity=${encoded}`]);
 });
 
 test("index relationships never label foreign account deals as related activity/proposal context", () => {
@@ -121,7 +121,7 @@ test("palette renders loading/error/empty states, grouped options, escaped text 
 test("search targets open deal details and select account-related activity without starting analysis", () => {
   const target = data.deals[20];
   const html = renderWithKeyboard(createElement(QueryClientProvider, { client: createQueryClient() }, createElement(PipelineTable, { deals: data.deals, accounts: data.accounts, initialDealId: target.id })));
-  assert.ok(html.includes(`/deals/${target.id}`));
+  assert.ok(html.includes(`/workspace/deals/${target.id}`));
   const client = createQueryClient();
   const render = (element: ReturnType<typeof createElement>) => renderWithKeyboard(createElement(QueryClientProvider, { client }, element));
   try {

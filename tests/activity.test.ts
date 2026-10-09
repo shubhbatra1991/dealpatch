@@ -87,10 +87,10 @@ test("workspace has newest default selection, loading, empty, missing and storag
     const selected = render("activity_003");
     assert.match(selected, /Waiting · Ready to analyze/);
     assert.match(selected, /Run simulated analysis/);
-    assert.match(selected, /href="\/contacts\//);
-    assert.match(selected, /href="\/deals\//);
+    assert.match(selected, /href="\/workspace\/contacts\//);
+    assert.match(selected, /href="\/workspace\/deals\//);
     assert.match(selected, /Already in Review Queue/);
-    assert.match(selected, /href="\/reviews\?proposal=proposal_001"/);
+    assert.match(selected, /href="\/workspace\/reviews\?proposal=proposal_001"/);
     assert.match(render("missing"), /selected activity is no longer/);
     client.setQueryData(queryKeys.activities.list, []);
     assert.match(render(), /No activities yet/);
@@ -132,12 +132,12 @@ test("analysis panel renders running, failed and completed drafts with confidenc
     }
     const completed = render({ status: "completed", events });
     for (const text of ["Complete · Analysis complete", "Generated proposal", "demo confidence", "Source evidence", "Current value:", "Proposed value:", "Send to Review Queue"]) assert.ok(completed.includes(text), text);
-    assert.match(completed, /href="\/accounts\/account_001"/);
-    assert.match(completed, /href="\/deals\//);
+    assert.match(completed, /href="\/workspace\/accounts\/account_001"/);
+    assert.match(completed, /href="\/workspace\/deals\//);
     client.setQueryData(queryKeys.proposals.list, seed.proposals);
     const existing = renderWithKeyboard(createElement(QueryClientProvider, { client }, createElement(AnalysisHarness, { state: { status: "idle", events: [] }, sourceId: activity.id })));
     assert.match(existing, /Already in Review Queue/);
-    assert.match(existing, /href="\/reviews\?proposal=proposal_001"/);
+    assert.match(existing, /href="\/workspace\/reviews\?proposal=proposal_001"/);
     assert.doesNotMatch(render({ status: "cancelled", events: events.slice(0, 5) }), /Send to Review Queue/);
   } finally { client.clear(); }
 });

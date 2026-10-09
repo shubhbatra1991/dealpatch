@@ -53,7 +53,7 @@ test("contact metrics distinguish account deals from explicit participation and 
   assert.equal(rows[2].region, undefined);
   assert.ok(matchesContactSearch(rows[0], " MARA director brenlow mara@ "));
   assert.equal(matchesContactSearch(rows[0], "Elias"), false);
-  assert.equal(contactHref("opaque/id ?#"), "/contacts/opaque%2Fid%20%3F%23");
+  assert.equal(contactHref("opaque/id ?#"), "/workspace/contacts/opaque%2Fid%20%3F%23");
 });
 
 test("actual contact table combines search/status/account/region filters and sorts derived counts numerically", () => {
@@ -90,7 +90,7 @@ test("contact detail scopes mixed diffs, audits and participation while retainin
   assert.match(html, /Current value: <\/span>Director/);
   assert.match(html, /Stale suggestion/);
   assert.doesNotMatch(html, /Private colleague suggestion/);
-  assert.match(html, /href="\/accounts\/a"/);
+  assert.match(html, /href="\/workspace\/accounts\/a"/);
   assert.match(html, /Source: Meeting · Scope agreed/);
   const withoutParticipation = buildContactDetail(contact, [account], [contact], [deal], [{ ...activity, participants: [colleague.id] }], [proposal], [], now);
   assert.equal(withoutParticipation.data.activities.length, 0);
@@ -139,8 +139,8 @@ test("contacts use semantic tables, escaped text, native navigation and recovera
   const html = renderWithKeyboard(createElement(ContactsTable, { data: rows }));
   assert.match(html, /&lt;script&gt;unsafe&lt;\/script&gt;/);
   assert.doesNotMatch(html, /<script>/);
-  assert.match(html, /href="\/contacts\/c"/);
-  assert.match(html, /href="\/accounts\/a"/);
+  assert.match(html, /href="\/workspace\/contacts\/c"/);
+  assert.match(html, /href="\/workspace\/accounts\/a"/);
   assert.match(html, /aria-sort="ascending"/);
   assert.match(html, /data-contact-link="c"/);
   assert.match(renderWithKeyboard(createElement(ContactsTable, { data: [] })), /No contacts yet/);

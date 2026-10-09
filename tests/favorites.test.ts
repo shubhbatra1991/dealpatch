@@ -169,7 +169,7 @@ test("sidebar renders five live records, all-favorites action, empty state, type
       client.setQueryData(queryKeys.contacts.list, contacts);
       client.setQueryData(queryKeys.deals.list, deals);
       const html = render(createElement(FavoritesSection));
-      assert.equal((html.match(/href="\/accounts\//g) ?? []).length, 5);
+      assert.equal((html.match(/href="\/workspace\/accounts\//g) ?? []).length, 5);
       assert.match(html, /View all favorites/);
       assert.match(render(createElement(FavoriteButton, { entityType: "account", entityId: accounts[0].id })), /aria-label="Remove from favorites".*aria-pressed="true"/);
       const mixed: Favorite[] = [
@@ -179,10 +179,10 @@ test("sidebar renders five live records, all-favorites action, empty state, type
       ];
       client.setQueryData(queryKeys.favorites.list, mixed);
       const list = render(createElement(FavoriteList, { records: resolveFavorites(mixed, accounts, contacts, deals), expanded: true }));
-      assert.ok(list.includes(`/contacts/${contacts[0].id}`));
-      assert.ok(list.includes(`/deals/${deals[0].id}`));
+      assert.ok(list.includes(`/workspace/contacts/${contacts[0].id}`));
+      assert.ok(list.includes(`/workspace/deals/${deals[0].id}`));
       assert.match(list, /Unavailable account/);
-      assert.doesNotMatch(list, /href="\/accounts\/missing"/);
+      assert.doesNotMatch(list, /href="\/workspace\/accounts\/missing"/);
       assert.equal((list.match(/aria-label="Remove .*? from favorites"/g) ?? []).length, 3);
     } finally { client.clear(); }
   });

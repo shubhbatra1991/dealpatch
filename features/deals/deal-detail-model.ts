@@ -7,7 +7,7 @@ import { isTerminalDealStage } from "../../domain/deals/rules";
 import type { Proposal } from "../../domain/proposals/proposal";
 import { buildAccountDetail, isPendingProposal, latestTimestamp } from "../accounts/accounts-model";
 
-export const dealHref = (id: string) => `/deals/${encodeURIComponent(id)}`;
+export const dealHref = (id: string) => `/workspace/deals/${encodeURIComponent(id)}`;
 export const dealTabs = ["Overview", "Activity", "Contacts", "Reviews", "Changes"] as const;
 export type DealTab = typeof dealTabs[number];
 const day = 86_400_000;

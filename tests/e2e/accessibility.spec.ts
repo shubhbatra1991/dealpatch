@@ -13,20 +13,20 @@ async function audit(page: Page) {
   expect(await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('[aria-hidden="true"] button, [aria-hidden="true"] a[href], [aria-hidden="true"] input, [aria-hidden="true"] [tabindex]')].filter(element => element.tabIndex >= 0 && !element.matches(":disabled") && element.getClientRects().length && !element.closest("[inert]")).map(element => element.outerHTML))).toEqual([]);
 }
 
-const routes = ["/", "/pipeline", "/accounts", "/accounts/account_001", "/contacts", "/contacts/contact_001", "/deals/deal_001", "/activity", "/reviews"];
+const routes = ["/workspace", "/workspace/pipeline", "/workspace/accounts", "/workspace/accounts/account_001", "/workspace/contacts", "/workspace/contacts/contact_001", "/workspace/deals/deal_001", "/workspace/activity", "/workspace/reviews"];
 for (const route of routes) test(`accessibility: route ${route}`, async ({ page }) => {
   await page.goto(route);
   await expect(badge(page, 15)).toBeVisible();
   await expect(page.getByRole("main").getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByText(/Loading .*data|Loading .*workspace|Loading local/)).toHaveCount(0);
-  if (["/pipeline", "/accounts", "/contacts"].includes(route)) await expect(page.getByRole("main").getByRole("table")).toBeVisible();
-  else if (route === "/") await expect(page.getByRole("meter", { name: "Workspace health score", exact: true })).toBeVisible();
-  else if (route === "/activity") await expect(page.getByRole("list", { name: "Activity feed" }).getByRole("button")).toHaveCount(150);
-  else if (route === "/reviews") await expect(review(page)).toBeVisible();
+  if (["/workspace/pipeline", "/workspace/accounts", "/workspace/contacts"].includes(route)) await expect(page.getByRole("main").getByRole("table")).toBeVisible();
+  else if (route === "/workspace") await expect(page.getByRole("meter", { name: "Workspace health score", exact: true })).toBeVisible();
+  else if (route === "/workspace/activity") await expect(page.getByRole("list", { name: "Activity feed" }).getByRole("button")).toHaveCount(150);
+  else if (route === "/workspace/reviews") await expect(review(page)).toBeVisible();
   else await expect(page.getByRole("main").getByRole("button", { name: /^Add .+ to favorites$/ })).toBeVisible();
   await audit(page);
-  if (route === "/accounts/account_001" || route === "/deals/deal_001") {
-    for (const name of ["Contacts", route.startsWith("/accounts") ? "Opportunities" : "Reviews", "Activity", "Changes"]) {
+  if (route === "/workspace/accounts/account_001" || route === "/workspace/deals/deal_001") {
+    for (const name of ["Contacts", route.startsWith("/workspace/accounts") ? "Opportunities" : "Reviews", "Activity", "Changes"]) {
       await page.getByRole("tab", { name, exact: true }).click();
       await audit(page);
     }
@@ -71,7 +71,7 @@ test("accessibility: rollback error and reviewed history", async ({ page }) => {
 });
 
 test("accessibility: skip link, shell navigation and shortcut help", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/workspace");
   await page.keyboard.press("Tab");
   const skip = page.getByRole("link", { name: "Skip to content", exact: true });
   await expect(skip).toBeFocused();
@@ -159,7 +159,7 @@ test("accessibility: review diff, editor focus and approval announcements", asyn
 });
 
 test("accessibility: Pipeline Tab order, selection, sorting and column controls", async ({ page }) => {
-  await page.goto("/pipeline");
+  await page.goto("/workspace/pipeline");
   const region = page.getByRole("region", { name: /^Pipeline deals/ });
   await region.focus();
   await region.press("ArrowDown");
@@ -186,11 +186,11 @@ test("accessibility: Pipeline Tab order, selection, sorting and column controls"
   await region.focus();
   await region.press("ArrowDown");
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/deals\//);
+  await expect(page).toHaveURL(/\/workspace\/deals\//);
 });
 
 test("accessibility: relationship table keyboard paths and contextual favorites", async ({ page }) => {
-  for (const [path, label] of [["/accounts", "Accounts"], ["/contacts", "Contacts"]]) {
+  for (const [path, label] of [["/workspace/accounts", "Accounts"], ["/workspace/contacts", "Contacts"]]) {
     await page.goto(path);
     const region = page.getByRole("region", { name: new RegExp(`^${label} table`) });
     await region.focus();
@@ -211,7 +211,7 @@ test("accessibility: relationship table keyboard paths and contextual favorites"
 });
 
 test("accessibility: shortcuts pause in editable controls", async ({ page }) => {
-  await page.goto("/activity");
+  await page.goto("/workspace/activity");
   const search = page.getByRole("searchbox", { name: "Search activities" });
   await search.pressSequentially("jkr");
   await search.press("Control+k");
@@ -226,7 +226,7 @@ test("accessibility: shortcuts pause in editable controls", async ({ page }) => 
   await page.keyboard.press("Control+k");
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await page.getByLabel("Editable test fixture").evaluate(element => element.remove());
-  await page.goto("/reviews");
+  await page.goto("/workspace/reviews");
   await openFirstReview(page);
   await review(page).getByRole("button", { name: /^Edit Probability on/ }).click();
   const input = page.getByRole("textbox", { name: "Edit proposed probability" });
@@ -237,7 +237,7 @@ test("accessibility: shortcuts pause in editable controls", async ({ page }) => 
 });
 
 test("accessibility: saved-view modal keyboard and focus", async ({ page }) => {
-  await page.goto("/pipeline");
+  await page.goto("/workspace/pipeline");
   const save = page.getByRole("button", { name: "Save view", exact: true });
   await save.focus();
   await save.press("Enter");
@@ -263,7 +263,7 @@ test("accessibility: saved-view modal keyboard and focus", async ({ page }) => {
 
 test("accessibility: activity navigation and simulated status announcements", async ({ page }) => {
   await workspaceFixture(page, "remove-source-proposal");
-  await page.goto("/activity?activity=activity_003");
+  await page.goto("/workspace/activity?activity=activity_003");
   const feed = page.getByRole("list", { name: "Activity feed" });
   const selected = feed.getByRole("button").and(page.locator('[aria-current="true"]'));
   await selected.focus();
@@ -285,7 +285,7 @@ test("accessibility: activity navigation and simulated status announcements", as
 
 test("accessibility: reduced motion and forced colors", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
-  await page.goto("/pipeline");
+  await page.goto("/workspace/pipeline");
   const search = page.getByRole("button", { name: /^Search workspace/ });
   await search.focus();
   expect(await search.evaluate(element => { const style = getComputedStyle(element); return parseFloat(style.outlineWidth); })).toBeGreaterThanOrEqual(2);
@@ -301,18 +301,18 @@ test("accessibility: narrow layouts, zoom-equivalent reflow and enlarged text", 
   for (const width of [390, 720, 768]) {
     // 720 × 500 CSS pixels is the reflow area of 1440 × 1000 at 200% zoom.
     await page.setViewportSize({ width, height: width === 720 ? 500 : 844 });
-    for (const route of ["/pipeline", "/activity", "/reviews", "/deals/deal_001"]) {
+    for (const route of ["/workspace/pipeline", "/workspace/activity", "/workspace/reviews", "/workspace/deals/deal_001"]) {
       await page.goto(route);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       const main = page.getByRole("main");
       expect(await main.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(2);
-      if (width === 390 && (route === "/activity" || route === "/reviews")) await page.screenshot({ path: test.info().outputPath(`mobile-${route.slice(1)}.png`), fullPage: true });
-      if (width === 390 && route === "/activity") {
+      if (width === 390 && (route === "/workspace/activity" || route === "/workspace/reviews")) await page.screenshot({ path: test.info().outputPath(`mobile-${route.slice("/workspace/".length)}.png`), fullPage: true });
+      if (width === 390 && route === "/workspace/activity") {
         await page.getByRole("button", { name: "Run simulated analysis", exact: true }).focus();
         await expect(page.getByRole("button", { name: "Run simulated analysis", exact: true })).toBeInViewport();
         await page.screenshot({ path: test.info().outputPath("mobile-activity-detail.png") });
       }
-      if (width === 390 && route === "/reviews") {
+      if (width === 390 && route === "/workspace/reviews") {
         await page.getByRole("list", { name: "Review proposals" }).getByRole("button").first().focus();
         await page.keyboard.press("Enter");
         await expect(page.getByRole("dialog").getByRole("button", { name: /Close/ })).toBeInViewport();
@@ -329,7 +329,7 @@ test("accessibility: narrow layouts, zoom-equivalent reflow and enlarged text", 
     await page.keyboard.press("Escape");
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/reviews");
+  await page.goto("/workspace/reviews");
   // Enlarge rem-based text separately; native browser UI zoom is a manual limitation.
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
   await openFirstReview(page);

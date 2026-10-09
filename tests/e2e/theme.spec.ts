@@ -14,7 +14,7 @@ for (const mode of modes) test(`theme: ${mode} major surfaces and review states`
   test.setTimeout(120_000); // Full axe scans of routes and review states per palette.
   await theme(page).selectOption(mode);
   await expect(page.locator("html")).toHaveAttribute("data-theme", mode);
-  for (const [name, route] of [["overview", "/"], ["pipeline", "/pipeline"], ["deal", "/deals/deal_001"], ["reviews", "/reviews"]]) {
+  for (const [name, route] of [["overview", "/workspace"], ["pipeline", "/workspace/pipeline"], ["deal", "/workspace/deals/deal_001"], ["reviews", "/workspace/reviews"]]) {
     await page.goto(route);
     await expect(badge(page, 15)).toBeVisible();
     if (name === "overview") await expect(page.getByRole("meter", { name: "Workspace health score", exact: true })).toBeVisible();
@@ -95,7 +95,7 @@ test("theme: pre-paint theme works without hydration and invalid preference fall
   try {
     await context.addInitScript(() => { if (!localStorage.getItem("dealpatch.theme")) localStorage.setItem("dealpatch.theme", "evening"); });
     await page.route("**/_next/**/*.js*", route => route.abort());
-    await page.goto("http://localhost:3100/", { waitUntil: "domcontentloaded" });
+    await page.goto("http://localhost:3100/workspace", { waitUntil: "domcontentloaded" });
     await expect(page.locator("html")).toHaveAttribute("data-theme", "evening");
     expect(await page.locator("body").evaluate(node => getComputedStyle(node).backgroundColor)).toBe("rgb(37, 33, 39)");
     await page.unrouteAll();

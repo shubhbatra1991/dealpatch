@@ -14,7 +14,7 @@ test("approve all updates the badge, Deal Detail and survives reload", async ({ 
   await expect(badge(page, 14)).toBeVisible();
   await page.getByRole("tab", { name: "Changes", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Proposal approved", exact: true })).toHaveCount(2);
-  await page.goto("/reviews?proposal=proposal_001");
+  await page.goto("/workspace/reviews?proposal=proposal_001");
   await expect(review(page).getByRole("region", { name: "Review outcome" })).toContainText("Approval complete");
   await expect(review(page).getByRole("button", { name: "Approve all (0)", exact: true })).toBeDisabled();
 });
@@ -43,7 +43,7 @@ test("edited values validate, remain suggestions until approval, and persist", a
   await expect(review(page)).toContainText("Edited · awaiting approval");
   await review(page).getByRole("link", { name: "View deal", exact: true }).click();
   await expectDeal(page, 20, "Discovery");
-  await page.goto("/reviews?proposal=proposal_001");
+  await page.goto("/workspace/reviews?proposal=proposal_001");
   await expect(review(page)).toContainText("55%");
   await review(page).getByRole("button", { name: "Approve all (2)", exact: true }).click();
   await expect(notifications(page)).toContainText("Approved 2 changes");
@@ -142,7 +142,7 @@ test("a storage abort rolls back CRM, proposal, badge and audit then allows retr
   await expectDeal(page, 20, "Discovery");
   await page.getByRole("tab", { name: "Changes", exact: true }).click();
   await expect(page.getByRole("region", { name: "Change history" })).toContainText("No audit events recorded");
-  await page.goto("/reviews?proposal=proposal_001");
+  await page.goto("/workspace/reviews?proposal=proposal_001");
   await review(page).getByRole("button", { name: "Approve all (2)", exact: true }).click();
   await expect(badge(page, 14)).toBeVisible();
 });
@@ -199,7 +199,7 @@ test("keyboard navigation, dialog focus restoration, checkbox Space and safe typ
 
 test("golden path: Activity → edit → partial approval → Deal audit → Undo", async ({ page }) => {
   await workspaceFixture(page, "remove-source-proposal");
-  await page.goto("/activity?activity=activity_003");
+  await page.goto("/workspace/activity?activity=activity_003");
   await expect(badge(page, 14)).toBeVisible();
   await page.getByRole("button", { name: "Run simulated analysis", exact: true }).click();
   const agent = page.getByRole("region", { name: "Demo intelligence" });
@@ -231,7 +231,7 @@ test("golden path: Activity → edit → partial approval → Deal audit → Und
   await expectDeal(page, 20, "Discovery");
   await page.reload();
   await expectDeal(page, 20, "Discovery");
-  await page.goto("/activity?activity=activity_003");
+  await page.goto("/workspace/activity?activity=activity_003");
   await expect(page.getByText("Already in Review Queue", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Run simulated analysis", exact: true })).toBeDisabled();
   await page.getByRole("link", { name: "Open Review", exact: true }).click();

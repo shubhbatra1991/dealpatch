@@ -7,7 +7,7 @@ import { SavedViewDialog } from "./saved-view-dialog";
 import { useSavedViews } from "./use-saved-views";
 import { EntityIcon } from "../../components/shared/entity-icon";
 
-export const savedViewHref = (id: string) => `/pipeline?view=${encodeURIComponent(id)}`;
+export const savedViewHref = (id: string) => `/workspace/pipeline?view=${encodeURIComponent(id)}`;
 
 export function SavedViewsSection() {
   const views = useSavedViews();

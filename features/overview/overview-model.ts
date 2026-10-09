@@ -54,16 +54,16 @@ export function buildOverview(deals: Deal[], accounts: Account[], activities: Ac
   const currencyTotals = new Map<string, number>();
   for (const deal of open) currencyTotals.set(deal.currency, (currencyTotals.get(deal.currency) ?? 0) + deal.value);
   const suggestions: { id: string; text: string; detail: string; href: string }[] = [];
-  if (reviews.highConfidence) suggestions.push({ id: "reviews", text: `Review ${reviews.highConfidence} high-confidence ${reviews.highConfidence === 1 ? "proposal" : "proposals"}`, detail: "90%+ confidence · verify evidence before approval", href: "/reviews" });
-  else if (reviews.pending) suggestions.push({ id: "reviews", text: `Work through ${reviews.pending} pending reviews`, detail: "Inspect proposed changes and supporting evidence", href: "/reviews" });
-  if (counts.missingNextStep) suggestions.push({ id: "next-step", text: `Define next steps for ${counts.missingNextStep} deals`, detail: "Agree a concrete follow-up with the buying team", href: "/pipeline" });
-  if (counts.overdue) suggestions.push({ id: "overdue", text: `Revisit ${counts.overdue} overdue close dates`, detail: "Confirm the decision timeline with each sponsor", href: "/pipeline" });
-  if (counts.highRisk) suggestions.push({ id: "risk", text: `Check ${counts.highRisk} high-risk deals`, detail: "Identify blockers and agree a recovery plan", href: "/pipeline" });
-  if (counts.stale) suggestions.push({ id: "stale", text: `Reconnect on ${counts.stale} stale deals`, detail: "No recorded deal activity in at least 14 days", href: "/activity" });
+  if (reviews.highConfidence) suggestions.push({ id: "reviews", text: `Review ${reviews.highConfidence} high-confidence ${reviews.highConfidence === 1 ? "proposal" : "proposals"}`, detail: "90%+ confidence · verify evidence before approval", href: "/workspace/reviews" });
+  else if (reviews.pending) suggestions.push({ id: "reviews", text: `Work through ${reviews.pending} pending reviews`, detail: "Inspect proposed changes and supporting evidence", href: "/workspace/reviews" });
+  if (counts.missingNextStep) suggestions.push({ id: "next-step", text: `Define next steps for ${counts.missingNextStep} deals`, detail: "Agree a concrete follow-up with the buying team", href: "/workspace/pipeline" });
+  if (counts.overdue) suggestions.push({ id: "overdue", text: `Revisit ${counts.overdue} overdue close dates`, detail: "Confirm the decision timeline with each sponsor", href: "/workspace/pipeline" });
+  if (counts.highRisk) suggestions.push({ id: "risk", text: `Check ${counts.highRisk} high-risk deals`, detail: "Identify blockers and agree a recovery plan", href: "/workspace/pipeline" });
+  if (counts.stale) suggestions.push({ id: "stale", text: `Reconnect on ${counts.stale} stale deals`, detail: "No recorded deal activity in at least 14 days", href: "/workspace/activity" });
   const fallbacks = [
-    { id: "pipeline", text: open.length ? `Check priorities across ${open.length} open deals` : "Explore the pipeline", detail: open.length ? "Confirm owners, stages and the next commercial milestone" : "No open deals currently need follow-up", href: "/pipeline" },
-    { id: "accounts", text: `Review ${accounts.length} account records`, detail: "Check company context before your next conversation", href: "/accounts" },
-    { id: "activity", text: activities.length ? "Catch up on the latest interactions" : "Open the activity workspace", detail: `${activities.length} recorded interactions in this local workspace`, href: "/activity" },
+    { id: "pipeline", text: open.length ? `Check priorities across ${open.length} open deals` : "Explore the pipeline", detail: open.length ? "Confirm owners, stages and the next commercial milestone" : "No open deals currently need follow-up", href: "/workspace/pipeline" },
+    { id: "accounts", text: `Review ${accounts.length} account records`, detail: "Check company context before your next conversation", href: "/workspace/accounts" },
+    { id: "activity", text: activities.length ? "Catch up on the latest interactions" : "Open the activity workspace", detail: `${activities.length} recorded interactions in this local workspace`, href: "/workspace/activity" },
   ];
   for (const suggestion of fallbacks) if (suggestions.length < 3) suggestions.push(suggestion);
   return {

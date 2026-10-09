@@ -40,9 +40,9 @@ export function ReviewCard({ item, onReviewed, active, onActivate, dialogOpen, o
       <div className="text-xs text-text-muted"><p>Generated · <time dateTime={proposal.createdAt}>{displayTimestamp(proposal.createdAt)}</time></p><p className="mt-1">Confidence <strong className="font-medium text-text">{proposal.confidence}%</strong> <span title="Simulated confidence describes a suggestion, not its correctness.">· simulated</span></p></div>
     </header>
     <nav aria-label="Related records" className="flex flex-wrap gap-3 border-t border-border px-3 py-2 text-xs sm:px-4">
-      <Link href={`/accounts/${encodeURIComponent(proposal.accountId)}`} className="rounded-sm text-accent underline">View account</Link>
-      {proposal.dealId && <Link href={`/deals/${encodeURIComponent(proposal.dealId)}`} className="rounded-sm text-accent underline">View deal</Link>}
-      <Link href={`/activity?activity=${encodeURIComponent(proposal.sourceActivityId)}`} className="rounded-sm text-accent underline">View source activity</Link>
+      <Link href={`/workspace/accounts/${encodeURIComponent(proposal.accountId)}`} className="rounded-sm text-accent underline">View account</Link>
+      {proposal.dealId && <Link href={`/workspace/deals/${encodeURIComponent(proposal.dealId)}`} className="rounded-sm text-accent underline">View deal</Link>}
+      <Link href={`/workspace/activity?activity=${encodeURIComponent(proposal.sourceActivityId)}`} className="rounded-sm text-accent underline">View source activity</Link>
     </nav>
     <div className="border-t border-border px-3 py-3 sm:px-4">
       <h3 className="text-xs font-semibold text-text">Source activity</h3>
