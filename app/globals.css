@@ -159,10 +159,6 @@
   --font-mono: Consolas, "Courier New", monospace;
 }
 
-html {
-  overflow: hidden;
-}
-
 body {
   background: var(--bg);
   color: var(--text);

@@ -90,6 +90,13 @@
 .landing-open p:not(.landing-eyebrow) { max-width: 64ch; margin-top: 16px; color: var(--text-muted); }
 .landing-source-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 20px; font-size: 12px; color: var(--accent); }
 .landing-source-links a:hover { text-decoration: underline; }
+.landing-engineering { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 32px; margin-block: 32px 24px; }
+.landing-engineering li { display: flex; align-items: flex-start; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); }
+.landing-engineering li > span { color: var(--accent); font-size: 12px; }
+.landing-engineering h3 { font-size: 13px; }
+.landing-engineering p { margin-top: 6px; max-width: 36ch; color: var(--text-muted); font-size: 12px; }
+.landing-open-actions { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
+.landing-stack { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; color: var(--text-subtle); font-size: 10px; }
 .landing-footer { padding-block: 28px; border-top: 1px solid var(--border); font-size: 12px; }
 .landing-footer > div { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
 .landing-footer strong { font-size: 14px; font-weight: 600; }
@@ -114,6 +121,8 @@
   .landing-workflow { grid-template-columns: repeat(3, minmax(0,1fr)); row-gap: 24px; }
   .landing-workflow li:nth-child(4) { padding-left: 0; border-left: none; }
   .landing-capabilities { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .landing-engineering { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .landing-open-actions { flex-shrink: 1; }
   .landing-review-section, .landing-local { grid-template-columns: 1fr; }
   .landing-review-section .landing-preview { max-width: 620px; }
 }
@@ -146,6 +155,7 @@
   .landing-workflow li:nth-child(odd) { padding-left: 0; border-left: none; }
   .landing-capabilities { gap: 24px 20px; }
   .landing-local-facts { grid-template-columns: 1fr; gap: 12px; }
+  .landing-engineering { grid-template-columns: 1fr; gap: 16px; }
   .landing-open { flex-direction: column; align-items: flex-start; gap: 24px; }
   .landing-source-links { gap: 16px; }
   .landing-footer > div { flex-direction: column; align-items: flex-start; }
@@ -157,4 +167,72 @@
 @media (forced-colors: active) {
   .landing a:focus-visible, .landing select:focus-visible { outline-color: Highlight; }
   .landing-diff-values > dl, .landing-check { border: 1px solid CanvasText; }
+}
+/* Landing interaction islands retain the same palette and geometry in all modes. */
+.landing-demo-status { min-height: 20px; margin-top: 12px; font-size: 10px; font-weight: 600; color: var(--accent); }
+.landing-demo-slot[data-visible="false"] { opacity: 0; visibility: hidden; transform: translateY(5px); }
+.landing-check[data-checked="false"] { background: var(--surface); border: 1px solid var(--border-strong); }
+.landing-demo-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; font-size: 10px; color: var(--text-muted); }
+.landing-demo-controls button { padding: 4px 8px; border: 1px solid var(--border-strong); border-radius: 3px; background: var(--surface); color: var(--text); white-space: nowrap; }
+.landing-demo-controls button:hover { border-color: var(--accent); background: var(--bg-subtle); }
+.landing-workflow li { position: relative; }
+.landing-workflow li::before { content: ""; position: absolute; top: -2px; left: 0; right: 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+.landing-workflow li[data-complete="true"]::before { transform: scaleX(1); }
+.landing-workflow li[data-active="true"] h3 { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
+.landing-showcase { margin-top: 28px; border: 1px solid var(--border-strong); border-radius: 4px; background: var(--surface); overflow: hidden; }
+.landing-showcase-tabs { display: flex; gap: 4px; padding: 8px 12px 0; background: var(--bg-subtle); border-bottom: 1px solid var(--border); }
+.landing-showcase-tabs button { padding: 9px 14px; border-bottom: 2px solid transparent; font-size: 12px; }
+.landing-showcase-tabs button[aria-selected="true"] { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.landing-showcase-tabs button:hover { background: var(--surface-muted); }
+.landing-showcase-panel { min-height: 300px; padding: 20px; }
+.landing-showcase-panel[hidden] { display: none; }
+.landing-showcase-description { max-width: 80ch; min-height: 40px; color: var(--text-muted); font-size: 12px; }
+.landing-showcase-surface { margin-top: 16px; border: 1px solid var(--border); border-radius: 3px; }
+.landing-showcase-surface > .landing-eyebrow { padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--bg-subtle); font-size: 9px; }
+.landing-showcase-table { overflow-x: auto; }
+.landing-showcase table { width: 100%; min-width: 580px; border-collapse: collapse; font-size: 11px; text-align: left; }
+.landing-showcase th, .landing-showcase td { padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.landing-showcase thead { color: var(--text-muted); font-size: 10px; }
+.landing-showcase tbody th { font-weight: 500; }
+.landing-showcase tbody tr:last-child > * { border-bottom: none; }
+.landing-showcase-content { padding: 12px; font-size: 12px; }
+.landing-showcase-content > p { margin-top: 8px; color: var(--text-muted); }
+.landing-showcase-events { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px; font-size: 11px; }
+.landing-showcase-diffs { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; }
+.landing-showcase-diffs > div { min-width: 180px; padding: 8px 12px; border-left: 2px solid var(--accent); background: var(--accent-soft); }
+.landing-showcase-diffs dt { font-size: 10px; color: var(--text-muted); }
+.landing-showcase-audit { display: grid; gap: 12px; }
+.landing-showcase-audit li { padding-left: 12px; border-left: 2px solid var(--accent); }
+.landing-showcase-audit span { font-size: 10px; color: var(--text-muted); }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes landing-enter { from { opacity: 0; transform: translateY(8px) scale(0.995); } to { opacity: 1; transform: none; } }
+  .landing-hero-copy > .landing-eyebrow, .landing-hero h1, .landing-hero-copy > .landing-lead, .landing-hero .landing-cta, .landing-hero-preview { animation: landing-enter 360ms ease-out both; }
+  .landing-hero h1 { animation-delay: 50ms; }
+  .landing-hero-copy > .landing-lead { animation-delay: 100ms; }
+  .landing-hero .landing-cta { animation-delay: 150ms; }
+  .landing-hero-preview { animation-delay: 180ms; }
+  .landing [data-landing-reveal] { transition: opacity 360ms ease-out, transform 360ms ease-out; }
+  .landing [data-reveal="waiting"] { opacity: 0; transform: translateY(10px); }
+  .landing [data-reveal="waiting"]:focus-within { opacity: 1; transform: none; }
+  .landing-demo-slot { transition: opacity 200ms ease, transform 200ms ease, visibility 200ms; }
+  .landing-example-primary { transition: transform 160ms ease, background-color 160ms ease; }
+  .landing-example-primary[data-applying="true"] { transform: scale(0.97); background: var(--accent-hover); }
+  .landing-workflow li::before { transition: transform 450ms ease; }
+  .landing-showcase-panel:not([hidden]) { animation: landing-enter 180ms ease-out; }
+  .landing-button, .landing-secondary, .landing-demo-controls button, .landing-showcase-tabs button { transition: transform 120ms ease, background-color 120ms ease, border-color 120ms ease; }
+  .landing-button:hover, .landing-secondary:hover { transform: translateY(-1px); }
+  .landing-button:active, .landing-secondary:active { transform: none; }
+  .landing-capabilities > div { transition: border-color 150ms ease; }
+  .landing-capabilities > div:hover { border-color: var(--accent); }
+}
+@media (max-width: 560px) {
+  .landing-showcase-panel { padding: 12px; min-height: 330px; }
+  .landing-showcase-tabs { padding-inline: 6px; }
+  .landing-showcase-tabs button { padding-inline: 12px; }
+}
+@media (forced-colors: active) {
+  .landing-demo-controls button, .landing-showcase-tabs button { border: 1px solid ButtonText; }
+  .landing-showcase-tabs button[aria-selected="true"] { border-bottom: 3px solid Highlight; }
+  .landing-workflow li[data-active="true"] { outline: 1px solid Highlight; }
+  .landing-workflow li::before { background: Highlight; }
 }

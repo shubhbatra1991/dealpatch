@@ -45,8 +45,12 @@ test("release: clean profile, complete workflow, persistence, console and networ
   expect(await page.evaluate(async () => (await indexedDB.databases()).length)).toBe(0);
   await expect(page.getByRole("combobox", { name: "Theme", exact: true })).toHaveValue("auto");
   if (browserName === "chromium") {
+    // Documentation captures use the readable completed state, not a random frame.
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(page.getByRole("group", { name: "Scripted review demo", exact: true })).toHaveAttribute("data-step", "8");
     await page.getByRole("combobox", { name: "Theme", exact: true }).selectOption("night");
     await page.screenshot({ path: "docs/images/landing.png", animations: "disabled" });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
   }
   await page.getByRole("main").getByRole("link", { name: "Explore workspace", exact: true }).first().click();
   await expect(badge(page, 15)).toBeVisible();

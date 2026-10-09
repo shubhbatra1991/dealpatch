@@ -4,8 +4,57 @@ import { projectLinks } from "../../lib/project";
 
 const theme = (page: import("@playwright/test").Page) => page.getByRole("combobox", { name: "Theme", exact: true });
 
+test("landing: mouse wheel and keyboard can scroll the document", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/");
+    await page.mouse.move(width / 2, 400);
+    await page.mouse.wheel(0, 700);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    await page.keyboard.press("End");
+    await expect(page.getByRole("contentinfo")).toBeInViewport();
+    await page.keyboard.press("Home");
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  }
+});
+
+test("landing: all lower sections and footer are reachable and keyboard accessible", async ({ page }) => {
+  await page.goto("/");
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const id of ["how-it-works", "product", "human-review", "local-first", "engineering", "open-source"]) {
+      const section = page.locator(`#${id}`);
+      await section.getByRole("heading", { level: 2 }).scrollIntoViewIfNeeded();
+      await expect(section).toHaveAttribute("data-reveal", "visible");
+      await expect(section.getByRole("heading", { level: 2 })).toBeInViewport();
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+  const review = page.locator("#human-review");
+  for (const principle of ["Visibility.", "Control.", "Traceability.", "Undoability."]) await expect(review.getByText(principle, { exact: true })).toBeVisible();
+  await expect(review.getByRole("blockquote")).toContainText("The sponsor confirmed");
+  for (const title of ["Accessibility-first", "Keyboard navigation", "Virtualized large datasets", "Optimistic updates", "Stale-change protection", "Automated tests", "Cross-browser validation"]) await expect(page.locator("#engineering").getByRole("heading", { name: title, exact: true })).toBeVisible();
+  const source = page.locator("#open-source");
+  await source.getByRole("link", { name: "Explore workspace", exact: true }).focus();
+  await page.keyboard.press("Tab");
+  await expect(source.getByRole("link", { name: "View source", exact: true })).toBeFocused();
+  const footer = page.getByRole("contentinfo");
+  await expect(footer).toContainText("Open-source educational CRM workspace");
+  await expect(footer.getByRole("list", { name: "Built with" })).toHaveText("Next.jsReactTypeScript");
+  const links = footer.getByRole("navigation", { name: "Project links" });
+  await links.getByRole("link", { name: "Workspace", exact: true }).focus();
+  for (const name of ["GitHub", "Documentation", "Security", "MIT License"]) {
+    await page.keyboard.press("Tab");
+    const link = links.getByRole("link", { name, exact: true });
+    await expect(link).toBeFocused();
+    expect(await link.evaluate(node => getComputedStyle(node).outlineStyle)).toBe("solid");
+  }
+});
+
 for (const mode of ["morning", "afternoon", "evening", "night"]) test(`landing: ${mode} desktop/mobile visuals and accessibility`, async ({ page }) => {
   test.setTimeout(120_000);
+  // Stable completed demo and all sections visible; motion is tested separately.
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.clock.setFixedTime(new Date("2026-10-09T12:00:00Z"));
   await page.goto("/");
   await theme(page).selectOption(mode);
@@ -30,7 +79,7 @@ test("landing: metadata, project links and lightweight workspace entry", async (
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /open-source, local-first/);
   await expect(page.getByRole("navigation", { name: "Main navigation" })).toHaveCount(0);
   expect(await page.evaluate(async () => (await indexedDB.databases()).length)).toBe(0);
-  await expect(page.getByRole("link", { name: "View source", exact: true })).toHaveAttribute("href", projectLinks.source);
+  await expect(page.getByRole("link", { name: "View source", exact: true }).first()).toHaveAttribute("href", projectLinks.source);
   const footer = page.getByRole("navigation", { name: "Project links" });
   for (const [name, href] of [["GitHub", projectLinks.source], ["Documentation", projectLinks.documentation], ["Security", projectLinks.security], ["MIT License", projectLinks.license]]) await expect(footer.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
   await expect(page.getByRole("link", { name: "Explore workspace", exact: true }).first()).toHaveAttribute("href", "/workspace");
@@ -73,7 +122,7 @@ test("landing: automatic theme, keyboard, reflow and reduced motion", async ({ p
     await expect(theme(page)).toBeInViewport();
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
-  expect(await page.getByRole("link", { name: "View source", exact: true }).evaluate(node => parseFloat(getComputedStyle(node).transitionDuration))).toBeLessThan(0.001);
+  expect(await page.getByRole("link", { name: "View source", exact: true }).first().evaluate(node => parseFloat(getComputedStyle(node).transitionDuration))).toBeLessThan(0.001);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   // Axe's authored-color contrast calculation does not model forced system paints.
   // Check forced-color focus separately, as in the workspace accessibility suite.

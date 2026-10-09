@@ -13,16 +13,26 @@ theme-specific component branches are introduced. A bounded 1240px canvas, large
 editorial typography and 44–88px section spacing distinguish the showcase from
 the compact CRM. Borders, small radii and restrained elevation remain related.
 
-The hero and human-review sections use a static fictional Review Queue example.
-Example action labels are text, not working controls; real work starts through
+The hero uses a scripted fictional Review Queue example; the human-review section
+retains a static example. Illustrated approval labels never change CRM data. A
+separate Pause control and product tabs are keyboard-operable; real work starts through
 Explore workspace. The public header uses section anchors and the CRM sidebar
 stays inside `/workspace`.
 
 Preview columns stack at tablet sizes, workflow steps reflow, and narrow headers
 retain the theme selector. No gradients, imagery, video or animation libraries are
-added. Optional 100ms color transitions respect reduced motion; forced-colors
+added. The landing layer also uses short opacity/transform entrances, once-only
+scroll reveals and staged demo transitions. Reduced motion disables these and
+autoplay; forced-colors
 outlines remain. Landing screenshots cover four modes on desktop/mobile.
 Workspace baselines are preserved unless verified migration changes require updates.
+
+Below the hero, the showcase follows the workflow, interactive product tabs,
+human-review evidence, local-first setup, engineering highlights and open-source
+invitation. Engineering highlights are a compact text grid, without statistics or
+commercial claims. The footer provides workspace/source/docs/security/license
+links and understated Next.js, React and TypeScript labels. These additions use
+the existing one-shot reveals and semantic tokens; no new client island is needed.
 
 ## Surfaces and hierarchy
 
@@ -104,7 +114,8 @@ semantic danger treatment and existing Retry actions. Empty/no-result/missing vi
 retain helpful text and return links. Do not replace them with unlabeled spinners
 or illustrations. Labels, live regions and focus restoration remain intact.
 
-Only background, border and text colors transition, for 100ms, under
+Workspace interactions transition only background, border and text colors for
+100ms under
 `prefers-reduced-motion: no-preference`. No layout or large movement animation.
 Forced-colors system outlines remain; selection also retains structural/text cues.
 See [ACCESSIBILITY.md](./ACCESSIBILITY.md) for remaining manual testing limitations.

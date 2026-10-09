@@ -119,3 +119,45 @@ including the 22 workspace accessibility cases, 34 unchanged screenshot baseline
 and stress fixture. Three additional repeated Firefox workflow checks passed after
 replacing forced reload-style navigation with normal product links; console warning
 assertions remain strict. No application feature or dependency was added.
+
+## Landing interaction polish
+
+`landing-motion.spec.ts` tests the scripted hero sequence/replay, retained stage
+time on hover/focus/manual pause, document visibility and viewport pause/resume,
+static/live preference changes for reduced motion, once-only workflow/reveal,
+keyboard product tabs, all-theme axe and forced-colors focus. Document visibility
+is changed with an isolated browser-property fixture; UI and timers remain real.
+The clock advances one stage at a time so React commits between timer callbacks.
+
+The four-theme desktop/mobile landing snapshots deliberately use reduced motion:
+all content is visible and the complete hero state is deterministic. These eight
+baselines are updated for the new showcase/status surface; workspace baselines
+are unchanged. README's landing image uses the same completed static capture.
+Looping hero text has no live region, and no workspace data is touched. Native
+screen-reader testing remains a separate manual limitation.
+
+Landing-polish final gate (9 October 2026): typecheck, lint (zero warnings),
+150 unit tests and production build passed. All 68 Playwright tests passed without
+retries: 60 Chromium, four Firefox and four WebKit. The eight landing baselines
+were intentionally updated; all 26 workspace baselines passed unchanged.
+
+## Landing sections and footer
+
+The lower-section check scrolls through workflow, product, human review,
+local-first, engineering and open-source sections at desktop/mobile widths.
+It verifies the four review principles, seven engineering highlights, CTA tab
+order, footer links/technology labels and visible keyboard focus. Existing
+four-theme screenshot/axe, 320px reflow and reduced-motion tests remain in place.
+Eight landing baselines were refreshed for the added engineering grid, expanded
+review explanation, open-source actions and footer; the hero was preserved.
+
+Final validation: typecheck, lint, 150 unit tests and production build passed.
+All 69 end-to-end tests passed without retries (61 Chromium, four Firefox, four
+WebKit), including all four landing themes, axe scans and unchanged workspace
+visual comparisons.
+
+The scrolling regression uses actual mouse-wheel input and Home/End keys at
+desktop and mobile widths. Programmatic `scrollIntoView` alone can still move a
+document with `overflow: hidden`, so section-reachability checks do not replace
+this user-input test. Document scrolling is allowed globally; the workspace's
+viewport-height shell retains its own internal scroll container.

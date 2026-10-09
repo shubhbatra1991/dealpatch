@@ -12,8 +12,9 @@ Routing and page composition only.
 - `app/workspace/**/page.tsx`: small compositions of existing workspace features.
 
 The public `/` showcase does not initialize IndexedDB or mount workspace providers.
-`features/landing` contains static server-rendered sections and an illustrative
-review preview. Only the shared ThemeControl needs client state. Workspace CTA
+`features/landing` contains server-rendered sections with small client islands for
+the scripted hero, one-shot workflow progression, section reveals and product tabs.
+The composed previews never import workspace providers, repositories or simulation. Workspace CTA
 links disable prefetch so viewing the showcase does not preload the product.
 
 Both layers share semantic tokens and theme bootstrap. Landing CSS is scoped under
@@ -64,8 +65,8 @@ Seed JSON must not become the runtime source of truth.
 
 ## Showcase performance boundary
 
-The landing page is statically rendered. Its only feature-specific client state
-is the existing theme selector; the illustrative review never imports queries,
+The landing page is statically rendered with lightweight local interaction state.
+The illustrative review never imports queries,
 repositories, Dexie, simulation or workspace tables. Browser tests assert that
 IndexedDB has no databases before workspace entry. CTA prefetch is disabled.
 
@@ -76,3 +77,27 @@ generated HTML document, including framework/polyfill chunks; Python gzip was
 applied to each file independently. It is not an interaction benchmark or actual
 network transfer measurement. Landing scripts contain no Dexie marker. The
 framework remains the largest baseline cost; no dependencies were added.
+
+## Landing interaction boundary
+
+CSS handles short transform/opacity entrances and transitions. IntersectionObserver
+reveals sections once and gates demo playback by viewport visibility. One cancellable
+timeout advances the hero; another advances the finite workflow only while visible.
+Remaining stage time is retained on hover/focus, explicit Pause, hidden document or
+offscreen pause. Cleanup removes timers, observers and event listeners. Reduced
+motion presents a complete static review with no autoplay. No new package, data
+model, workspace query or persistence behavior is introduced.
+
+Hero content is illustrative and excluded from the accessibility tree, with a
+stable screen-reader description and keyboard-operable pause control. Looping
+status text has no live region. Product tabs use roving focus, Arrow Left/Right,
+Home/End and labeled panels. No real workspace route is embedded or preloaded.
+
+Landing interaction build observation (9 October 2026): the generated `/` HTML
+references eight local JavaScript files totaling 589,083 raw bytes / 180,976 bytes
+after individually applying Python gzip. This includes framework/polyfill chunks,
+not just the interaction code, and is not measured network transfer or a latency
+benchmark. No Dexie marker was found in those referenced scripts; browser checks
+also confirm the showcase creates no IndexedDB database before workspace entry.
+The earlier numbers above are a historical pre-interaction observation, not a
+controlled performance comparison.
