@@ -23,6 +23,7 @@ export const proposalChangeSchema = z.strictObject({
   after: z.json(),
   selected: z.boolean(),
   status: z.enum(["Pending", "Approved", "Rejected", "Edited"]),
+  edited: z.boolean().optional(),
 }).superRefine((change, ctx) => {
   const fields: Record<string, z.ZodType> = editableFields[change.entityType];
   // Own-property lookup prevents inherited names such as toString being fields.
@@ -31,19 +32,25 @@ export const proposalChangeSchema = z.strictObject({
     return;
   }
   const fieldSchema = fields[change.field];
+  let proposedValue: unknown = change.after;
   for (const key of ["before", "after"] as const) {
     // Optional model fields represent absence as null in serialized changes.
     if (change[key] === null && fieldSchema.safeParse(undefined).success) continue;
     const result = fieldSchema.safeParse(change[key]);
     if (!result.success) {
       ctx.addIssue({ code: "custom", path: [key], message: result.error.issues.map((issue) => issue.message).join("; ") });
-    }
+    } else if (key === "after") proposedValue = result.data;
   }
-  if (JSON.stringify(change.before) === JSON.stringify(change.after)) {
+  if (JSON.stringify(change.before) === JSON.stringify(proposedValue)) {
     ctx.addIssue({ code: "custom", path: ["after"], message: "Change must modify the value" });
   }
 // The refinement above validates the entity/field/value correlation.
-}).transform((change) => change as ProposalChange);
+}).transform((change) => {
+  const fields: Record<string, z.ZodType> = editableFields[change.entityType];
+  // Keep the immutable snapshot exact; normalize only the proposed value using
+  // the same field schema as the eventual entity write (e.g. trimmed strings).
+  return { ...change, after: change.after === null ? null : fields[change.field].parse(change.after) } as ProposalChange;
+});
 
 export const evidenceSchema = z.strictObject({
   type: z.literal("activity_excerpt"),

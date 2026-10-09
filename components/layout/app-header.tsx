@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export function AppHeader() {
   const keyboard = useWorkspaceKeyboard();
   const pathname = usePathname();
-  const page = ({ "/": "Overview", "/pipeline": "Pipeline", "/accounts": "Accounts", "/contacts": "Contacts", "/reviews": "Review Queue", "/activity": "Activity" } as Record<string, string>)[pathname] ?? "Workspace";
+  const page = ({ "/": "Overview", "/pipeline": "Pipeline", "/accounts": "Accounts", "/contacts": "Contacts", "/reviews": "Review Queue", "/activity": "Activity" } as Record<string, string>)[pathname] ?? (pathname.startsWith("/accounts/") ? "Accounts" : pathname.startsWith("/contacts/") ? "Contacts" : pathname.startsWith("/deals/") ? "Deal" : "Workspace");
   return (
     <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-zinc-200 bg-white px-3 sm:px-5">
       <div className="flex shrink-0 items-center gap-2 text-xs" aria-label={`Sales workspace, ${page}`}>

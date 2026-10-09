@@ -5,10 +5,17 @@ import { generateDemoDeals } from "../../lib/simulation/generate-demo-deals";
 import { useAccounts } from "../accounts/use-accounts";
 import { useDeals } from "./use-deals";
 import { PipelineTable } from "./pipeline-table";
+import Link from "next/link";
+import type { PipelineViewConfig } from "../../domain/saved-views/saved-view";
+import { useSavedViews } from "../saved-views/use-saved-views";
+import { SavedViewDialog } from "../saved-views/saved-view-dialog";
 
-export function PipelineWorkspace() {
+export function PipelineWorkspace({ targetDealId, savedViewId }: { targetDealId?: string; savedViewId?: string }) {
   const deals = useDeals();
   const accounts = useAccounts();
+  const views = useSavedViews();
+  const view = views.data?.find(record => record.id === savedViewId);
+  const [saving, setSaving] = useState<PipelineViewConfig>();
   const [performanceCount, setPerformanceCount] = useState(0);
   const displayedDeals = useMemo(() => performanceCount > 0 && accounts.data?.length
     ? generateDemoDeals(accounts.data, performanceCount) : deals.data,
@@ -38,7 +45,12 @@ export function PipelineWorkspace() {
         <p>{ready ? "Unable to refresh the pipeline. Showing the last loaded data." : "Unable to load the pipeline from local storage."}</p>
         <button type="button" onClick={retry} disabled={deals.isFetching || accounts.isFetching} className="font-medium underline underline-offset-4 disabled:opacity-50">Retry</button>
       </div>}
-      {ready && displayedDeals ? <PipelineTable key={performanceCount} deals={displayedDeals} accounts={accounts.data} /> : !failed && <div role="status" aria-busy="true" className="rounded-sm border border-zinc-200 p-4 text-sm text-zinc-500">Loading pipeline…</div>}
+      {ready && targetDealId && !deals.data.some(deal => deal.id === targetDealId) && <p role="status" className="text-xs text-amber-800">The selected deal is no longer in this workspace. Showing the saved pipeline.</p>}
+      {view && <p className="text-xs text-zinc-600">Saved view: <span className="font-medium text-zinc-800">{view.name}</span> · <Link href="/pipeline" className="rounded-sm underline">Default pipeline</Link></p>}
+      {savedViewId && views.isError && <p role="alert" className="text-xs text-red-900">Unable to load this saved view. <button type="button" onClick={() => void views.refetch()} className="underline">Retry</button> · <Link href="/pipeline" className="underline">Default pipeline</Link></p>}
+      {savedViewId && !views.isError && views.data && !view && <p role="status" className="text-xs text-amber-800">This saved view is no longer available. Showing the default pipeline. <Link href="/pipeline" className="underline">Clear saved view</Link></p>}
+      {ready && displayedDeals && (!savedViewId || views.data && !views.isError) ? <PipelineTable key={`${performanceCount}:${view?.id ?? "default"}`} deals={displayedDeals} accounts={accounts.data} initialView={view} onSaveView={setSaving} initialDealId={performanceCount === 0 ? targetDealId : undefined} /> : !failed && !(savedViewId && views.isError) && <div role="status" aria-busy="true" className="rounded-sm border border-zinc-200 p-4 text-sm text-zinc-500">{savedViewId && !views.data ? "Loading saved view…" : "Loading pipeline…"}</div>}
+      {saving && <SavedViewDialog action="create" config={saving} onClose={() => setSaving(undefined)} />}
     </section>
   );
 }

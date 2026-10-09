@@ -170,8 +170,9 @@ test("Activity SSR renders demo labels and native controls without starting anal
     client.setQueryData(queryKeys.activities.list, seed.activities);
     client.setQueryData(queryKeys.accounts.list, seed.accounts);
     client.setQueryData(queryKeys.deals.list, seed.deals);
-    const html = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ActivityWorkspace)));
-    for (const text of ["Demo intelligence", "No real LLM or external AI API", "Run simulated analysis", "Choose activity", "Simulated analysis events", "Ready to analyze"]) assert.ok(html.includes(text), text);
+    client.setQueryData(queryKeys.contacts.list, seed.contacts);
+    const html = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ActivityWorkspace, { targetActivityId: "activity_003" })));
+    for (const text of ["Demo intelligence", "No real LLM or external AI API", "Run simulated analysis", "Activity feed", "Simulated analysis events", "Ready to analyze"]) assert.ok(html.includes(text), text);
     assert.ok(!html.includes("Draft proposal ready"));
   } finally { client.clear(); }
 });

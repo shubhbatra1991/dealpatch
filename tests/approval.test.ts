@@ -6,6 +6,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { QueryClientProvider } from "@tanstack/react-query";
 import type { Deal } from "../domain/deals/deal";
+import type { Contact } from "../domain/contacts/contact";
 import type { Proposal } from "../domain/proposals/proposal";
 import { DealPatchDatabase } from "../lib/db/database";
 import { createReviewRepository, type ReviewItem } from "../lib/repositories/reviews";
@@ -34,6 +35,8 @@ async function workspace(run: (environment: {
     client.setQueryData(queryKeys.proposals.pending, await createProposalRepository(db).getPending());
     client.setQueryData(queryKeys.deals.list, await db.deals.toArray());
     client.setQueryData(queryKeys.accounts.list, await db.accounts.toArray());
+    client.setQueryData(queryKeys.contacts.list, await db.contacts.toArray());
+    client.setQueryData(queryKeys.proposals.list, await db.proposals.toArray());
     await run({ db, repo, client, item: queue[0] });
   } finally { client.clear(); await db.delete(); }
 }
@@ -45,7 +48,7 @@ test("successful approval updates deal, queue and count before persistence compl
     const mutation = client.getMutationCache().build(client, approvalMutationOptions(client, {
       ...repo, approve: async (id, ids) => { started.resolve(); await release.promise; return repo.approve(id, ids); },
     }));
-    const operation = mutation.execute({ id: item.proposal.id, changeIds: item.proposal.changes.map(c => c.id) });
+    const operation = mutation.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     await started.promise;
     assert.equal(mutation.state.status, "pending");
     assert.equal(mutation.state.context?.receipt.after.status, "Approved");
@@ -60,6 +63,7 @@ test("successful approval updates deal, queue and count before persistence compl
     assert.equal(receipt.after.status, "Approved");
     assert.equal((await db.deals.get(before!.id))!.stage, visible.stage);
     assert.equal((await db.proposals.get(item.proposal.id))!.status, "Approved");
+    assert.equal(client.getQueryData<Proposal[]>(queryKeys.proposals.list)!.find(proposal => proposal.id === item.proposal.id)!.status, "Approved");
     assert.equal(mutation.state.status, "success");
   });
 });
@@ -70,7 +74,7 @@ test("partial optimistic approval leaves unselected fields and pending count int
     const mutation = client.getMutationCache().build(client, approvalMutationOptions(client, {
       ...repo, approve: async (id, ids) => { started.resolve(); await release.promise; return repo.approve(id, ids); },
     }));
-    const operation = mutation.execute({ id: item.proposal.id, changeIds: [item.proposal.changes[0].id] });
+    const operation = mutation.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: [item.proposal.changes[0].id] });
     await started.promise;
     const visible = client.getQueryData<Deal[]>(queryKeys.deals.list)!.find(deal => deal.id === item.proposal.dealId)!;
     assert.equal(visible.stage, "Evaluation");
@@ -92,7 +96,7 @@ test("failed persistence rolls back proposal and affected fields without losing 
     const mutation = client.getMutationCache().build(client, approvalMutationOptions(client, {
       ...repo, approve: async () => { started.resolve(); await release.promise; throw new Error("IndexedDB write failed"); },
     }));
-    const operation = mutation.execute({ id: item.proposal.id, changeIds: item.proposal.changes.map(c => c.id) });
+    const operation = mutation.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     const rejected = assert.rejects(operation, /IndexedDB write failed/);
     await started.promise;
     client.setQueryData<Deal[]>(queryKeys.deals.list, rows => rows!.map(row => row.id === item.proposal.dealId ? { ...row, nextStep: "Unrelated cached edit" } : row));
@@ -104,6 +108,7 @@ test("failed persistence rolls back proposal and affected fields without losing 
     assert.equal(client.getQueryData<Proposal[]>(queryKeys.proposals.pending)!.length, 15);
     assert.deepEqual(await db.proposals.get(item.proposal.id), item.proposal);
     assert.equal(mutation.state.status, "error");
+    assert.deepEqual(client.getQueryData<Proposal[]>(queryKeys.proposals.list)!.find(proposal => proposal.id === item.proposal.id), item.proposal);
   });
 });
 
@@ -111,7 +116,7 @@ test("full Undo restores original CRM fields, proposal and caches while preservi
   await workspace(async ({ db, repo, client, item }) => {
     const before = (await db.deals.get(item.proposal.dealId!))!;
     const approval = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
-    const receipt = await approval.execute({ id: item.proposal.id, changeIds: item.proposal.changes.map(c => c.id) });
+    const receipt = await approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     await db.deals.update(before.id, { nextStep: "A newer unrelated next step" });
     client.setQueryData(queryKeys.deals.list, await db.deals.toArray());
     const undo = client.getMutationCache().build(client, undoMutationOptions(client, repo));
@@ -135,7 +140,7 @@ test("partial Undo preserves earlier approvals and restores edited proposal stat
     client.setQueryData(queryKeys.proposals.pending, await createProposalRepository(db).getPending());
     client.setQueryData(queryKeys.deals.list, await db.deals.toArray());
     const approval = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
-    const receipt = await approval.execute({ id: item.proposal.id, changeIds: [probability.id] });
+    const receipt = await approval.execute({ id: item.proposal.id, expectedProposal: partial.proposal, changeIds: [probability.id] });
     await client.getMutationCache().build(client, undoMutationOptions(client, repo)).execute({ receipt, item: partial, approvalId: approval.mutationId });
     assert.deepEqual(await db.proposals.get(item.proposal.id), partial.proposal);
     const deal = (await db.deals.get(item.proposal.dealId!))!;
@@ -149,7 +154,7 @@ test("partial Undo preserves earlier approvals and restores edited proposal stat
 test("failed Undo rolls back its optimistic restoration and can be retried", async () => {
   await workspace(async ({ db, repo, client, item }) => {
     const approval = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
-    const receipt = await approval.execute({ id: item.proposal.id, changeIds: item.proposal.changes.map(c => c.id) });
+    const receipt = await approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     const started = deferred(), release = deferred();
     const undo = client.getMutationCache().build(client, undoMutationOptions(client, {
       ...repo, undo: async () => { started.resolve(); await release.promise; throw new Error("Undo storage failure"); },
@@ -175,10 +180,10 @@ test("Undo refuses newer changes and overlapping optimistic writes are blocked",
     const approval = client.getMutationCache().build(client, approvalMutationOptions(client, {
       ...repo, approve: async (id, ids) => { started.resolve(); await release.promise; return repo.approve(id, ids); },
     }));
-    const operation = approval.execute({ id: item.proposal.id, changeIds: item.proposal.changes.map(c => c.id) });
+    const operation = approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     await started.promise;
     const second = client.getQueryData<ReviewItem[]>(queryKeys.proposals.queue)![0];
-    await assert.rejects(client.getMutationCache().build(client, approvalMutationOptions(client, repo)).execute({ id: second.proposal.id, changeIds: second.proposal.changes.map(c => c.id) }), /Another review/);
+    await assert.rejects(client.getMutationCache().build(client, approvalMutationOptions(client, repo)).execute({ id: second.proposal.id, expectedProposal: second.proposal, changeIds: second.proposal.changes.map(c => c.id) }), /Another review/);
     release.resolve();
     const receipt = await operation;
     await db.deals.update(item.proposal.dealId!, { probability: 80 });
@@ -192,10 +197,10 @@ test("Undo refuses newer changes and overlapping optimistic writes are blocked",
 test("sequential partial approvals must be undone in reverse order", async () => {
   await workspace(async ({ db, repo, client, item }) => {
     const first = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
-    const firstReceipt = await first.execute({ id: item.proposal.id, changeIds: [item.proposal.changes[0].id] });
+    const firstReceipt = await first.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: [item.proposal.changes[0].id] });
     const partial = client.getQueryData<ReviewItem[]>(queryKeys.proposals.queue)!.find(row => row.proposal.id === item.proposal.id)!;
     const second = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
-    const secondReceipt = await second.execute({ id: item.proposal.id, changeIds: [item.proposal.changes[1].id] });
+    const secondReceipt = await second.execute({ id: item.proposal.id, expectedProposal: partial.proposal, changeIds: [item.proposal.changes[1].id] });
     await assert.rejects(client.getMutationCache().build(client, undoMutationOptions(client, repo)).execute({ receipt: firstReceipt, item, approvalId: first.mutationId }), /most recent approval/);
     assert.deepEqual(await db.proposals.get(item.proposal.id), secondReceipt.after);
     await client.getMutationCache().build(client, undoMutationOptions(client, repo)).execute({ receipt: secondReceipt, item: partial, approvalId: second.mutationId });
@@ -208,7 +213,7 @@ test("sequential partial approvals must be undone in reverse order", async () =>
 test("global success and rollback notifications render after approval leaves the queue", async () => {
   await workspace(async ({ repo, client, item }) => {
     const approval = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
-    await approval.execute({ id: item.proposal.id, changeIds: item.proposal.changes.map(c => c.id) });
+    await approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     const render = () => renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ReviewNotifications)));
     let html = render();
     assert.ok(html.includes("Approved 2 changes for Avelmere Systems"));
@@ -217,10 +222,80 @@ test("global success and rollback notifications render after approval leaves the
     const next = client.getQueryData<ReviewItem[]>(queryKeys.proposals.queue)![0];
     await assert.rejects(client.getMutationCache().build(client, approvalMutationOptions(client, {
       ...repo, approve: async () => { throw new Error("Storage unavailable"); },
-    })).execute({ id: next.proposal.id, changeIds: next.proposal.changes.map(c => c.id) }));
+    })).execute({ id: next.proposal.id, expectedProposal: next.proposal, changeIds: next.proposal.changes.map(c => c.id) }));
     html = render();
     assert.ok(html.includes("Previous values and the proposal were restored"));
     assert.ok(html.includes("Storage unavailable"));
     assert.ok(html.includes('role="alert"'));
+  });
+});
+
+test("contact approval patches list, account contacts and proposal history optimistically, then rollback and undo restore them", async () => {
+  await workspace(async ({ db, repo, client }) => {
+    const item = (await repo.getQueue()).find(row => row.proposal.changes.some(change => change.entityType === "Contact"))!;
+    const change = item.proposal.changes[0];
+    const before = await db.contacts.get(change.entityId);
+    const contactsKey = queryKeys.contacts.forAccount(item.proposal.accountId);
+    const proposalsKey = queryKeys.proposals.forAccount(item.proposal.accountId);
+    client.setQueryData(contactsKey, await db.contacts.where("accountId").equals(item.proposal.accountId).toArray());
+    client.setQueryData(proposalsKey, await db.proposals.where("accountId").equals(item.proposal.accountId).toArray());
+    const started = deferred(), release = deferred();
+    const failed = client.getMutationCache().build(client, approvalMutationOptions(client, {
+      ...repo, approve: async () => { started.resolve(); await release.promise; throw new Error("Contact storage failure"); },
+    }));
+    const rejected = assert.rejects(failed.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: [change.id] }), /Contact storage failure/);
+    await started.promise;
+    for (const key of [queryKeys.contacts.list, contactsKey]) assert.equal(Reflect.get(client.getQueryData<Contact[]>(key)!.find(contact => contact.id === change.entityId)!, change.field), change.after);
+    for (const key of [queryKeys.proposals.list, proposalsKey]) assert.equal(client.getQueryData<Proposal[]>(key)!.find(proposal => proposal.id === item.proposal.id)!.status, "PartiallyApproved");
+    assert.deepEqual(await db.contacts.get(change.entityId), before);
+    release.resolve(); await rejected;
+    for (const key of [queryKeys.contacts.list, contactsKey]) assert.deepEqual(client.getQueryData<Contact[]>(key)!.find(contact => contact.id === change.entityId), before);
+    for (const key of [queryKeys.proposals.list, proposalsKey]) assert.deepEqual(client.getQueryData<Proposal[]>(key)!.find(proposal => proposal.id === item.proposal.id), item.proposal);
+    const approval = client.getMutationCache().build(client, approvalMutationOptions(client, repo));
+    const receipt = await approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: [change.id] });
+    assert.equal((await db.contacts.get(change.entityId))!.role, change.after);
+    await client.getMutationCache().build(client, undoMutationOptions(client, repo)).execute({ receipt, item, approvalId: approval.mutationId });
+    for (const key of [queryKeys.contacts.list, contactsKey]) assert.deepEqual(client.getQueryData<Contact[]>(key)!.find(contact => contact.id === change.entityId), before);
+    for (const key of [queryKeys.proposals.list, proposalsKey]) assert.deepEqual(client.getQueryData<Proposal[]>(key)!.find(proposal => proposal.id === item.proposal.id), item.proposal);
+  });
+});
+
+test("a proposal edited in another view after optimistic approval begins cannot apply unseen values", async () => {
+  await workspace(async ({ db, repo, client, item }) => {
+    const started = deferred(), release = deferred();
+    const original = await db.deals.get(item.proposal.dealId!);
+    const approval = client.getMutationCache().build(client, approvalMutationOptions(client, {
+      ...repo, approve: async (id, ids, expected) => { started.resolve(); await release.promise; return repo.approve(id, ids, expected); },
+    }));
+    const rejected = assert.rejects(approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(change => change.id) }), /edited or reviewed/);
+    await started.promise;
+    const edited = await repo.review(item.proposal.id, { type: "edit", changeId: item.proposal.changes[1].id, value: 75 });
+    release.resolve(); await rejected;
+    assert.deepEqual(await db.deals.get(item.proposal.dealId!), original);
+    assert.deepEqual(await db.proposals.get(item.proposal.id), edited);
+    assert.deepEqual(client.getQueryData<Deal[]>(queryKeys.deals.list)!.find(deal => deal.id === original!.id), original);
+    assert.equal((await db.auditEvents.toArray()).filter(event => event.action !== "FieldEdited").length, 0);
+  });
+});
+
+test("a newly stale persisted value rolls back optimistic approval and refetches the conflict for review", async () => {
+  await workspace(async ({ db, repo, client, item }) => {
+    const started = deferred(), release = deferred();
+    const approval = client.getMutationCache().build(client, approvalMutationOptions(client, {
+      ...repo, approve: async (id, ids, expected) => { started.resolve(); await release.promise; return repo.approve(id, ids, expected); },
+    }));
+    const rejected = assert.rejects(approval.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(change => change.id) }), /current value changed/);
+    await started.promise;
+    await db.deals.update(item.proposal.dealId!, { probability: 38 });
+    release.resolve(); await rejected;
+    assert.equal((await db.deals.get(item.proposal.dealId!))!.stage, "Discovery");
+    assert.equal((await db.deals.get(item.proposal.dealId!))!.probability, 38);
+    assert.deepEqual(await db.proposals.get(item.proposal.id), item.proposal);
+    assert.equal(await db.auditEvents.count(), 0);
+    assert.equal(client.getQueryState(queryKeys.proposals.queue)?.isInvalidated, true);
+    const refreshed = await client.fetchQuery({ queryKey: queryKeys.proposals.queue, queryFn: () => repo.getQueue() });
+    const stale = refreshed.find(row => row.proposal.id === item.proposal.id)!;
+    assert.equal(stale.changes[1].current, 38); assert.equal(stale.changes[1].conflict, true);
+    await assert.rejects(client.getMutationCache().build(client, approvalMutationOptions(client, repo)).execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: [item.proposal.changes[1].id] }), /conflict/);
   });
 });

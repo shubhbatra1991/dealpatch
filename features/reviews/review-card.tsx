@@ -17,6 +17,7 @@ export function ReviewCard({ item, onReviewed, active, onActivate }: { item: Rev
   const [selection, setSelection] = useState(() => new Set(proposal.changes.filter(c => c.selected && isUnreviewed(c)).map(c => c.id)));
   const pending = item.changes.filter(c => isUnreviewed(c.change));
   const eligible = pending.filter(c => !c.conflict);
+  const stale = pending.length - eligible.length;
   const selected = eligible.filter(c => selection.has(c.change.id)).map(c => c.change.id);
   const [open, setOpen] = useState(false);
   const article = useRef<HTMLElement>(null);
@@ -28,7 +29,7 @@ export function ReviewCard({ item, onReviewed, active, onActivate }: { item: Rev
   useWorkspaceShortcuts(actions, active);
   const content = <article ref={article} id={`${proposal.id}-review`} tabIndex={0} onFocusCapture={onActivate} onPointerDown={onActivate} aria-labelledby={`${proposal.id}-title ${proposal.id}-deal`} aria-busy={mutation.isPending} className={`overflow-hidden rounded-sm border bg-white ${active ? "border-indigo-500 ring-1 ring-indigo-200" : "border-zinc-200"}`}>
     <header className="flex flex-wrap items-start justify-between gap-2 bg-zinc-50/70 px-3 py-3 sm:px-4">
-      <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h2 id={`${proposal.id}-title`} className="text-sm font-semibold">{item.account}</h2><span className="text-xs text-zinc-500">{proposal.status === "PartiallyApproved" ? "Partially approved" : "Pending review"}</span></div><p id={`${proposal.id}-deal`} className="mt-1 break-words text-xs text-zinc-600">{item.deal ?? "Account-level proposal"}</p></div>
+      <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h2 id={`${proposal.id}-title`} className="text-sm font-semibold">{item.account}</h2><span className="text-xs text-zinc-500">{proposal.status === "PartiallyApproved" ? "Partially approved" : "Pending review"}</span>{stale > 0 && <strong className="text-xs text-amber-900">{stale} stale {stale === 1 ? "change" : "changes"} · review required</strong>}</div><p id={`${proposal.id}-deal`} className="mt-1 break-words text-xs text-zinc-600">{item.deal ?? "Account-level proposal"}</p></div>
       <div className="text-xs text-zinc-500"><p>Generated · <time dateTime={proposal.createdAt}>{displayTimestamp(proposal.createdAt)}</time></p><p className="mt-1">Confidence <strong className="font-medium text-zinc-700">{proposal.confidence}%</strong> <span title="Simulated confidence describes a suggestion, not its correctness.">· simulated</span></p></div>
     </header>
     <div className="border-t border-zinc-200 px-3 py-3 sm:px-4">
@@ -50,7 +51,7 @@ export function ReviewCard({ item, onReviewed, active, onActivate }: { item: Rev
         <button type="button" disabled={mutation.isPending || !selected.length} onClick={() => void mutation.approve(selected)} className={reviewButton}>Approve selected ({selected.length})</button>
         <button type="button" disabled={mutation.isPending} onClick={() => void mutation.reject()} className={`${reviewButton} ml-auto`}>Reject {proposal.status === "PartiallyApproved" ? "remaining" : "proposal"}</button>
       </div>
-      <p className="mt-2 text-[11px] text-zinc-500">{mutation.isPending ? "Saving review…" : "Approval applies exactly the values above. Rejection discards pending suggestions only."}</p>
+      <p className="mt-2 text-[11px] text-zinc-500">{mutation.isPending ? "Saving review…" : "Approval applies exactly the selected values. Skipped fields stay awaiting review; rejection preserves earlier approvals and all change history."}</p>
     </footer>
   </article>;
   return open ? <WorkspaceDialog title={`Review · ${item.account}`} onClose={() => setOpen(false)} restoreFocus={() => { if (article.current) article.current.focus(); else document.getElementById("main-content")?.focus(); }} onKeyDown={event => {

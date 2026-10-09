@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePendingProposals } from "../../features/reviews/use-pending-proposals";
+import { FavoritesSection } from "../../features/favorites/favorites-section";
+import { SavedViewsSection } from "../../features/saved-views/saved-views-section";
 
 const navigation = [
   { href: "/", label: "Overview", icon: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z" },
@@ -33,7 +35,7 @@ export function AppSidebar() {
         <p className="sr-only mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500 sm:not-sr-only">{group.label}</p>
         <ul aria-label={group.label} className="space-y-0.5">
           {group.items.map(({ href, label, icon }) => {
-            const active = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+            const active = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`) || href === "/pipeline" && pathname.startsWith("/deals/");
             return (
               <li key={href}>
                 <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`relative flex h-8 items-center justify-center gap-2.5 rounded-sm px-2 text-xs sm:justify-start ${active ? "bg-white font-semibold text-zinc-950 ring-1 ring-zinc-200" : "text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-950"}`}>
@@ -50,10 +52,8 @@ export function AppSidebar() {
             );
           })}
         </ul></div>)}
-        <section aria-labelledby="saved-views-label" className="hidden border-t border-zinc-200 pt-4 sm:block">
-          <h2 id="saved-views-label" className="px-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Saved views</h2>
-          <p className="px-2 pt-2 text-xs text-zinc-500">No saved views yet</p>
-        </section>
+        <FavoritesSection />
+        <SavedViewsSection />
       </nav>
       <div className="hidden border-t border-zinc-200 px-4 py-3 sm:block"><p className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-600"><span aria-hidden="true" className="size-1.5 rounded-full bg-zinc-400" />Local workspace</p><p className="mt-1 text-[10px] text-zinc-500">Fictional data · Human-reviewed</p></div>
     </aside>

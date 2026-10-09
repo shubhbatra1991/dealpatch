@@ -23,3 +23,14 @@ export const relationshipField: ProposalChange["field"] = "accountId";
 type ContactChange = Extract<ProposalChange, { entityType: "Contact" }>;
 // @ts-expect-error Deal fields cannot be applied to contacts.
 export const invalidContactField: ContactChange["field"] = "stage";
+
+const snapshot: DealStageChange = { id: "change", entityType: "Deal", entityId: "deal", field: "stage", before: "Discovery", after: "Evaluation", selected: true, status: "Pending" };
+// @ts-expect-error A proposal editor must never refresh its generation-time snapshot.
+snapshot.before = "Negotiation";
+
+type ParticipantChange = Extract<ProposalChange, { entityType: "Activity"; field: "participants" }>;
+const participants: ParticipantChange = { id: "change", entityType: "Activity", entityId: "activity", field: "participants", before: ["contact"], after: [], selected: true, status: "Pending" };
+if (participants.before) {
+  // @ts-expect-error Snapshot arrays must not be edited in place.
+  participants.before.push("another-contact");
+}

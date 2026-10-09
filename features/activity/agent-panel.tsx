@@ -35,7 +35,7 @@ export function AgentPanel({ analysis }: { analysis: ReturnType<typeof useDemoAn
   const detected = state.events.find(event => event.type === "detecting_changes");
   const changes = detected?.type === "detecting_changes" ? detected.changes : [];
   const latest = state.events.at(-1);
-  const progress = running ? analysisSteps[Math.min(state.events.length, 6)][1] : state.status === "completed" ? "Analysis complete" : state.status === "cancelled" ? "Analysis cancelled" : state.status === "error" ? "Analysis failed" : "Ready to analyze";
+  const progress = running ? `Running · ${analysisSteps[Math.min(state.events.length, 6)][1]}` : state.status === "completed" ? "Complete · Analysis complete" : state.status === "cancelled" ? "Analysis cancelled" : state.status === "error" ? "Failed · Analysis failed" : "Waiting · Ready to analyze";
   return <section aria-labelledby="agent-title" className="min-w-0 rounded-sm border border-zinc-200 bg-white">
     <header className="flex flex-wrap items-start justify-between gap-3 border-b border-zinc-200 bg-zinc-50/70 p-3 sm:p-4">
       <div><h2 id="agent-title" className="text-sm font-semibold">Demo intelligence</h2><p className="mt-1 text-xs leading-5 text-zinc-500">Local deterministic rules with staged events. No real LLM or external AI API.</p></div>
@@ -62,6 +62,7 @@ export function AgentPanel({ analysis }: { analysis: ReturnType<typeof useDemoAn
       <h3 className="text-xs font-semibold">{proposal ? "Generated proposal" : "Detected changes · preliminary"}</h3>
       <dl className="mt-2 space-y-2">{changes.map(change => <div key={change.id} className="border-l-2 border-indigo-300 bg-indigo-50/30 px-3 py-2 text-xs"><dt className="font-medium text-zinc-700">{fieldLabel(change.field)}</dt><dd className="mt-1 break-words text-zinc-600"><span className="sr-only">Current value: </span>{displayFieldValue(change.field, change.before)}<span aria-hidden="true" className="mx-2">→</span><span className="sr-only"> Proposed value: </span>{displayFieldValue(change.field, change.after)}</dd></div>)}</dl>
       {proposal && <>
+        <p className="mt-2 text-xs font-medium text-zinc-700">{proposal.changes.length} proposed field changes · {proposal.confidence}% demo confidence</p>
         <h4 className="mt-3 text-xs font-semibold text-zinc-700">Source evidence</h4>{proposal.evidence.map((evidence, index) => <blockquote key={index} className="mt-2 border-l-2 border-zinc-300 pl-3 text-xs leading-5 text-zinc-500">{evidence.text}</blockquote>)}
         <p className="mt-3 text-xs text-zinc-500">Pending suggestion · Nothing is applied to your CRM. Send it to the queue for human review.</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">

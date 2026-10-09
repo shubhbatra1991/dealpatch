@@ -9,24 +9,28 @@ import type { Deal } from "../../domain/deals/deal";
 import { buildPipelineRows, matchesPipelineSearch, riskOrder, stageLabels, stageOrder } from "./pipeline-model";
 import { pipelineColumns } from "./pipeline-columns";
 import { useWorkspaceShortcuts } from "../../components/layout/workspace-keyboard";
-import { WorkspaceDialog } from "../../components/ui/workspace-dialog";
+import Link from "next/link";
+import { dealHref } from "../deals/deal-detail-model";
+import type { PipelineViewConfig } from "../../domain/saved-views/saved-view";
+import { capturePipelineView, restorePipelineView } from "./pipeline-view-state";
 
 const controlClass = "h-8 rounded-sm border border-zinc-300 bg-white px-2 text-xs text-zinc-700";
 const ROW_HEIGHT = 36;
 const HEADER_HEIGHT = 36;
 const OVERSCAN = 8;
 
-export function PipelineTable({ deals, accounts }: { deals: Deal[]; accounts: Account[] }) {
+export function PipelineTable({ deals, accounts, initialDealId, initialView, onSaveView }: { deals: Deal[]; accounts: Account[]; initialDealId?: string; initialView?: PipelineViewConfig; onSaveView?: (config: PipelineViewConfig) => void }) {
   "use no memo"; // TanStack Table v8 uses mutable instance methods.
   const data = useMemo(() => buildPipelineRows(deals, accounts), [deals, accounts]);
-  const [search, setSearch] = useState("");
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = useState<SortingState>([{ id: "accountName", desc: false }]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [initial] = useState(() => restorePipelineView(initialView));
+  const [search, setSearch] = useState(initial.search);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(initial.columnFilters);
+  const [sorting, setSorting] = useState<SortingState>(initial.sorting);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initial.columnVisibility);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [focusedRowId, setFocusedRowId] = useState<string>();
-  const [openedId, setOpenedId] = useState<string>();
+  const [focusedRowId, setFocusedRowId] = useState<string | undefined>(initialDealId);
+  const openLink = useRef<HTMLAnchorElement>(null);
   // eslint-disable-next-line react-hooks/incompatible-library -- This component explicitly opts out of compiler memoization for TanStack Table v8.
   const table = useReactTable({
     data, columns: pipelineColumns,
@@ -97,11 +101,11 @@ export function PipelineTable({ deals, accounts }: { deals: Deal[]; accounts: Ac
     focusRow(next);
   }
 
-  const opened = data.find(deal => deal.id === openedId);
+  const highlighted = rows[Math.max(0, focusedIndex)]?.original;
   useWorkspaceShortcuts({
     next: () => focusRow(Math.min(rows.length - 1, focusedIndex + 1)),
     previous: () => focusRow(focusedIndex < 0 ? 0 : Math.max(0, focusedIndex - 1)),
-    open: () => { const row = rows[Math.max(0, focusedIndex)]; if (row) setOpenedId(row.id); },
+    open: () => openLink.current?.click(),
   });
 
   function spacer(key: string, height: number) {
@@ -115,10 +119,11 @@ export function PipelineTable({ deals, accounts }: { deals: Deal[]; accounts: Ac
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div className="flex flex-wrap items-end gap-2">
-        <button type="button" disabled={!rows.length} onClick={() => { const row = rows[Math.max(0, focusedIndex)]; if (row) setOpenedId(row.id); }} className={`${controlClass} disabled:opacity-40`}>Open deal</button>
+        {onSaveView && <button type="button" onClick={() => onSaveView(capturePipelineView(search, columnFilters, sorting, columnVisibility))} className={controlClass}>Save view</button>}
+        {highlighted ? <Link ref={openLink} href={dealHref(highlighted.id)} className={`${controlClass} flex items-center`}>Open deal</Link> : <button type="button" disabled className={`${controlClass} opacity-40`}>Open deal</button>}
         <label className="flex min-w-48 flex-1 flex-col gap-1 text-xs font-medium text-zinc-600">
           Search deals
-          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Account, deal, owner or next step…" className={`${controlClass} w-full sm:max-w-96`} />
+          <input type="search" maxLength={1000} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Account, deal, owner or next step…" className={`${controlClass} w-full sm:max-w-96`} />
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-zinc-600">Stage
           <select value={(table.getColumn("stage")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("stage")?.setFilterValue(event.target.value || undefined)} className={controlClass}>
@@ -165,7 +170,7 @@ export function PipelineTable({ deals, accounts }: { deals: Deal[]; accounts: Ac
               const previousEnd = index === 0 ? HEADER_HEIGHT : virtualRows[index - 1].end;
               return <Fragment key={row.id}>
                 {spacer(`${row.id}-gap`, item.start - previousEnd)}
-                <tr data-row-id={row.id} onDoubleClick={() => setOpenedId(row.id)} aria-rowindex={item.index + 2} className={`h-9 ${focusedRowId === row.id ? "bg-indigo-50 outline-1 -outline-offset-1 outline-indigo-500" : row.getIsSelected() ? "bg-indigo-50 hover:bg-indigo-100/60" : "hover:bg-zinc-50"}`}>
+                <tr data-row-id={row.id} onDoubleClick={event => { if (!(event.target as HTMLElement).closest("input, button, a")) event.currentTarget.querySelector<HTMLAnchorElement>(`a[href]`)?.click(); }} aria-rowindex={item.index + 2} className={`h-9 ${focusedRowId === row.id ? "bg-indigo-50 outline-1 -outline-offset-1 outline-indigo-500" : row.getIsSelected() ? "bg-indigo-50 hover:bg-indigo-100/60" : "hover:bg-zinc-50"}`}>
                   {row.getVisibleCells().map((cell) => <td key={cell.id} className="h-9 border-b border-zinc-100 p-0 text-zinc-700">
                     <div className="flex h-[35px] items-center overflow-hidden px-3"><span className="block min-w-0 truncate" title={cell.getValue() == null ? undefined : String(cell.getValue())}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</span></div>
                   </td>)}
@@ -182,13 +187,8 @@ export function PipelineTable({ deals, accounts }: { deals: Deal[]; accounts: Ac
         </table>
       </div>
       <p className="text-xs text-zinc-500">J / K or arrow keys to navigate · Enter opens a highlighted deal · Space toggles its checkbox. Scroll horizontally for all columns.</p>
-      {opened && <WorkspaceDialog title={opened.title} onClose={() => setOpenedId(undefined)} restoreFocus={() => { const index = rows.findIndex(row => row.id === opened.id); if (index >= 0) focusRow(index); else scrollRef.current?.focus(); }}>
-        <dl className="divide-y divide-zinc-100 text-sm">{Object.entries({ Account: opened.accountName, Stage: stageLabels[opened.stage], Value: `${opened.currency} ${opened.value.toLocaleString()}`, Owner: opened.ownerId, Probability: `${opened.probability}%`, "Last activity": opened.lastActivityAt ?? "None", "Expected close": opened.expectedCloseDate ?? "Unscheduled", Risk: opened.risk, "Next step": opened.nextStep ?? "None" }).map(([label, value]) => <div key={label} className="grid grid-cols-[8rem_1fr] gap-3 py-2"><dt className="text-zinc-500">{label}</dt><dd className="break-words">{value}</dd></div>)}</dl>
-      </WorkspaceDialog>}
+
     </div>
   );
 }
-
-
-
 

@@ -19,7 +19,7 @@ export function parseEdit(value: string, change: ProposalChange): unknown {
     if (!Number.isFinite(number)) throw new Error("Enter a valid number.");
     return number;
   }
-  if (typeof change.after === "boolean" || Array.isArray(change.after)) return JSON.parse(value);
+  if (typeof change.after === "boolean" || Array.isArray(change.after) || Array.isArray(change.before)) return JSON.parse(value);
   return value;
 }
 export function editorOptions(change: ProposalChange): string[] | undefined {
