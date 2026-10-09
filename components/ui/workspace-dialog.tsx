@@ -30,8 +30,8 @@ export function WorkspaceDialog({ title, children, onClose, restoreFocus, onKeyD
     if (first && (event.shiftKey ? document.activeElement === first : document.activeElement === last)) {
       event.preventDefault(); (event.shiftKey ? last : first)?.focus();
     }
-  }} onCancel={event => { event.preventDefault(); onClose(); }} className="fixed inset-0 m-auto max-h-[85dvh] w-[min(42rem,calc(100%-2rem))] overflow-auto rounded-sm border border-zinc-300 bg-white p-0 text-zinc-900 shadow-lg backdrop:bg-zinc-950/30">
-    <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-zinc-200 bg-white px-4 py-3"><h2 className="text-sm font-semibold">{title}</h2><button type="button" onClick={onClose} className="rounded-sm border border-zinc-300 px-2 py-1 text-xs">Close <kbd>Esc</kbd></button></header>
+  }} onCancel={event => { event.preventDefault(); onClose(); }} className="workspace-dialog fixed inset-0 m-auto max-h-[85dvh] w-[min(42rem,calc(100%-2rem))] overflow-auto rounded-sm border border-border-strong bg-surface-raised p-0 text-text shadow-lg backdrop:bg-overlay/30">
+    <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border bg-surface-raised px-4 py-3"><h2 className="text-sm font-semibold">{title}</h2><button type="button" onClick={onClose} className="rounded-sm border border-border-strong px-2 py-1 text-xs">Close <kbd>Esc</kbd></button></header>
     <div className="p-4">{children}</div>
   </dialog>;
 }

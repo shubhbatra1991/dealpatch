@@ -64,13 +64,14 @@ export function createProposalRepository(database?: DealPatchDatabase): Proposal
         const account = await db.accounts.get(proposal.accountId);
         const deal = proposal.dealId ? await db.deals.get(proposal.dealId) : undefined;
         if (!source || !account || !deal || source.accountId !== account.id || source.dealId !== deal.id || deal.accountId !== account.id) throw new Error("The activity, account or deal changed. Run the analysis again.");
+        // A source activity has one review history, even after edits or review.
+        // The same read/write transaction also protects simultaneous sends.
+        const existing = (await db.proposals.where("sourceActivityId").equals(source.id).sortBy("createdAt")).at(-1);
+        if (existing) return { proposal: proposalSchema.parse(existing), created: false };
         if (proposal.evidence.some(evidence => evidence.sourceActivityId !== source.id || !source.summary.includes(evidence.text))) throw new Error("The source activity changed. Run the analysis again.");
         for (const change of proposal.changes) {
           if (change.entityId !== deal.id || JSON.stringify(Reflect.get(deal, change.field) ?? null) !== JSON.stringify(change.before)) throw new Error("A current deal value changed. Run the analysis again before sending this suggestion.");
         }
-        const signature = (changes: ProposalChange[]) => JSON.stringify(changes.filter(change => change.status === "Pending" || change.status === "Edited").map(change => JSON.stringify([change.entityType, change.entityId, change.field, change.before, change.after])).sort());
-        const existing = (await db.proposals.where("sourceActivityId").equals(source.id).toArray()).find(candidate => ["Pending", "PartiallyApproved"].includes(candidate.status) && signature(candidate.changes) === signature(proposal.changes));
-        if (existing) return { proposal: existing, created: false };
         if (await db.proposals.get(proposal.id)) throw new Error("This proposal was already saved. Run the analysis again to generate a new suggestion.");
         await db.proposals.add(proposal);
         return { proposal, created: true };

@@ -45,9 +45,10 @@ export const seedDataSchema = z.strictObject({
       }
     });
   });
+  const latestByDeal = new Map<string, string>();
+  for (const activity of data.activities) if (activity.dealId && activity.occurredAt > (latestByDeal.get(activity.dealId) ?? "")) latestByDeal.set(activity.dealId, activity.occurredAt);
   data.deals.forEach((deal, index) => {
-    const latest = data.activities.filter((activity) => activity.dealId === deal.id)
-      .map((activity) => activity.occurredAt).sort().at(-1);
+    const latest = latestByDeal.get(deal.id);
     if (deal.lastActivityAt !== latest) issue(["deals", index, "lastActivityAt"], "Must match latest deal activity");
     if (deal.stage === "ClosedWon" && deal.probability !== 100) issue(["deals", index, "probability"], "Won deals must have 100% probability");
     if (deal.stage === "ClosedLost" && deal.probability !== 0) issue(["deals", index, "probability"], "Lost deals must have 0% probability");

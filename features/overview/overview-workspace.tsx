@@ -29,17 +29,17 @@ export function OverviewWorkspace() {
 
   return <section aria-labelledby="overview-title" className="mx-auto max-w-[1440px] space-y-3">
     <header className="flex flex-wrap items-center justify-between gap-3 pb-1">
-      <div><p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-zinc-500">Sales workspace</p><h1 id="overview-title" className="text-xl font-semibold tracking-tight text-zinc-950">Overview</h1><p className="mt-1 text-xs text-zinc-600">Pipeline signals, review decisions, and the work to move forward.</p></div>
-      <div className="flex items-center gap-3"><p className="text-right text-[10px] leading-4 text-zinc-500">Fictional local workspace{data && <><br /><time dateTime={data.today}>{data.today}</time> · UTC</>}</p><button type="button" onClick={refresh} disabled={refreshing} className="rounded-sm border border-zinc-300 bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50">{refreshing ? "Refreshing…" : "Refresh"}</button></div>
+      <div><p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-text-muted">Sales workspace</p><h1 id="overview-title" className="text-xl font-semibold tracking-tight text-text">Overview</h1><p className="mt-1 text-xs text-text-muted">Pipeline signals, review decisions, and the work to move forward.</p></div>
+      <div className="flex items-center gap-3"><p className="text-right text-[10px] leading-4 text-text-muted">Fictional local workspace{data && <><br /><time dateTime={data.today}>{data.today}</time> · UTC</>}</p><button type="button" onClick={refresh} disabled={refreshing} className="rounded-sm border border-border-strong bg-surface px-2.5 py-1.5 text-xs font-medium text-text hover:bg-bg-subtle disabled:border-dashed">{refreshing ? "Refreshing…" : "Refresh"}</button></div>
     </header>
-    {failed && <div role="alert" className="flex flex-wrap items-center justify-between gap-2 rounded-sm border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900"><p>{data ? "Some local data could not refresh. Showing the last available values." : "Unable to load the dashboard. Check that browser storage is available."}</p><button type="button" onClick={refresh} disabled={refreshing} className="rounded-sm font-semibold underline underline-offset-4 disabled:opacity-50">Retry loading dashboard</button></div>}
-    {!data && !failed && <p role="status" className="rounded-sm border border-zinc-200 bg-zinc-50 px-3 py-6 text-xs text-zinc-600">Loading local workspace signals…</p>}
+    {failed && <div role="alert" className="workspace-state flex flex-wrap items-center justify-between gap-2 rounded-sm border border-warning-border bg-warning-soft px-3 py-2 text-xs text-warning"><p>{data ? "Some local data could not refresh. Showing the last available values." : "Unable to load the dashboard. Check that browser storage is available."}</p><button type="button" onClick={refresh} disabled={refreshing} className="rounded-sm font-semibold underline underline-offset-4 disabled:border-dashed">Retry loading dashboard</button></div>}
+    {!data && !failed && <p role="status" className="workspace-state rounded-sm border border-border bg-bg-subtle px-3 py-6 text-xs text-text-muted">Loading local workspace signals…</p>}
     {data && <>
       <WorkspaceSummary data={data} />
       <div className="grid items-start gap-3 lg:grid-cols-3"><WorkspaceHealth data={data} /><PipelineStageSummary data={data} /><ReviewQueueSummary data={data} /></div>
       <div className="grid items-start gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"><NeedsAttention data={data} /><SuggestedActions data={data} /></div>
       <RecentActivity data={data} />
-      <p className="text-[10px] leading-4 text-zinc-500">Derived from your local workspace. Attention checks cover open deals only; activity is stale after 14 days. Suggested actions require human judgment.</p>
+      <p className="text-[10px] leading-4 text-text-muted">Derived from your local workspace. Attention checks cover open deals only; activity is stale after 14 days. Suggested actions require human judgment.</p>
     </>}
   </section>;
 }

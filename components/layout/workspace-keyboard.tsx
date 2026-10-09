@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { isTypingTarget, workspaceAction, type WorkspaceAction } from "../../lib/utils/keyboard";
 import { WorkspaceDialog } from "../ui/workspace-dialog";
 import { CommandPalette } from "../../features/search/command-palette";
@@ -22,6 +22,17 @@ export function useWorkspaceShortcuts(handlers: Handlers, enabled = true) {
 
 export function WorkspaceKeyboard({ children }: { children: ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const previousPath = useRef(pathname);
+  useEffect(() => {
+    if (previousPath.current === pathname) return;
+    previousPath.current = pathname;
+    // Let dialog cleanup restore its trigger before focusing the new route.
+    const frame = requestAnimationFrame(() => {
+      if (!document.querySelector("dialog[open]")) document.getElementById("main-content")?.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]);
   const handlers = useRef(new Set<Handlers>());
   const [overlay, setOverlay] = useState<"commands" | "help" | null>(null);
   const [singleKeys, setSingleKeys] = useState(true);
@@ -59,10 +70,10 @@ export function WorkspaceKeyboard({ children }: { children: ReactNode }) {
     {children}
     {overlay === "commands" && <CommandPalette onClose={() => setOverlay(null)} navigate={path => { setOverlay(null); router.push(path); }} restoreFocus={() => { if (searchOpener.current?.isConnected) searchOpener.current.focus(); else document.getElementById("main-content")?.focus(); }} />}
     {overlay === "help" && <WorkspaceDialog title="Keyboard shortcuts" onClose={() => setOverlay(null)}>
-      <p className="mb-3 text-xs text-zinc-600">Navigate the current filtered list. A approves the highlighted proposal’s selected, available changes; R rejects its remaining changes. These actions also work inside an opened review. Shortcuts pause while typing, and dialogs pause background navigation.</p>
-      <dl className="divide-y divide-zinc-100 text-sm">{[["Ctrl / ⌘ K", "Search local workspace records"], ["J / K", "Next / previous item"], ["Enter", "Open highlighted item"], ["A", "Approve selected changes"], ["R", "Reject highlighted proposal"], ["Escape", "Close dialog, editor or menu"], ["?", "Keyboard shortcuts"]].map(([key, description]) => <div key={key} className="flex justify-between gap-4 py-2"><dt><kbd>{key}</kbd></dt><dd className="text-right text-zinc-600">{description}</dd></div>)}</dl>
+      <p className="mb-3 text-xs text-text-muted">Navigate the current filtered list. A approves the highlighted proposal’s selected, available changes; R rejects its remaining changes. These actions also work inside an opened review. Shortcuts pause while typing, and dialogs pause background navigation.</p>
+      <dl className="divide-y divide-border text-sm">{[["Ctrl / ⌘ K", "Search local workspace records"], ["J / K", "Next / previous item"], ["Enter", "Open highlighted item"], ["A", "Approve selected changes"], ["R", "Reject highlighted proposal"], ["Escape", "Close dialog, editor or menu"], ["?", "Keyboard shortcuts"]].map(([key, description]) => <div key={key} className="flex justify-between gap-4 py-2"><dt><kbd>{key}</kbd></dt><dd className="text-right text-text-muted">{description}</dd></div>)}</dl>
       <label className="mt-4 flex items-center gap-2 text-sm"><input type="checkbox" checked={singleKeys} onChange={event => setSingleKeys(event.target.checked)} />Enable single-key list shortcuts</label>
-      <p className="mt-2 text-xs text-zinc-500">Turn these off for speech input or screen reader character navigation. Standard Tab and arrow-key controls remain available.</p>
+      <p className="mt-2 text-xs text-text-muted">Turn these off for speech input or screen reader character navigation. Standard Tab and arrow-key controls remain available.</p>
     </WorkspaceDialog>}
   </WorkspaceKeyboardContext.Provider>;
 }

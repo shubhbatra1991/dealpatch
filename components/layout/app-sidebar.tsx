@@ -25,24 +25,24 @@ export function AppSidebar() {
   ];
 
   return (
-    <aside className="flex w-14 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50 sm:w-48">
-      <div className="flex h-12 shrink-0 items-center justify-center border-b border-zinc-200 px-3 sm:justify-start sm:gap-2.5">
-        <span aria-hidden="true" className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-zinc-900 text-xs font-bold text-white">DP</span>
-        <div className="hidden min-w-0 sm:block"><p className="text-xs font-semibold text-zinc-900">DealPatch</p><p className="mt-0.5 text-[10px] text-zinc-500">Demo workspace</p></div>
+    <aside className="workspace-sidebar flex w-14 shrink-0 flex-col border-r border-border bg-bg-subtle sm:w-48">
+      <div className="flex h-12 shrink-0 items-center justify-center border-b border-border px-3 sm:justify-start sm:gap-2.5">
+        <span aria-hidden="true" className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-accent text-xs font-bold text-on-accent">DP</span>
+        <div className="hidden min-w-0 sm:block"><p className="text-xs font-semibold text-text">DealPatch</p><p className="mt-0.5 text-[10px] text-text-muted">Demo workspace</p></div>
       </div>
       <nav aria-label="Main navigation" className="min-h-0 flex-1 space-y-5 overflow-y-auto px-2 py-3">
         {groups.map(group => <div key={group.label}>
-        <p className="sr-only mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-500 sm:not-sr-only">{group.label}</p>
+        <p className="sr-only mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-text-muted sm:not-sr-only">{group.label}</p>
         <ul aria-label={group.label} className="space-y-0.5">
           {group.items.map(({ href, label, icon }) => {
             const active = href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`) || href === "/pipeline" && pathname.startsWith("/deals/");
             return (
               <li key={href}>
-                <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`relative flex h-8 items-center justify-center gap-2.5 rounded-sm px-2 text-xs sm:justify-start ${active ? "bg-white font-semibold text-zinc-950 ring-1 ring-zinc-200" : "text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-950"}`}>
+                <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`workspace-nav-link relative flex h-8 items-center justify-center gap-2.5 rounded-sm px-2 text-xs sm:justify-start ${active ? "bg-accent-soft font-semibold text-text" : "text-text-muted hover:bg-surface-muted/50 hover:text-text"}`}>
                   <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-4 shrink-0"><path d={icon} /></svg>
                   <span className="sr-only sm:not-sr-only">{label}</span>
                   {href === "/reviews" && (
-                    <span className="absolute top-0.5 right-0.5 rounded-sm bg-zinc-200 px-1 text-[10px] leading-4 text-zinc-700 tabular-nums sm:static sm:ml-auto sm:px-1.5 sm:text-xs sm:leading-5">
+                    <span className="absolute top-0.5 right-0.5 rounded-sm bg-surface-muted px-1 text-[10px] leading-4 text-text tabular-nums sm:static sm:ml-auto sm:px-1.5 sm:text-xs sm:leading-5">
                       <span aria-hidden="true">{pending.data?.length ?? "—"}</span>
                       <span className="sr-only">{pending.data ? `${pending.data.length} pending` : "Pending count unavailable"}</span>
                     </span>
@@ -55,7 +55,7 @@ export function AppSidebar() {
         <FavoritesSection />
         <SavedViewsSection />
       </nav>
-      <div className="hidden border-t border-zinc-200 px-4 py-3 sm:block"><p className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-600"><span aria-hidden="true" className="size-1.5 rounded-full bg-zinc-400" />Local workspace</p><p className="mt-1 text-[10px] text-zinc-500">Fictional data · Human-reviewed</p></div>
+      <div className="hidden border-t border-border px-4 py-3 sm:block"><p className="flex items-center gap-1.5 text-[11px] font-medium text-text-muted"><span aria-hidden="true" className="size-1.5 rounded-full bg-surface-muted" />Local workspace</p><p className="mt-1 text-[10px] text-text-muted">Fictional data · Human-reviewed</p></div>
     </aside>
   );
 }

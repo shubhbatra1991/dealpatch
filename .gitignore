@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
 
 # next.js
 /.next/
@@ -41,4 +43,8 @@ yarn-error.log*
 next-env.d.ts
 
 docs/*
+!docs/PERFORMANCE.md
+!docs/ACCESSIBILITY.md
+!docs/THEMING.md
+!docs/DESIGN_SYSTEM.md
 AGENTS.md

@@ -149,6 +149,7 @@ test("review cards render semantic diffs, evidence, selection and explicit actio
       for (const text of ["Current value", "Proposed value", "Source activity", "Supporting evidence", "Approve selected (2)", "Reject proposal", "72%", "<article", 'type="checkbox"']) assert.ok(html.includes(text), text);
       assert.equal(parseEdit("55", item.proposal.changes[1]), 55);
       client.setQueryData(reviewQueueOptions.queryKey, []);
+      client.setQueryData(queryKeys.proposals.reviewItems, []);
       const empty = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ReviewWorkspace)));
       assert.ok(empty.includes("Queue cleared"));
     } finally { client.clear(); }

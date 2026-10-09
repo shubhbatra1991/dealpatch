@@ -87,23 +87,41 @@ export function createReviewRepository(database?: DealPatchDatabase) {
     }));
   }
   const operations = {
-    async getQueue(): Promise<ReviewItem[]> {
+    async getAll(): Promise<ReviewItem[]> {
       const db = await ready();
       return db.transaction("r", [db.proposals, db.accounts, db.deals, db.contacts, db.activities], async () => {
-        const proposals = (await db.proposals.toArray()).map(p => proposalSchema.parse(p)).filter(p => ["Pending", "PartiallyApproved"].includes(p.status) && p.changes.some(isUnreviewed)).sort((a,b) => a.createdAt.localeCompare(b.createdAt));
-        return Promise.all(proposals.map(async proposal => {
-          const account = await db.accounts.get(proposal.accountId);
-          const deal = proposal.dealId ? await db.deals.get(proposal.dealId) : undefined;
-          const source = await db.activities.get(proposal.sourceActivityId);
-          const changes = await Promise.all(proposal.changes.map(async change => {
+        const proposals = (await db.proposals.toArray()).map(p => proposalSchema.parse(p)).sort((a,b) => a.createdAt.localeCompare(b.createdAt));
+        const changes = proposals.flatMap(proposal => proposal.changes);
+        const ids = (type: ProposalChange["entityType"]) => changes.filter(change => change.entityType === type).map(change => change.entityId);
+        // Batch referenced IDs, not the whole activity/contact store. A queue of
+        // 1,000 proposals previously issued thousands of individual get requests.
+        const [accounts, deals, contacts, activities] = await Promise.all([
+          db.accounts.bulkGet([...new Set([...proposals.map(p => p.accountId), ...ids("Account")])]),
+          db.deals.bulkGet([...new Set([...proposals.flatMap(p => p.dealId ? [p.dealId] : []), ...ids("Deal")])]),
+          db.contacts.bulkGet([...new Set(ids("Contact"))]),
+          db.activities.bulkGet([...new Set([...proposals.map(p => p.sourceActivityId), ...ids("Activity")])]),
+        ]);
+        const accountMap = new Map(accounts.flatMap(record => record ? [[record.id, record] as const] : []));
+        const dealMap = new Map(deals.flatMap(record => record ? [[record.id, record] as const] : []));
+        const contactMap = new Map(contacts.flatMap(record => record ? [[record.id, record] as const] : []));
+        const activityMap = new Map(activities.flatMap(record => record ? [[record.id, record] as const] : []));
+        const records = { Account: accountMap, Deal: dealMap, Contact: contactMap, Activity: activityMap };
+        return proposals.map(proposal => {
+          const account = accountMap.get(proposal.accountId);
+          const deal = proposal.dealId ? dealMap.get(proposal.dealId) : undefined;
+          const source = activityMap.get(proposal.sourceActivityId);
+          const changes = proposal.changes.map(change => {
             let record;
-            try { record = await recordFor(db, proposal, change); } catch { /* Missing targets remain visible for rejection. */ }
+            try {
+              const candidate = records[change.entityType].get(change.entityId);
+              if (candidate && (change.entityType === "Account" ? candidate.id === proposal.accountId : "accountId" in candidate && candidate.accountId === proposal.accountId)) { target(db, change).schema.parse(candidate); record = candidate; }
+            } catch { /* Invalid targets remain visible for rejection, never application. */ }
             const current: unknown = record ? Reflect.get(record, change.field) ?? null : null;
             const label = record && "firstName" in record ? `${record.firstName} ${record.lastName}` : record && "title" in record ? record.title : record && "name" in record ? record.name : change.entityId;
             return { change, current, target: `${change.entityType} · ${label}`, conflict: isUnreviewed(change) && (!record || isProposalChangeStale(change, current)) };
-          }));
-          return { proposal, account: account?.name ?? "Missing account", deal: deal?.title, source, changes };
-        }));
+          });
+          return { proposal, account: account?.name ?? "Missing account", deal: deal?.accountId === proposal.accountId ? deal.title : undefined, source: source?.accountId === proposal.accountId ? source : undefined, changes };
+        });
       });
     },
     async commit(id: string, action: ReviewAction, expectedProposal?: Proposal): Promise<{ before: Proposal; after: Proposal }> {
@@ -151,8 +169,9 @@ export function createReviewRepository(database?: DealPatchDatabase) {
     },
   };
   return {
-    getQueue: operations.getQueue,
-    async review(id: string, action: ReviewAction) { return (await operations.commit(id, action)).after; },
+    getAll: operations.getAll,
+    async getQueue() { return (await operations.getAll()).filter(item => ["Pending", "PartiallyApproved"].includes(item.proposal.status) && item.proposal.changes.some(isUnreviewed)); },
+    async review(id: string, action: ReviewAction, expectedProposal?: Proposal) { return (await operations.commit(id, action, expectedProposal)).after; },
     async approve(id: string, changeIds: string[], expectedProposal?: Proposal): Promise<ApprovalReceipt> {
       return { ...await operations.commit(id, { type: "approve", changeIds }, expectedProposal), changeIds: [...changeIds] };
     },

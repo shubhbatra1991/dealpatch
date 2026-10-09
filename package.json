@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test",
+    "test:performance": "playwright test --grep performance: --workers=1",
+    "test:a11y": "playwright test accessibility.spec.ts",
     "test:compile": "tsc -p tsconfig.json --noEmit false --noEmitOnError --module commonjs --moduleResolution node --incremental false --rootDir . --outDir node_modules/.cache/dealpatch-node",
     "test": "npm run test:compile && cd node_modules/.cache/dealpatch-node && node --test \"tests/*.test.js\"",
     "validate:seed": "npm run test:compile && node node_modules/.cache/dealpatch-node/scripts/validate-seed.js",
@@ -31,6 +34,8 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

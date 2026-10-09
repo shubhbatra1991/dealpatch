@@ -32,6 +32,7 @@ async function workspace(run: (environment: {
     const repo = createReviewRepository(db);
     const queue = await repo.getQueue();
     client.setQueryData(queryKeys.proposals.queue, queue);
+    client.setQueryData(queryKeys.proposals.reviewItems, await repo.getAll());
     client.setQueryData(queryKeys.proposals.pending, await createProposalRepository(db).getPending());
     client.setQueryData(queryKeys.deals.list, await db.deals.toArray());
     client.setQueryData(queryKeys.accounts.list, await db.accounts.toArray());
@@ -51,6 +52,7 @@ test("successful approval updates deal, queue and count before persistence compl
     const operation = mutation.execute({ id: item.proposal.id, expectedProposal: item.proposal, changeIds: item.proposal.changes.map(c => c.id) });
     await started.promise;
     assert.equal(mutation.state.status, "pending");
+    assert.equal(client.getQueryData<ReviewItem[]>(queryKeys.proposals.reviewItems)![0].proposal.status, "Approved");
     assert.equal(mutation.state.context?.receipt.after.status, "Approved");
     const visible = client.getQueryData<Deal[]>(queryKeys.deals.list)!.find(deal => deal.id === before!.id)!;
     assert.equal(visible.stage, "Evaluation");
@@ -105,6 +107,7 @@ test("failed persistence rolls back proposal and affected fields without losing 
     const restored = client.getQueryData<Deal[]>(queryKeys.deals.list)!.find(row => row.id === item.proposal.dealId)!;
     assert.deepEqual(restored, { ...before.find(row => row.id === restored.id), nextStep: "Unrelated cached edit" });
     assert.deepEqual(client.getQueryData<ReviewItem[]>(queryKeys.proposals.queue)!.find(row => row.proposal.id === item.proposal.id), item);
+    assert.deepEqual(client.getQueryData<ReviewItem[]>(queryKeys.proposals.reviewItems)!.find(row => row.proposal.id === item.proposal.id), item);
     assert.equal(client.getQueryData<Proposal[]>(queryKeys.proposals.pending)!.length, 15);
     assert.deepEqual(await db.proposals.get(item.proposal.id), item.proposal);
     assert.equal(mutation.state.status, "error");

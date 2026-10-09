@@ -34,6 +34,7 @@ export const queryKeys = {
     list: ["proposals", "list"] as const,
     pending: ["proposals", "pending"] as const,
     queue: ["proposals", "queue"] as const,
+    reviewItems: ["proposals", "reviewItems"] as const,
     forAccount: (accountId: string) => ["proposals", "account", accountId] as const,
   },
 } as const;
