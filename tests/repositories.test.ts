@@ -6,11 +6,35 @@ import { DealPatchDatabase } from "../lib/db/database";
 import { createAccountRepository, accountRepository } from "../lib/repositories/accounts";
 import { createDealRepository, dealRepository } from "../lib/repositories/deals";
 import { createProposalRepository, proposalRepository } from "../lib/repositories/proposals";
+import { createActivityRepository } from "../lib/repositories/activities";
 
 async function withWorkspace(run: (database: DealPatchDatabase) => Promise<void>) {
   const database = new DealPatchDatabase(`dealpatch-repositories-test-${randomUUID()}`);
   try { await run(database); } finally { await database.delete(); }
 }
+
+test("malformed persisted records reject at read boundaries without modifying storage", async () => {
+  await withWorkspace(async database => {
+    const accounts = createAccountRepository(database), deals = createDealRepository(database);
+    const proposals = createProposalRepository(database), activities = createActivityRepository(database);
+    const account = (await accounts.getAll())[0];
+    await database.accounts.update(account.id, { name: "" });
+    await assert.rejects(accounts.getAll()); await assert.rejects(accounts.getById(account.id));
+    assert.equal((await database.accounts.get(account.id))?.name, "");
+    await database.accounts.put(account);
+    const deal = (await deals.getAll())[0];
+    await database.deals.update(deal.id, { probability: 101 });
+    await assert.rejects(deals.getAll()); await assert.rejects(deals.getById(deal.id));
+    await database.deals.put(deal);
+    const activity = (await activities.getAll())[0];
+    await database.activities.update(activity.id, { occurredAt: "invalid-date" });
+    await assert.rejects(activities.getAll()); await database.activities.put(activity);
+    const proposal = (await proposals.getPending())[0];
+    await database.proposals.update(proposal.id, { confidence: 101 });
+    await assert.rejects(proposals.getPending()); await assert.rejects(proposals.getById(proposal.id));
+    assert.equal((await database.proposals.get(proposal.id))?.confidence, 101);
+  });
+});
 
 test("shared repositories are lazy and reject server-side calls", async () => {
   await assert.rejects(accountRepository.getAll(), /requires IndexedDB in a browser/);

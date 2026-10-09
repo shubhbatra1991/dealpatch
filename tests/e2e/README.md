@@ -65,3 +65,57 @@ history, not Undo surviving reload). Installation audit reported five high
 severity findings in the existing `eslint-config-next` / `fast-glob` /
 `micromatch` / `braces` development dependency chain. No Playwright advisory was
 reported. No forced downgrade or unrelated dependency changes were made.
+
+## Public showcase and workspace routes
+
+Workspace tests use `/workspace` and its descendants. `landing.spec.ts` checks no
+IndexedDB is created before workspace entry, shared theme persistence, browser
+back behavior, metadata and configured links. Four-mode desktop/mobile screenshot
+baselines and axe scans cover the showcase. Workspace baselines stay unchanged.
+
+Landing reflow checks cover 1920, 1280, 768, 390 and 320px. Reduced-motion and
+forced-color focus checks are separate from normal-palette contrast scans: axe's
+authored-color calculation does not model forced system paints. No contrast rules
+are disabled in the four-theme desktop/mobile scans. Native screen-reader and
+cross-platform screenshot limitations remain documented in ACCESSIBILITY.md.
+
+Landing/route migration validation (9 October 2026): typecheck, lint, 148 unit
+tests, production build and all 50 Playwright tests pass. The seven added browser
+cases cover four-mode visuals/axe, metadata/project links, isolated landing entry,
+Automatic/manual themes, keyboard/reflow, and migrated Favorites/Saved Views/Search.
+Eight new landing baselines and all 26 unchanged workspace baselines pass comparison.
+The existing real IndexedDB golden path, rollback, stale/unsafe Undo and large-data
+structural checks also pass under `/workspace`.
+
+## Open-source release checks
+
+Install engines once with `npx playwright install chromium firefox webkit`. The
+full `npm run test:e2e` gate includes the existing Chromium suites and four release
+smoke tests in each of Chromium, Firefox and WebKit. `npx playwright test
+release.spec.ts` runs just those twelve checks. Earlier results above are milestone
+history; see [the current release report](../../docs/RELEASE_READINESS.md).
+
+Release checks start with genuinely fresh browser contexts. They cover landing
+entry, seeding, themes, favorites/saved-view persistence, global search, simulated
+analysis, real proposal approval/audit persistence, reset, malformed records,
+missing relationships, invalid IDs and unavailable IndexedDB. Normal-use checks
+fail on console errors/warnings, page errors, unexpected failed responses and
+third-party requests. Intentional failure scenarios are tested separately.
+
+Global setup bundles the actual reset module into ignored `node_modules/.cache`
+using Next's bundled webpack and the installed TypeScript compiler. A Playwright
+route serves it only within reset tests; no application route or debug endpoint is
+added. Native IndexedDB fixture writes simulate corruption or another writer;
+workflow assertions use visible UI and real persistence. Reset checks assert all
+eight store counts and the restored deal value.
+
+Firefox/WebKit are smoke targets, not complete platform or assistive-technology
+certification. Screenshot and axe suites remain Chromium-based.
+
+Release-hardening final gate (9 October 2026): standalone clean-install typecheck,
+lint (zero warnings), 149 unit tests and production build passed. All 62 production
+Playwright tests passed with no retries: 54 Chromium, four Firefox and four WebKit,
+including the 22 workspace accessibility cases, 34 unchanged screenshot baselines
+and stress fixture. Three additional repeated Firefox workflow checks passed after
+replacing forced reload-style navigation with normal product links; console warning
+assertions remain strict. No application feature or dependency was added.

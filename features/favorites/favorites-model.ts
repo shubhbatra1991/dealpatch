@@ -15,7 +15,7 @@ export function resolveFavorites(favorites: Favorite[], accounts: Account[], con
     const names = favorite.entityType === "account" ? accountNames : favorite.entityType === "contact" ? contactNames : dealNames;
     const name = names.get(favorite.entityId);
     const id = encodeURIComponent(favorite.entityId);
-    const href = favorite.entityType === "account" ? `/accounts/${id}` : favorite.entityType === "contact" ? `/contacts/${id}` : dealHref(favorite.entityId);
+    const href = favorite.entityType === "account" ? `/workspace/accounts/${id}` : favorite.entityType === "contact" ? `/workspace/contacts/${id}` : dealHref(favorite.entityId);
     return { favorite, name: name ?? `Unavailable ${favorite.entityType}`, href: name === undefined ? undefined : href };
   });
 }

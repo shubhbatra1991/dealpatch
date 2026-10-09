@@ -7,7 +7,7 @@ import type { buildContactDetail } from "./contact-detail-model";
 export function ContactProposals({ detail, proposals, pendingOnly = false }: { detail: ReturnType<typeof buildContactDetail>; proposals: Proposal[]; pendingOnly?: boolean }) {
   const sources = new Map(detail.sourceActivities.map(activity => [activity.id, activity]));
   return <section aria-label={pendingOnly ? "Pending contact proposals" : "Contact proposal history"} className="workspace-panel min-w-0 rounded-sm border border-border bg-surface">
-    <header className="flex items-center justify-between gap-2 border-b border-border px-3 py-2.5"><h2 className="text-xs font-semibold">{pendingOnly ? "Pending contact proposals" : "Contact proposal history"}</h2><Link href="/reviews" className="rounded-sm text-[11px] text-accent hover:underline">Review Queue</Link></header>
+    <header className="flex items-center justify-between gap-2 border-b border-border px-3 py-2.5"><h2 className="text-xs font-semibold">{pendingOnly ? "Pending contact proposals" : "Contact proposal history"}</h2><Link href="/workspace/reviews" className="rounded-sm text-[11px] text-accent hover:underline">Review Queue</Link></header>
     {proposals.length ? <ul className="divide-y divide-border">{proposals.map(proposal => {
       const source = sources.get(proposal.sourceActivityId);
       const changeIds = new Set(proposal.changes.map(change => change.id));

@@ -13,7 +13,7 @@ record and restore that record on failure without losing simultaneous changes to
 other favorites. Same-record writes are guarded while pending. Star controls show
 save errors and the sidebar updates from the same cache immediately.
 
-Account, Contact and Deal detail headers expose stars. Deal favorites navigate directly to `/deals/[dealId]`. The sidebar shows the latest
+Account, Contact and Deal detail headers expose stars. Deal favorites navigate directly to `/workspace/deals/[dealId]`. The sidebar shows the latest
 five favorites, and a native dialog offers all favorites when more exist.
 Existing account/contact/deal query caches resolve labels without duplicating
 entity fetching or copying names into storage. No new packages are required.

@@ -5,6 +5,25 @@ alignment and surface boundaries, not oversized cards or decoration. One compone
 system serves all modes. See [THEMING.md](./THEMING.md) for token definitions, time
 boundaries, persistence and initialization; those rules are not duplicated here.
 
+## Public showcase layer
+
+`/` uses `features/landing/landing.css`, scoped to `.landing`, and shares all
+semantic tokens and ThemeControl with `/workspace`. No separate palette or
+theme-specific component branches are introduced. A bounded 1240px canvas, larger
+editorial typography and 44–88px section spacing distinguish the showcase from
+the compact CRM. Borders, small radii and restrained elevation remain related.
+
+The hero and human-review sections use a static fictional Review Queue example.
+Example action labels are text, not working controls; real work starts through
+Explore workspace. The public header uses section anchors and the CRM sidebar
+stays inside `/workspace`.
+
+Preview columns stack at tablet sizes, workflow steps reflow, and narrow headers
+retain the theme selector. No gradients, imagery, video or animation libraries are
+added. Optional 100ms color transitions respect reduced motion; forced-colors
+outlines remain. Landing screenshots cover four modes on desktop/mobile.
+Workspace baselines are preserved unless verified migration changes require updates.
+
 ## Surfaces and hierarchy
 
 - Canvas uses `--bg`; sidebar and table headers use `--bg-subtle`.

@@ -49,7 +49,7 @@ test("account aggregates retain every account, exclude closed pipeline and keep 
   assert.equal(rows[2].lastActivityAt, undefined);
   assert.ok(matchesAccountSearch(rows[0], "  brenlow   SOFTWARE  north  "));
   assert.equal(matchesAccountSearch(rows[0], "South"), false);
-  assert.equal(accountHref("opaque/id ?#"), "/accounts/opaque%2Fid%20%3F%23");
+  assert.equal(accountHref("opaque/id ?#"), "/workspace/accounts/opaque%2Fid%20%3F%23");
 });
 
 test("actual account columns compose exact status/region filters and numeric sorting", () => {
@@ -84,7 +84,7 @@ test("semantic list and detail views escape text, guard websites, and expose all
   const rows = buildAccountRows([account], [deal], [activity], [proposal]);
   const list = renderWithKeyboard(createElement(AccountsTable, { data: rows }));
   for (const label of ["Account", "Status", "Industry", "Region", "Owner", "Open Deals", "Open Pipeline Value", "Last Activity", "Pending Reviews"]) assert.ok(list.includes(label));
-  assert.ok(list.includes('href="/accounts/account"'));
+  assert.ok(list.includes('href="/workspace/accounts/account"'));
   assert.match(renderWithKeyboard(createElement(AccountsTable, { data: [] })), /No accounts yet/);
   const data = buildAccountDetail(account.id, [deal], [contact], [activity], [proposal], now);
   const detail = renderToStaticMarkup(createElement(QueryClientProvider, { client: createQueryClient() }, createElement(AccountDetailView, { account: { ...account, name: "<script>name</script>", website: "javascript:alert(1)" }, data })));

@@ -33,13 +33,13 @@ export function buildSearchIndex(data: SearchData): SearchEntry[] {
       const candidate = proposal.dealId ? deals.get(proposal.dealId) : undefined;
       const deal = candidate?.accountId === proposal.accountId ? candidate : undefined;
       const fields = [...new Set(proposal.changes.map(change => fieldLabel(change.field)))].join(", ");
-      return entry("Reviews", proposal.id, `${account?.name ?? "Unavailable account"} — ${fields || "Review proposal"}`, join([deal?.title, proposal.status === "PartiallyApproved" ? "Partially approved" : proposal.status]), `${proposal.confidence}% confidence`, targetHref("/reviews", "proposal", proposal.id), [account?.name, deal?.title, fields, ...proposal.changes.map(change => change.field), ...proposal.evidence.map(evidence => evidence.text)]);
+      return entry("Reviews", proposal.id, `${account?.name ?? "Unavailable account"} — ${fields || "Review proposal"}`, join([deal?.title, proposal.status === "PartiallyApproved" ? "Partially approved" : proposal.status]), `${proposal.confidence}% confidence`, targetHref("/workspace/reviews", "proposal", proposal.id), [account?.name, deal?.title, fields, ...proposal.changes.map(change => change.field), ...proposal.evidence.map(evidence => evidence.text)]);
     }),
     ...data.activities.map(activity => {
       const candidate = activity.dealId ? deals.get(activity.dealId) : undefined;
       const deal = candidate?.accountId === activity.accountId ? candidate : undefined;
       const account = accounts.get(activity.accountId);
-      return entry("Activities", activity.id, activity.title, join([account?.name, deal?.title, activity.type]), displayTimestamp(activity.occurredAt), targetHref("/activity", "activity", activity.id), [activity.title, activity.summary, account?.name, deal?.title]);
+      return entry("Activities", activity.id, activity.title, join([account?.name, deal?.title, activity.type]), displayTimestamp(activity.occurredAt), targetHref("/workspace/activity", "activity", activity.id), [activity.title, activity.summary, account?.name, deal?.title]);
     }),
   ];
 }

@@ -1,6 +1,6 @@
 # Deal Detail
 
-`/deals/[dealId]` is the local opportunity workspace. The route only resolves the async route parameter; the feature owns queries and presentation.
+`/workspace/deals/[dealId]` is the local opportunity workspace. The route only resolves the async route parameter; the feature owns queries and presentation.
 
 The feature reuses Contacts’ core entity queries and account-scoped proposal/audit queries. They share the existing caches and review invalidation, including optimistic deal updates. No new table, repository, dependency or seed data is needed.
 

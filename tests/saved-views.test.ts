@@ -156,7 +156,7 @@ test("saved-view navigation is URL-addressable, sidebar names are escaped, and m
     const client = createQueryClient();
     const render = (element: ReturnType<typeof createElement>) => renderWithKeyboard(createElement(QueryClientProvider, { client }, element));
     try {
-      assert.equal(savedViewHref("opaque/id ?#"), "/pipeline?view=opaque%2Fid%20%3F%23");
+      assert.equal(savedViewHref("opaque/id ?#"), "/workspace/pipeline?view=opaque%2Fid%20%3F%23");
       assert.match(render(createElement(PipelineWorkspace, { savedViewId: "missing" })), /Loading saved view/);
       client.setQueryData(queryKeys.savedViews.list, []);
       assert.match(render(createElement(SavedViewsSection)), /No saved views yet/);
@@ -164,7 +164,7 @@ test("saved-view navigation is URL-addressable, sidebar names are escaped, and m
       client.setQueryData(queryKeys.savedViews.list, [view]);
       const sidebar = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(SavedViewsSection)));
       assert.match(sidebar, /&lt;script&gt;saved&lt;\/script&gt;/);
-      assert.ok(sidebar.includes(`/pipeline?view=${view.id}`));
+      assert.ok(sidebar.includes(`/workspace/pipeline?view=${view.id}`));
       assert.match(sidebar, /Rename/); assert.match(sidebar, /Delete/);
       client.setQueryData(queryKeys.accounts.list, await db.accounts.toArray());
       client.setQueryData(queryKeys.deals.list, await db.deals.toArray());

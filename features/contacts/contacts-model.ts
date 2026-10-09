@@ -6,7 +6,7 @@ import type { Proposal } from "../../domain/proposals/proposal";
 import { isUnreviewed } from "../../domain/proposals/review";
 import { buildAccountRows, isPendingProposal } from "../accounts/accounts-model";
 
-export const contactHref = (id: string) => `/contacts/${encodeURIComponent(id)}`;
+export const contactHref = (id: string) => `/workspace/contacts/${encodeURIComponent(id)}`;
 export const contactName = (contact: Contact) => `${contact.firstName} ${contact.lastName}`;
 export const missingContactRegion = "__missing_region__";
 

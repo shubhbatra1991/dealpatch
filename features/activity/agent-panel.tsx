@@ -51,7 +51,7 @@ export function AgentPanel({ analysis, row }: { analysis: ReturnType<typeof useD
       {state.status === "error" && <p role="alert" className="mt-1 text-xs text-danger">{state.error} No proposal was saved. You can retry the analysis.</p>}
     </div>
     {analysis.checkingSource && <div className="border-b border-border p-3 text-xs text-text-muted">{analysis.proposals.isError ? <><p role="alert">Unable to check existing reviews. Retry before running analysis.</p><button type="button" className={reviewButton} onClick={() => void analysis.proposals.refetch()}>Retry review lookup</button></> : <p role="status">Checking source review history…</p>}</div>}
-    {existing && <div className="border-b border-border p-3 text-xs"><p role="status" className="mb-2 font-medium">Already in Review Queue</p><p className="mb-2 text-text-muted">{existing.status} · This activity already has a review proposal.</p><Link ref={queueLink} href={`/reviews?proposal=${encodeURIComponent(existing.id)}`} className={reviewButton}>Open Review</Link>{queue.isSuccess && <p role="status" className="mt-2 text-text-muted">{queue.data.created ? "Proposal saved for human review." : "An existing proposal was found. No duplicate was created."}</p>}</div>}
+    {existing && <div className="border-b border-border p-3 text-xs"><p role="status" className="mb-2 font-medium">Already in Review Queue</p><p className="mb-2 text-text-muted">{existing.status} · This activity already has a review proposal.</p><Link ref={queueLink} href={`/workspace/reviews?proposal=${encodeURIComponent(existing.id)}`} className={reviewButton}>Open Review</Link>{queue.isSuccess && <p role="status" className="mt-2 text-text-muted">{queue.data.created ? "Proposal saved for human review." : "An existing proposal was found. No duplicate was created."}</p>}</div>}
     <ol aria-label="Simulated analysis events" className="divide-y divide-border">
       {analysisSteps.map(([type, label], index) => {
         const event = state.events.find(event => event.type === type || index === 6 && event.type === "analysis_completed");
@@ -68,7 +68,7 @@ export function AgentPanel({ analysis, row }: { analysis: ReturnType<typeof useD
     </ol>
     {changes.length > 0 && <div className="border-t border-border p-3 sm:p-4">
       <h3 className="text-xs font-semibold">{proposal ? "Generated proposal" : "Detected changes · preliminary"}</h3>
-      {proposal && row && <p className="mt-2 text-xs text-text-muted">{row.account ? <Link className="underline" href={`/accounts/${encodeURIComponent(row.account.id)}`}>{row.account.name}</Link> : "Unavailable account"}{row.deal && <> · <Link className="underline" href={`/deals/${encodeURIComponent(row.deal.id)}`}>{row.deal.title}</Link></>}</p>}
+      {proposal && row && <p className="mt-2 text-xs text-text-muted">{row.account ? <Link className="underline" href={`/workspace/accounts/${encodeURIComponent(row.account.id)}`}>{row.account.name}</Link> : "Unavailable account"}{row.deal && <> · <Link className="underline" href={`/workspace/deals/${encodeURIComponent(row.deal.id)}`}>{row.deal.title}</Link></>}</p>}
       <dl className="mt-2 space-y-2">{changes.map(change => {
         const current: unknown = row?.deal && change.entityId === row.deal.id ? Reflect.get(row.deal, change.field) ?? null : change.before;
         const stale = isProposalChangeStale(change, current);

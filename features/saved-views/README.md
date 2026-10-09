@@ -19,7 +19,7 @@ patterns. Successful persistence updates the shared TanStack Query cache, so the
 sidebar updates immediately. Failed writes leave the previous configuration
 intact and show an error; deletion requires explicit confirmation in the dialog.
 
-Sidebar links use `/pipeline?view=<encoded ID>`. The route loads local configuration
+Sidebar links use `/workspace/pipeline?view=<encoded ID>`. The route loads local configuration
 before mounting the table, so refresh and back/forward restore the selected view.
 The URL references a local view rather than duplicating its configuration. Manual
 table changes are temporary until saved as a new view; reopening the active view

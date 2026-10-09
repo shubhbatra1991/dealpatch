@@ -39,7 +39,7 @@ test("large search/filter results retain grouping, partial matching, full totals
   assert.equal(all.entries.length, 30);
   const contact = searchIndex(index, "CONTACT10000@");
   assert.equal(contact.total, 1);
-  assert.equal(contact.entries[0].href, "/contacts/stress-contact-10000");
+  assert.equal(contact.entries[0].href, "/workspace/contacts/stress-contact-10000");
   const rows = buildActivityRows(data.activities, data.accounts, data.deals);
   const matching = filterActivityRows(rows, { type: "Email", accountId: "stress-account-2", search: "ROLLOUT" });
   assert.equal(matching.length, 50);

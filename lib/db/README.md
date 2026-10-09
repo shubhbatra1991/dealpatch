@@ -42,7 +42,8 @@ await resetWorkspace();
 window.location.reload();
 ```
 
-This deliberately discards local edits, favorites and audit history, then replaces the five business stores with the
+This deliberately discards local edits, generated proposals, favorites, saved views
+and audit history, then replaces the five business stores with the
 validated seed snapshot in one transaction. A failed reset restores the prior
 workspace. Reload after reset to refresh any mounted views or future caches.
 No reset occurs automatically after errors or schema changes.

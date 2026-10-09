@@ -1,4 +1,5 @@
 import type { Account } from "../../domain/accounts/account";
+import { accountSchema } from "../../domain/accounts/schema";
 import { getDatabase, type DealPatchDatabase } from "../db/database";
 import { initializeWorkspace } from "../db/workspace";
 
@@ -16,10 +17,11 @@ export function createAccountRepository(database?: DealPatchDatabase): AccountRe
 
   return {
     async getAll() {
-      return (await ready()).accounts.toArray();
+      return (await (await ready()).accounts.toArray()).map(record => accountSchema.parse(record));
     },
     async getById(id) {
-      return (await ready()).accounts.get(id);
+      const record = await (await ready()).accounts.get(id);
+      return record === undefined ? undefined : accountSchema.parse(record);
     },
   };
 }

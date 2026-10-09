@@ -35,7 +35,7 @@ export const test = base.extend({
   page: async ({ page }, runTest) => {
     // Each test also has a fresh browser context. Exercise the real empty-store
     // initializer after clearing all tables, including append-only audit history.
-    await page.goto("/reviews");
+    await page.goto("/workspace/reviews");
     await expect(badge(page, 15)).toBeVisible();
     await workspaceFixture(page, "clear");
     await page.reload();

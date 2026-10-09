@@ -15,7 +15,7 @@ import { buildSearchIndex } from "../features/search/search-index";
 import { resolveFavorites } from "../features/favorites/favorites-model";
 import { dealsQueryOptions } from "../features/pipeline/use-deals";
 import { dealRepository } from "../lib/repositories/deals";
-import Page from "../app/deals/[dealId]/page";
+import Page from "../app/workspace/deals/[dealId]/page";
 import { renderWithKeyboard } from "./keyboard-provider";
 
 const seed = loadSeedData();
@@ -51,7 +51,7 @@ test("deal audit filters direct fields and related proposal decisions, retaining
   const html = renderWithKeyboard(createElement(DealTabContent, { detail, tab: "Changes" }));
   assert.match(html, /Approval undone/); assert.match(html, /Proposal approved/);
   assert.match(html, /Previous value/); assert.match(html, /Next value/);
-  assert.ok(html.includes(`/reviews?proposal=${proposal.id}`));
+  assert.ok(html.includes(`/workspace/reviews?proposal=${proposal.id}`));
 });
 
 test("deal health uses UTC calendar days, live related activity and open-deal thresholds", () => {
@@ -78,10 +78,10 @@ test("all deal tabs render scoped sources, review diffs and meaningful empty sta
     assert.doesNotMatch(html, /dangerouslySetInnerHTML/);
   }
   const activity = renderWithKeyboard(createElement(DealTabContent, { detail, tab: "Activity" }));
-  assert.ok(activity.includes(`/activity?activity=${detail.activities[0].id}`));
+  assert.ok(activity.includes(`/workspace/activity?activity=${detail.activities[0].id}`));
   const people = renderWithKeyboard(createElement(DealTabContent, { detail, tab: "Contacts" }));
   assert.match(people, /Inferred from participation/);
-  assert.ok(people.includes(`/contacts/${detail.contacts[0].id}`));
+  assert.ok(people.includes(`/workspace/contacts/${detail.contacts[0].id}`));
   const reviews = renderWithKeyboard(createElement(DealTabContent, { detail, tab: "Reviews" }));
   assert.match(reviews, /Current value:/); assert.match(reviews, /Original captured value:/); assert.match(reviews, /Evidence:/); assert.match(reviews, /Open in Review Queue/);
   const empty = buildDealDetail({ ...deal, nextStep: undefined }, [], [], [], [], [], [], now);
@@ -107,7 +107,7 @@ test("route and query states remain SSR-safe, recover from errors and derive fro
     const html = render(deal.id);
     assert.match(html, /aria-label="Deal summary"/); assert.match(html, /aria-label="Add .* to favorites"/);
     for (const tab of dealTabs) assert.ok(html.includes(`id="deal-tab-${tab}"`));
-    assert.ok(html.includes(`/accounts/${deal.accountId}`));
+    assert.ok(html.includes(`/workspace/accounts/${deal.accountId}`));
     client.setQueryData(queryKeys.deals.list, [{ ...deal, title: "<script>escaped</script>", nextStep: "Updated from shared cache" }]);
     assert.match(render(deal.id), /&lt;script&gt;escaped/); assert.match(render(deal.id), /Updated from shared cache/);
     await assert.rejects(client.fetchQuery({ ...dealsQueryOptions, staleTime: 0, queryFn: async () => { throw new Error("Storage unavailable"); } }));
@@ -119,7 +119,7 @@ test("route and query states remain SSR-safe, recover from errors and derive fro
 
 test("Pipeline links, search and favorites all resolve opaque deal IDs to the dedicated route", () => {
   const id = "opaque/id ?&#";
-  assert.equal(dealHref(id), `/deals/${encodeURIComponent(id)}`);
+  assert.equal(dealHref(id), `/workspace/deals/${encodeURIComponent(id)}`);
   const index = buildSearchIndex(seed);
   assert.equal(index.find(entry => entry.key === `Deals:${deal.id}`)?.href, dealHref(deal.id));
   const favorites = resolveFavorites([{ id: "favorite", entityType: "deal", entityId: deal.id, createdAt: now.toISOString() }], seed.accounts, seed.contacts, seed.deals);

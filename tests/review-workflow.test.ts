@@ -69,9 +69,9 @@ test("compact list exposes one tab stop while focused and reviewed details retai
     client.setQueryData(queryKeys.proposals.queue, await repo.getQueue());
     const html = render(first.id);
     for (const value of ["Approval complete", "Current value", "Proposed value", "Supporting evidence", "Audit trail", "Related records"]) assert.ok(html.includes(value), value);
-    assert.ok(html.includes(`/accounts/${encodeURIComponent(first.accountId)}`));
-    assert.ok(html.includes(`/deals/${encodeURIComponent(first.dealId!)}`));
-    assert.ok(html.includes(`/activity?activity=${encodeURIComponent(first.sourceActivityId)}`));
+    assert.ok(html.includes(`/workspace/accounts/${encodeURIComponent(first.accountId)}`));
+    assert.ok(html.includes(`/workspace/deals/${encodeURIComponent(first.dealId!)}`));
+    assert.ok(html.includes(`/workspace/activity?activity=${encodeURIComponent(first.sourceActivityId)}`));
     assert.match(html, /disabled=""[^>]*>Approve all \(0\)/);
     assert.match(html, /disabled=""[^>]*>Reject proposal/);
     assert.match(render("missing"), /selected proposal is no longer/);

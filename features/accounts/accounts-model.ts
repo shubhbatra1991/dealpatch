@@ -10,7 +10,7 @@ import { formatDealValue } from "../pipeline/pipeline-model";
 
 export const accountStatuses = ["Prospect", "Active", "Customer", "Dormant"] as const;
 export const missingRegionFilter = "__dealpatch_missing_region__";
-export const accountHref = (id: string) => `/accounts/${encodeURIComponent(id)}`;
+export const accountHref = (id: string) => `/workspace/accounts/${encodeURIComponent(id)}`;
 export const isPendingProposal = (proposal: Proposal) => (proposal.status === "Pending" || proposal.status === "PartiallyApproved") && proposal.changes.some(isUnreviewed);
 
 export function pipelineTotals(deals: Deal[]) {

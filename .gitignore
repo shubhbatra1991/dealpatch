@@ -42,9 +42,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-docs/*
-!docs/PERFORMANCE.md
-!docs/ACCESSIBILITY.md
-!docs/THEMING.md
-!docs/DESIGN_SYSTEM.md
-AGENTS.md
+# Local editor, log and database artifacts; docs and intentional baselines ship.
+.vscode/
+.idea/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+Thumbs.db
+*.tmp
+*.bak

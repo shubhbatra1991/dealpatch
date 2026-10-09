@@ -1,6 +1,6 @@
 # Contacts
 
-`/contacts` reads validated local contacts through `contactRepository.getAll()` and
+`/workspace/contacts` reads validated local contacts through `contactRepository.getAll()` and
 the `contacts.list` query cache. Accounts, deals, activities and pending proposals
 reuse existing hooks and cache keys. Review writes already invalidate the contacts
 prefix, including this list. React components never import Dexie or seed JSON.
@@ -18,7 +18,7 @@ individual deal ownership. Last Activity only includes activities at that accoun
 whose participant IDs contain this contact. Pending Reviews counts distinct Pending
 or PartiallyApproved proposals with unresolved changes targeting the contact.
 
-`/contacts/[contactId]` adds account-scoped proposal and audit reads using existing
+`/workspace/contacts/[contactId]` adds account-scoped proposal and audit reads using existing
 hooks. The existing account projection resolves relationships once; the contact
 projection narrows activity to participation, opportunities to those referenced by
 that activity, diffs to this contact, and audit to direct contact events or proposal

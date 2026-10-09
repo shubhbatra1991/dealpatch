@@ -4,13 +4,13 @@ import { formatOverviewMoney, type OverviewData } from "./overview-model";
 
 export function WorkspaceSummary({ data }: { data: OverviewData }) {
   const metrics = [
-    { label: "Open deals", value: data.openDeals, detail: `${data.accountCount} accounts in play`, href: "/pipeline", accent: "bg-accent" },
-    { label: "At-risk deals", value: data.atRisk, detail: `${data.counts.highRisk} high · ${data.atRisk - data.counts.highRisk} medium risk`, href: "/pipeline", accent: "bg-warning" },
-    { label: "Pending reviews", value: data.reviews.pending, detail: "Human approval required", href: "/reviews", accent: "bg-accent" },
+    { label: "Open deals", value: data.openDeals, detail: `${data.accountCount} accounts in play`, href: "/workspace/pipeline", accent: "bg-accent" },
+    { label: "At-risk deals", value: data.atRisk, detail: `${data.counts.highRisk} high · ${data.atRisk - data.counts.highRisk} medium risk`, href: "/workspace/pipeline", accent: "bg-warning" },
+    { label: "Pending reviews", value: data.reviews.pending, detail: "Human approval required", href: "/workspace/reviews", accent: "bg-accent" },
   ];
   return <section aria-label="Workspace summary" className="grid grid-cols-1 gap-2.5 min-[380px]:grid-cols-2 xl:grid-cols-4">
     <div className="workspace-metric min-w-0 rounded-sm border border-border bg-surface px-3 py-3">
-      <p className="flex items-center gap-2 text-xs text-text-muted"><span aria-hidden="true" className="size-1.5 bg-accent" /><Link href="/pipeline" className="rounded-sm hover:underline">Pipeline value</Link></p>
+      <p className="flex items-center gap-2 text-xs text-text-muted"><span aria-hidden="true" className="size-1.5 bg-accent" /><Link href="/workspace/pipeline" className="rounded-sm hover:underline">Pipeline value</Link></p>
       <div className="mt-2 space-y-0.5">{data.currencies.length ? data.currencies.map(total => <p key={total.currency} className="break-words text-lg font-semibold tracking-tight text-text tabular-nums">{formatOverviewMoney(total.value, total.currency)}</p>) : <p className="text-lg font-semibold text-text">—</p>}</div>
       <p className="mt-1 text-[11px] text-text-muted">Open deals · no currency conversion</p>
     </div>
@@ -35,7 +35,7 @@ export function WorkspaceHealth({ data }: { data: OverviewData }) {
 }
 
 export function PipelineStageSummary({ data }: { data: OverviewData }) {
-  return <DashboardCard id="stages-title" title="Pipeline Stage Summary" eyebrow="Active opportunities" href="/pipeline" linkLabel="Pipeline">
+  return <DashboardCard id="stages-title" title="Pipeline Stage Summary" eyebrow="Active opportunities" href="/workspace/pipeline" linkLabel="Pipeline">
     <dl className="grid grid-cols-2 gap-px bg-surface-muted">{data.stages.map((item, index) => <div key={item.stage} className="bg-surface px-3 py-3"><dt className="flex items-center gap-1.5 text-[11px] text-text-muted"><span aria-hidden="true" className="text-[10px] text-text-muted">0{index + 1}</span>{item.stage}</dt><dd className="mt-1 text-xl font-semibold text-text tabular-nums">{item.count}</dd></div>)}</dl>
     <p className="px-3 py-2 text-[10px] text-text-muted">{data.openDeals} open deals · closed stages excluded</p>
   </DashboardCard>;
@@ -43,7 +43,7 @@ export function PipelineStageSummary({ data }: { data: OverviewData }) {
 
 export function ReviewQueueSummary({ data }: { data: OverviewData }) {
   const rows = [["Pending proposals", data.reviews.pending], ["Deal updates", data.reviews.dealUpdates], ["Contact updates", data.reviews.contactUpdates], ["High confidence · 90%+", data.reviews.highConfidence]] as const;
-  return <DashboardCard id="reviews-title" title="Review Queue Summary" eyebrow="Human-reviewed automation" href="/reviews" linkLabel="Open queue">
+  return <DashboardCard id="reviews-title" title="Review Queue Summary" eyebrow="Human-reviewed automation" href="/workspace/reviews" linkLabel="Open queue">
     <dl className="divide-y divide-border px-3">{rows.map(([label, count]) => <div key={label} className="flex items-center justify-between py-2.5"><dt className="text-xs text-text-muted">{label}</dt><dd className="text-sm font-semibold text-text tabular-nums">{count}</dd></div>)}</dl>
     <p className="border-t border-border px-3 py-2 text-[10px] leading-4 text-text-muted">Counts are proposals with unreviewed changes. Types may overlap. Confidence never approves changes.</p>
   </DashboardCard>;
