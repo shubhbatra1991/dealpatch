@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isUnreviewed, type ReviewChange } from "../../lib/repositories/reviews";
 import { displayFieldValue, displayValue, editorOptions, fieldLabel, parseEdit } from "./review-format";
 
@@ -18,9 +18,16 @@ export function ReviewChangeRow({ item, selected, disabled, onSelect, onSave }: 
   const [draft, setDraft] = useState("");
   const [error, setError] = useState("");
   const editButton = useRef<HTMLButtonElement>(null);
+  const editor = useRef<HTMLTextAreaElement | HTMLSelectElement>(null);
+  const restoreEditFocus = useRef(false);
+  useEffect(() => {
+    if (disabled) return;
+    if (editing && error) editor.current?.focus();
+    else if (!editing && restoreEditFocus.current) { editButton.current?.focus(); restoreEditFocus.current = false; }
+  }, [disabled, editing, error]);
   const options = editorOptions(change);
   const label = `${fieldLabel(change.field)} on ${target}`;
-  function close() { setEditing(false); setError(""); requestAnimationFrame(() => editButton.current?.focus()); }
+  function close() { restoreEditFocus.current = true; setEditing(false); setError(""); }
   async function save() {
     try { await onSave(parseEdit(draft, change)); close(); }
     catch (error) { setError(error instanceof Error ? error.message : "Unable to save this edit."); }
@@ -29,17 +36,17 @@ export function ReviewChangeRow({ item, selected, disabled, onSelect, onSave }: 
     <div className="flex items-start gap-3">
       <input aria-label={`Select ${label}`} type="checkbox" checked={selected} disabled={disabled || !pending || conflict} onChange={event => onSelect(event.target.checked)} className="mt-0.5 size-4 shrink-0 accent-indigo-700" />
       <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs"><span className="font-semibold text-zinc-900">{fieldLabel(change.field)}</span><span className="break-words text-zinc-500">{target}</span>{change.status !== "Pending" && <span className="font-medium text-zinc-600">{change.status === "Edited" ? "Edited · awaiting approval" : change.status}</span>}</div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs"><span className="font-semibold text-zinc-900">{fieldLabel(change.field)}</span><span className="break-words text-zinc-500">{target}</span>{change.status !== "Pending" && <span className="font-medium text-zinc-600">{change.status === "Edited" ? "Edited · awaiting approval" : change.status}</span>}{change.edited && change.status !== "Edited" && <span className="text-zinc-600">Edited before review</span>}{pending && conflict && <strong className="text-amber-900">Stale · approval blocked</strong>}</div>
         <div className="mt-2 grid gap-1 text-xs sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-3">
           <div className="min-w-0 border-l-2 border-zinc-300 bg-zinc-50 px-3 py-2"><span className="mb-1 block text-[10px] font-medium uppercase tracking-wide text-zinc-500">Current value</span><span className="whitespace-pre-wrap break-words">{displayFieldValue(change.field, current)}</span></div>
           <span aria-hidden="true" className="self-center text-zinc-400">→</span>
           <div className="min-w-0 border-l-2 border-indigo-400 bg-indigo-50/50 px-3 py-2"><span className="mb-1 block text-[10px] font-medium uppercase tracking-wide text-indigo-700">Proposed value</span><span className="whitespace-pre-wrap break-words">{displayFieldValue(change.field, change.after)}</span></div>
         </div>
-        {pending && conflict && <p className="mt-2 text-xs text-amber-900">Conflict: generated against “{displayValue(change.before)}”. The current value has changed or the record is unavailable. Approval is blocked; review the source and reject this proposal if it is stale.</p>}
+        {pending && conflict && <div className="mt-2 border-l-2 border-amber-500 bg-amber-50 px-3 py-2 text-xs text-amber-950"><p><strong>Original captured value:</strong> <span className="whitespace-pre-wrap break-words">{displayFieldValue(change.field, change.before)}</span></p><p className="mt-1">The current value differs from the generation snapshot, or the target is unavailable. Review all three values and the source again. Editing the proposed value keeps the snapshot and does not resolve staleness. Reject this suggestion or generate a new proposal; newer data will not be overwritten.</p></div>}
         {editing && <form className="mt-3 space-y-2" onSubmit={event => { event.preventDefault(); void save(); }} onKeyDown={event => { if (event.key === "Escape" && !disabled) { event.preventDefault(); close(); } }}>
           <label className="block text-xs font-medium">Edit proposed {fieldLabel(change.field).toLowerCase()}
-            {options ? <select autoFocus value={draft} disabled={disabled} onChange={event => setDraft(event.target.value)} aria-describedby={error ? `${change.id}-error` : undefined} aria-invalid={!!error} className="mt-1 block min-h-8 w-full rounded-sm border border-zinc-300 bg-white px-2">{options.map(value => <option key={value} value={value}>{displayValue(value)}</option>)}</select>
-              : <textarea autoFocus rows={2} value={draft} disabled={disabled} onChange={event => setDraft(event.target.value)} aria-describedby={error ? `${change.id}-error` : undefined} aria-invalid={!!error} className="mt-1 block w-full rounded-sm border border-zinc-300 bg-white p-2 font-mono text-xs" />}
+            {options ? <select ref={element => { editor.current = element; }} autoFocus value={draft} disabled={disabled} onChange={event => setDraft(event.target.value)} aria-describedby={error ? `${change.id}-error` : undefined} aria-invalid={!!error} className="mt-1 block min-h-8 w-full rounded-sm border border-zinc-300 bg-white px-2">{options.map(value => <option key={value} value={value}>{displayValue(value)}</option>)}</select>
+              : <textarea ref={element => { editor.current = element; }} autoFocus rows={2} value={draft} disabled={disabled} onChange={event => setDraft(event.target.value)} aria-describedby={error ? `${change.id}-error` : undefined} aria-invalid={!!error} className="mt-1 block w-full rounded-sm border border-zinc-300 bg-white p-2 font-mono text-xs" />}
           </label>
           <p className="text-xs text-zinc-500">Save updates the proposal only. Approval is a separate step.{change.field === "expectedCloseDate" ? " Use YYYY-MM-DD; leave blank to clear." : typeof change.after === "number" ? " Enter a number." : ""}</p>
           {error && <p id={`${change.id}-error`} role="alert" className="text-xs text-red-800">{error}</p>}

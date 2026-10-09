@@ -13,6 +13,9 @@ import { ReviewCard } from "../features/reviews/review-card";
 import { ReviewWorkspace } from "../features/reviews/review-workspace";
 import { reviewQueueOptions } from "../features/reviews/use-review-queue";
 import { parseEdit } from "../features/reviews/review-format";
+import { ReviewOutcome } from "../features/reviews/review-outcome";
+import { ReviewHistory } from "../features/reviews/review-history";
+import { queryKeys } from "../lib/query/keys";
 
 async function workspace(run: (db: DealPatchDatabase, repo: ReturnType<typeof createReviewRepository>) => Promise<void>) {
   const db = new DealPatchDatabase(`review-test-${randomUUID()}`);
@@ -149,5 +152,146 @@ test("review cards render semantic diffs, evidence, selection and explicit actio
       const empty = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ReviewWorkspace)));
       assert.ok(empty.includes("Queue cleared"));
     } finally { client.clear(); }
+  });
+});
+
+test("edited values preserve snapshots and edited provenance through partial approval, rejection, and undo", async () => {
+  await workspace(async (db, repo) => {
+    const item = (await repo.getQueue())[0];
+    const [stage, probability] = item.proposal.changes;
+    const entity = await db.deals.get(stage.entityId);
+    await assert.rejects(repo.review(item.proposal.id, { type: "edit", changeId: probability.id, value: 101 }));
+    assert.equal(await db.auditEvents.count(), 0);
+    const edited = await repo.review(item.proposal.id, { type: "edit", changeId: probability.id, value: 55 });
+    assert.equal(edited.changes[1].before, probability.before);
+    assert.equal(edited.changes[1].after, 55);
+    assert.equal(edited.changes[1].status, "Edited");
+    assert.equal(edited.changes[1].edited, true);
+    assert.deepEqual(await db.deals.get(stage.entityId), entity);
+    const receipt = await repo.approve(item.proposal.id, [probability.id]);
+    assert.equal(receipt.after.status, "PartiallyApproved");
+    assert.equal(receipt.after.changes[1].edited, true);
+    assert.equal(receipt.after.changes[0].status, "Pending");
+    const events = await db.auditEvents.toArray();
+    assert.deepEqual(new Set(events.map(event => event.action)), new Set(["FieldEdited", "ProposalPartiallyApproved"]));
+    const applied = events.find(event => event.action === "ProposalPartiallyApproved")!;
+    assert.equal(applied.entityType, "Deal"); assert.equal(applied.entityId, probability.entityId);
+    assert.deepEqual(applied.previousValue, { probability: probability.before });
+    assert.deepEqual(applied.nextValue, { probability: 55 });
+    await repo.undo(receipt);
+    assert.deepEqual(await db.proposals.get(item.proposal.id), edited);
+    assert.deepEqual(await db.deals.get(stage.entityId), entity);
+    const history = await db.auditEvents.toArray();
+    assert.equal(history.length, 3);
+    assert.ok(events.every(event => history.some(current => JSON.stringify(current) === JSON.stringify(event))));
+    assert.equal(history.filter(event => event.action === "ApprovalUndone").length, 1);
+    const rejected = await repo.review(item.proposal.id, { type: "reject" });
+    assert.equal(rejected.changes[1].status, "Rejected"); assert.equal(rejected.changes[1].edited, true);
+    assert.equal(rejected.changes[1].before, probability.before); assert.equal(rejected.changes[1].after, 55);
+    assert.equal((await db.auditEvents.toArray()).filter(event => event.action === "ProposalRejected").length, 1);
+  });
+});
+
+test("stale edited suggestions remain blocked and show captured, current and proposed values", async () => {
+  await workspace(async (db, repo) => {
+    const item = (await repo.getQueue())[0];
+    const probability = item.proposal.changes[1];
+    await db.deals.update(probability.entityId, { probability: 35 });
+    await repo.review(item.proposal.id, { type: "edit", changeId: probability.id, value: 60 });
+    const stale = (await repo.getQueue()).find(row => row.proposal.id === item.proposal.id)!;
+    assert.equal(stale.changes[1].change.before, 20);
+    assert.equal(stale.changes[1].current, 35);
+    assert.equal(stale.changes[1].change.after, 60);
+    assert.equal(stale.changes[1].conflict, true);
+    const auditBefore = await db.auditEvents.toArray();
+    await assert.rejects(repo.approve(item.proposal.id, item.proposal.changes.map(change => change.id)), /current value changed/);
+    assert.equal((await db.deals.get(probability.entityId))!.stage, "Discovery");
+    assert.equal((await db.deals.get(probability.entityId))!.probability, 35);
+    assert.deepEqual(await db.auditEvents.toArray(), auditBefore);
+    const client = createQueryClient();
+    try {
+      const html = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ReviewCard, { item: stale, onReviewed: () => {}, active: true, onActivate: () => {} })));
+      for (const text of ["stale change", "Stale · approval blocked", "Original captured value:", "20%", "35%", "60%", "Editing the proposed value keeps the snapshot"]) assert.ok(html.includes(text), text);
+    } finally { client.clear(); }
+  });
+});
+
+test("multi-entity approvals and audit append are atomic, including undo, and terminal stages cannot be reopened", async () => {
+  await workspace(async (db, repo) => {
+    const item = (await repo.getQueue())[0];
+    const contact = (await db.contacts.where("accountId").equals(item.proposal.accountId).toArray())[0];
+    const changes = [...item.proposal.changes, { id: "contact-role", entityType: "Contact" as const, entityId: contact.id, field: "role" as const, before: contact.role ?? null, after: "Revenue Operations Lead", selected: true, status: "Pending" as const }];
+    await db.proposals.update(item.proposal.id, { changes });
+    const fail = () => { throw new Error("Audit append failed"); };
+    db.auditEvents.hook("creating", fail);
+    await assert.rejects(repo.approve(item.proposal.id, changes.map(change => change.id)), /Audit append failed/);
+    db.auditEvents.hook("creating").unsubscribe(fail);
+    assert.deepEqual(await db.contacts.get(contact.id), contact);
+    assert.equal((await db.deals.get(item.proposal.dealId!))!.stage, "Discovery");
+    assert.equal((await db.proposals.get(item.proposal.id))!.status, "Pending");
+    assert.equal(await db.auditEvents.count(), 0);
+    const receipt = await repo.approve(item.proposal.id, changes.map(change => change.id));
+    assert.equal(receipt.after.status, "Approved");
+    assert.equal((await db.contacts.get(contact.id))!.role, "Revenue Operations Lead");
+    const approved = await db.auditEvents.toArray();
+    assert.equal(approved.length, 3);
+    assert.ok(approved.every(event => event.action === "ProposalApproved" && event.proposalId === item.proposal.id));
+    db.auditEvents.hook("creating", fail);
+    await assert.rejects(repo.undo(receipt), /Audit append failed/);
+    db.auditEvents.hook("creating").unsubscribe(fail);
+    assert.equal((await db.contacts.get(contact.id))!.role, "Revenue Operations Lead");
+    assert.equal((await db.deals.get(item.proposal.dealId!))!.stage, "Evaluation");
+    assert.deepEqual(await db.proposals.get(item.proposal.id), receipt.after);
+    assert.deepEqual(await db.auditEvents.toArray(), approved);
+    await repo.undo(receipt);
+    assert.deepEqual(await db.contacts.get(contact.id), contact);
+    assert.equal(await db.auditEvents.count(), 6);
+    await db.deals.update(item.proposal.dealId!, { stage: "ClosedWon" });
+    await assert.rejects(repo.review(item.proposal.id, { type: "edit", changeId: changes[0].id, value: "Negotiation" }), /terminal/);
+    // Even a structurally valid suggestion captured after closure cannot reopen it.
+    await db.proposals.update(item.proposal.id, { changes: [{ ...changes[0], entityType: "Deal", field: "stage", before: "ClosedWon", after: "Negotiation" }] });
+    await assert.rejects(repo.approve(item.proposal.id, [changes[0].id]), /terminal/);
+    assert.equal((await db.deals.get(item.proposal.dealId!))!.stage, "ClosedWon");
+  });
+});
+
+test("outcomes and persisted history distinguish applied, skipped, rejected and edited fields", async () => {
+  await workspace(async (db, repo) => {
+    const item = (await repo.getQueue())[0];
+    await repo.review(item.proposal.id, { type: "edit", changeId: item.proposal.changes[0].id, value: "Proposal" });
+    const receipt = await repo.approve(item.proposal.id, [item.proposal.changes[0].id]);
+    const html = renderToStaticMarkup(createElement(ReviewOutcome, { proposal: receipt.after, changeIds: receipt.changeIds }));
+    for (const text of ["Partially approved", "Applied", "Skipped · awaiting review", "Edited suggestion", "Captured:"]) assert.ok(html.includes(text), text);
+    const rejected = await repo.review(item.proposal.id, { type: "reject" });
+    const client = createQueryClient();
+    try {
+      client.setQueryData(queryKeys.accounts.list, await db.accounts.toArray());
+      client.setQueryData(queryKeys.proposals.list, [rejected]);
+      const history = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ReviewHistory)));
+      for (const text of ["Avelmere Systems", "Partially approved", "Rejected · not applied", "Edited suggestion", "append-only audit trail"]) assert.ok(history.includes(text), text);
+    } finally { client.clear(); }
+    db.close(); await db.open();
+    assert.equal((await db.proposals.get(item.proposal.id))!.changes[0].edited, true);
+  });
+});
+
+test("edited text uses the target field normalization so approval receipts and Undo match persisted values", async () => {
+  await workspace(async (db, repo) => {
+    const item = (await repo.getQueue()).find(row => row.proposal.changes.some(change => change.field === "nextStep"))!;
+    const change = item.proposal.changes.find(change => change.field === "nextStep")!;
+    const before = await db.deals.get(change.entityId);
+    await db.deals.update(change.entityId, { nextStep: `  ${String(change.before)}  ` });
+    await assert.rejects(repo.approve(item.proposal.id, [change.id]), /current value changed/);
+    assert.equal((await db.deals.get(change.entityId))!.nextStep, `  ${String(change.before)}  `);
+    await db.deals.put(before!);
+    await assert.rejects(repo.review(item.proposal.id, { type: "edit", changeId: change.id, value: `  ${String(change.before)}  ` }), /modify the value/);
+    const edited = await repo.review(item.proposal.id, { type: "edit", changeId: change.id, value: "  Confirm the legal review timeline.  " });
+    assert.equal(edited.changes.find(field => field.id === change.id)!.after, "Confirm the legal review timeline.");
+    assert.equal(edited.changes.find(field => field.id === change.id)!.before, change.before);
+    const receipt = await repo.approve(item.proposal.id, [change.id], edited);
+    assert.equal((await db.deals.get(change.entityId))!.nextStep, "Confirm the legal review timeline.");
+    await repo.undo(receipt);
+    assert.deepEqual(await db.deals.get(change.entityId), before);
+    assert.deepEqual(await db.proposals.get(item.proposal.id), edited);
   });
 });

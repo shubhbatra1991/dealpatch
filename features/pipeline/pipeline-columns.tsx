@@ -1,6 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { formatDealValue, formatPipelineDate, riskOrder, stageLabels, stageOrder, type PipelineRow } from "./pipeline-model";
 import { SelectionCheckbox } from "./selection-checkbox";
+import Link from "next/link";
+import { dealHref } from "../deals/deal-detail-model";
 
 export const pipelineColumns: ColumnDef<PipelineRow>[] = [
   {
@@ -20,7 +22,7 @@ export const pipelineColumns: ColumnDef<PipelineRow>[] = [
     cell: ({ row }) => <SelectionCheckbox label={`Select ${row.original.title}`} checked={row.getIsSelected()} onChange={row.getToggleSelectedHandler()} />,
   },
   { accessorKey: "accountName", header: "Account", size: 190, enableHiding: false, cell: ({ row }) => <span className="font-medium text-zinc-900">{row.original.accountName}</span> },
-  { accessorKey: "title", header: "Deal", size: 280, enableHiding: false },
+  { accessorKey: "title", header: "Deal", size: 280, enableHiding: false, cell: ({ row }) => <Link href={dealHref(row.id)} className="rounded-sm font-medium text-zinc-900 underline-offset-4 hover:text-indigo-700 hover:underline">{row.original.title}</Link> },
   { accessorKey: "stage", header: "Stage", size: 130, filterFn: "equals", sortingFn: (a, b) => stageOrder.indexOf(a.original.stage) - stageOrder.indexOf(b.original.stage), cell: ({ row }) => stageLabels[row.original.stage] },
   { accessorKey: "value", header: "Value", size: 140, sortingFn: (a, b) => a.original.currency.localeCompare(b.original.currency) || a.original.value - b.original.value, cell: ({ row }) => <span className="whitespace-nowrap tabular-nums">{formatDealValue(row.original.value, row.original.currency)}</span> },
   { accessorKey: "ownerId", header: "Owner", size: 110 },

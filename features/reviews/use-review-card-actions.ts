@@ -18,7 +18,7 @@ export function useReviewCardActions(item: ReviewItem, onReviewed: (message: str
       setError("");
       onReviewed(`Applying ${changeIds.length} changes for ${item.account}…`);
       try {
-        const receipt = await approval.mutateAsync({ id: item.proposal.id, changeIds });
+        const receipt = await approval.mutateAsync({ id: item.proposal.id, changeIds, expectedProposal: item.proposal });
         const remaining = receipt.after.changes.filter(isUnreviewed).length;
         onReviewed(`Approved ${changeIds.length} changes for ${item.account}. ${remaining ? `${remaining} remaining changes await review.` : "Proposal complete."} Undo is available in the notification.`);
       } catch {

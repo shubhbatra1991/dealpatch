@@ -8,7 +8,7 @@ export type DealStage =
 
 export type DealRisk = "Low" | "Medium" | "High";
 
-/** ISO 4217 currency code, e.g. EUR, USD, or GBP. Validated at input boundaries. */
+/** ISO-style three-letter currency code, e.g. EUR, USD, or GBP. Validated at input boundaries. */
 export type CurrencyCode = string;
 
 export interface Deal {
@@ -23,6 +23,7 @@ export interface Deal {
   probability: number;
   /** ISO 8601 date (YYYY-MM-DD). */
   expectedCloseDate?: string;
+  /** Demo ownership reference only; no User entity or access-control meaning. */
   ownerId: string;
   risk: DealRisk;
   nextStep?: string;

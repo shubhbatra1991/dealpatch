@@ -19,6 +19,7 @@ export type ChangeEntityType = keyof ChangeableEntities;
 // Optional fields use null in proposals to represent an absent/cleared value,
 // so changes remain serializable without relying on undefined JSON properties.
 type ChangeValue<T> = undefined extends T ? Exclude<T, undefined> | null : T;
+type SnapshotValue<T> = T extends readonly (infer Item)[] ? readonly Item[] : T;
 
 type EntityChange<Entity extends ChangeEntityType> = {
   [Field in keyof ChangeableEntities[Entity]]-?: {
@@ -26,11 +27,13 @@ type EntityChange<Entity extends ChangeEntityType> = {
     entityType: Entity;
     entityId: string;
     field: Field;
-    /** Snapshot at generation time; compare with current data before applying. */
-    before: ChangeValue<ChangeableEntities[Entity][Field]>;
+    /** Immutable generation-time snapshot. Editing a suggestion changes after only. */
+    readonly before: SnapshotValue<ChangeValue<ChangeableEntities[Entity][Field]>>;
     after: ChangeValue<ChangeableEntities[Entity][Field]>;
     selected: boolean;
     status: ChangeStatus;
+    /** Retained after approval/rejection; optional for existing stored proposals. */
+    edited?: boolean;
   };
 }[keyof ChangeableEntities[Entity]];
 

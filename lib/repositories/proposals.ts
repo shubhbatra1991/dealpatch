@@ -5,6 +5,8 @@ import { getDatabase, type DealPatchDatabase } from "../db/database";
 import { initializeWorkspace } from "../db/workspace";
 
 export interface ProposalRepository {
+  getAll(): Promise<Proposal[]>;
+  getByAccountId(accountId: string): Promise<Proposal[]>;
   getPending(): Promise<Proposal[]>;
   getById(id: string): Promise<Proposal | undefined>;
   updateStatus(id: string, status: ProposalStatus): Promise<Proposal>;
@@ -31,6 +33,13 @@ export function createProposalRepository(database?: DealPatchDatabase): Proposal
   }
 
   return {
+    async getAll() {
+      return (await (await ready()).proposals.toArray()).map(proposal => proposalSchema.parse(proposal));
+    },
+    async getByAccountId(accountId) {
+      return (await (await ready()).proposals.where("accountId").equals(accountId).sortBy("createdAt"))
+        .reverse().map(proposal => proposalSchema.parse(proposal));
+    },
     async getPending() {
       // Oldest first, so earlier proposals are reviewed before newer ones.
       return (await (await ready()).proposals.where("status").anyOf("Pending", "PartiallyApproved").sortBy("createdAt"))

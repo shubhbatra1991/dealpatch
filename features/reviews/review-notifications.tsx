@@ -5,6 +5,8 @@ import { useIsMutating, useMutation, useMutationState, useQueryClient } from "@t
 import type { ApprovalReceipt } from "../../domain/proposals/review";
 import { approvalKey, reviewWriteKey, undoMutationOptions, type ApprovalContext } from "./approval-mutations";
 import { reviewButton } from "./review-change";
+import { ReviewOutcome } from "./review-outcome";
+import { useAllProposals } from "./use-proposals";
 
 interface Notice {
   id: number;
@@ -18,6 +20,9 @@ function ApprovalToast({ notice, onDismiss }: { notice: Notice; onDismiss: () =>
   const undo = useMutation(undoMutationOptions(useQueryClient()));
   const busy = useIsMutating({ mutationKey: reviewWriteKey }) > 0;
   const panel = useRef<HTMLDivElement>(null);
+  const proposals = useAllProposals();
+  const current = proposals.data?.find(proposal => proposal.id === notice.receipt?.after.id);
+  const newerDecision = !!current && JSON.stringify(current) !== JSON.stringify(notice.receipt?.after);
   const saving = notice.status === "pending" || undo.isPending;
   const failure = notice.status === "error" || undo.isError;
   const account = notice.context?.item.account ?? "this proposal";
@@ -37,8 +42,10 @@ function ApprovalToast({ notice, onDismiss }: { notice: Notice; onDismiss: () =>
     : `Approved ${notice.receipt?.changeIds.length ?? 0} changes for ${account}.`;
   return <div ref={panel} tabIndex={-1} className={`rounded-sm border bg-white p-3 shadow-sm ${failure ? "border-red-300" : "border-zinc-300"}`}>
     <p role={failure ? "alert" : "status"} aria-atomic="true" className={`text-xs leading-5 ${failure ? "text-red-900" : "text-zinc-800"}`}>{message}</p>
+    {notice.status === "success" && notice.receipt && !undo.isSuccess && <ReviewOutcome proposal={notice.receipt.after} changeIds={notice.receipt.changeIds} />}
+    {notice.status === "success" && !undo.isSuccess && newerDecision && !undo.isPending && <p className="mt-2 text-[11px] text-amber-900">Undo unavailable: this proposal has a newer review decision. Undo the most recent approval first.</p>}
     <div className="mt-2 flex items-center gap-2">
-      {notice.status === "success" && !undo.isSuccess && <button type="button" disabled={busy} onClick={() => void restore()} className={reviewButton}>{undo.isPending ? "Undoing…" : "Undo"}</button>}
+      {notice.status === "success" && !undo.isSuccess && <button type="button" disabled={busy || newerDecision} onClick={() => void restore()} className={reviewButton}>{undo.isPending ? "Undoing…" : "Undo"}</button>}
       <button type="button" disabled={saving} onClick={onDismiss} className={`${reviewButton} ml-auto`} aria-label={`Dismiss review notification for ${account}`}>Dismiss</button>
     </div>
   </div>;
