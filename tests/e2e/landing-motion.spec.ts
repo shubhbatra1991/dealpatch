@@ -129,6 +129,9 @@ test("landing motion: product tabs support pointer, arrow keys, Home/End and axe
   await expect(page.getByRole("tabpanel", { name: "Pipeline", exact: true })).toBeFocused();
   for (const mode of ["morning", "afternoon", "evening", "night"]) {
     await page.getByRole("combobox", { name: "Theme", exact: true }).selectOption(mode);
+    const authorLink = page.getByRole("link", { name: "Saurabh", exact: true });
+    await expect(authorLink).toHaveAttribute("href", "https://www.saurabhbatra.com/");
+    await expect(authorLink).toHaveCSS("text-decoration-line", "underline");
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   }
   await page.emulateMedia({ forcedColors: "active" });

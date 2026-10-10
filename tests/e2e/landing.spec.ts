@@ -130,8 +130,8 @@ test("landing: metadata, project links and lightweight workspace entry", async (
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
-  await expect(page).toHaveTitle("DealPatch — Human-Reviewed Sales Automation");
-  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "DealPatch — Human-Reviewed Sales Automation");
+  await expect(page).toHaveTitle("DealPatch - Human-Reviewed Sales Automation");
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "DealPatch - Human-Reviewed Sales Automation");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /open-source, local-first/);
   await expect(page.getByRole("navigation", { name: "Main navigation" })).toHaveCount(0);
   expect(await page.evaluate(async () => (await indexedDB.databases()).length)).toBe(0);

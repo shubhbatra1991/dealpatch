@@ -57,7 +57,7 @@ No functional application bugs were found or runtime code changed in this task.
 An initial lint failure was a fixture callback named `use` being mistaken for a
 React hook; renaming the callback fixed it without suppressing lint rules.
 The singular "1 changes" copy issue recorded here was corrected in the following
-performance-hardening milestone; see `docs/PERFORMANCE.md` for that validation.
+performance-hardening milestone.
 
 Remaining limits: browser coverage is Chromium only; Undo receipts remain
 session-scoped (the persistence assertions cover CRM values, proposals and audit
@@ -77,7 +77,7 @@ Landing reflow checks cover 1920, 1280, 768, 390 and 320px. Reduced-motion and
 forced-color focus checks are separate from normal-palette contrast scans: axe's
 authored-color calculation does not model forced system paints. No contrast rules
 are disabled in the four-theme desktop/mobile scans. Native screen-reader and
-cross-platform screenshot limitations remain documented in ACCESSIBILITY.md.
+cross-platform screenshot limitations require separate manual verification.
 
 Landing/route migration validation (9 October 2026): typecheck, lint, 148 unit
 tests, production build and all 50 Playwright tests pass. The seven added browser
@@ -93,7 +93,7 @@ Install engines once with `npx playwright install chromium firefox webkit`. The
 full `npm run test:e2e` gate includes the existing Chromium suites and four release
 smoke tests in each of Chromium, Firefox and WebKit. `npx playwright test
 release.spec.ts` runs just those twelve checks. Earlier results above are milestone
-history; see [the current release report](../../docs/RELEASE_READINESS.md).
+history.
 
 Release checks start with genuinely fresh browser contexts. They cover landing
 entry, seeding, themes, favorites/saved-view persistence, global search, simulated

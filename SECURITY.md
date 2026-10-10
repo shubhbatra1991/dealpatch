@@ -66,8 +66,5 @@ has no patched version listed. npm suggests downgrading the Next lint config to
 risk: lint only trusted repository patterns and revisit upstream fixes. Do not
 interpret a zero production audit as proof of complete security.
 
-See [security principles](docs/SECURITY.md) and
-[release readiness](docs/RELEASE_READINESS.md) for current checks and limitations.
-Repository CI, action pins, dependency review and recommended (unverified) GitHub
-settings are documented in [GitHub security](docs/GITHUB_SECURITY.md). This root
-file remains the canonical disclosure policy so existing public links keep working.
+This is the canonical disclosure policy. Repository security settings must be
+verified by an administrator; workflow files alone do not enable them.

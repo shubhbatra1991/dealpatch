@@ -49,7 +49,7 @@ test("release: clean profile, complete workflow, persistence, console and networ
     await page.emulateMedia({ reducedMotion: "reduce" });
     await expect(page.getByRole("group", { name: "Scripted review demo", exact: true })).toHaveAttribute("data-step", "8");
     await page.getByRole("combobox", { name: "Theme", exact: true }).selectOption("night");
-    await page.screenshot({ path: "docs/images/landing.png", animations: "disabled" });
+    await page.screenshot({ path: "test-results/release-landing.png", animations: "disabled" });
     await page.emulateMedia({ reducedMotion: "no-preference" });
   }
   await page.getByRole("main").getByRole("link", { name: "Explore workspace", exact: true }).first().click();

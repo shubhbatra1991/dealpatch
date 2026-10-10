@@ -1,8 +1,7 @@
 # Contributing to DealPatch
 
 DealPatch is an educational, local-first workspace with fictional data. Start
-with [AGENTS.md](AGENTS.md), [architecture](docs/ARCHITECTURE.md),
-[engineering rules](docs/ENGINEERING_RULES.md) and [design](docs/DESIGN_SYSTEM.md).
+with the [README](README.md) and [security policy](SECURITY.md).
 
 Use Node.js 24 (the validated runtime) and npm. Clone the repository, then run
 `npm install` and `npm run dev`. No credentials, `.env`, database setup or accounts
@@ -39,6 +38,6 @@ limitations. Include fictional screenshots for visible changes. Keep unrelated
 refactors out. Never include local databases, generated artifacts or credentials.
 Report security issues through [SECURITY.md](SECURITY.md).
 
-Never commit credentials or API keys. Review the [GitHub security and CI guide](docs/GITHUB_SECURITY.md)
-for the PR smoke/full-release split, dependency policy and manual repository settings.
+Never commit credentials or API keys. Review dependency changes and keep repository
+security checks enabled.
 CI uses `npm ci` with the committed lockfile; do not replace it with `npm install`.

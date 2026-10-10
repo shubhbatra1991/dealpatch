@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/shared/brand-mark";
 import { ThemeControl } from "@/components/layout/theme-control";
 import { EntityIcon } from "@/components/shared/entity-icon";
 import { projectLinks } from "@/lib/project";
@@ -38,7 +39,7 @@ export function LandingPage() {
     <a href="#landing-main" className="landing-skip">Skip to content</a>
     <header className="landing-header">
       <div className="landing-container landing-header-inner">
-        <a href="#" aria-label="DealPatch home" className="landing-brand"><span aria-hidden="true">DP</span>DealPatch</a>
+        <a href="#" aria-label="DealPatch home" className="landing-brand"><BrandMark />DealPatch</a>
         <nav aria-label="Product navigation"><a href="#product">Product</a><a href="#how-it-works">How it works</a><a href="#open-source">Open source</a></nav>
         <div className="landing-header-controls"><ThemeControl /><ExploreLink /></div>
       </div>
@@ -102,7 +103,7 @@ export function LandingPage() {
         <div><h2>Project</h2><nav aria-label="Project links"><a href={projectLinks.source}><FiGithub aria-hidden="true" />GitHub</a><a href={projectLinks.documentation}>Documentation</a><a href={projectLinks.security}>Security</a><a href={projectLinks.license}>MIT License</a></nav></div>
         <div><h2>Built with</h2><ul className="landing-stack" aria-label="Built with"><li>Next.js</li><li>React</li><li>TypeScript</li></ul></div>
       </div>
-      <div className="landing-footer-bottom"><span>DealPatch</span><span>Open-source / educational project</span><span>{new Date().getFullYear()}</span></div>
+      <div className="landing-footer-bottom"><span>DealPatch</span><span>Open-source / educational project</span><span>Designed & built by <a href="https://www.saurabhbatra.com/">Saurabh</a></span><span>{new Date().getFullYear()}</span></div>
     </div></footer>
   </div>;
 }
