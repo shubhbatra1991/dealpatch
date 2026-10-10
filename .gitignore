@@ -53,7 +53,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Local editor, log and database artifacts; docs and intentional baselines ship.
+# Local editor, log and database artifacts.
 .vscode/
 .idea/
 *.log
@@ -65,3 +65,4 @@ Thumbs.db
 *.bak
 
 docs/*
+/AGENTS.md

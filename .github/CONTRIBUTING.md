@@ -1,11 +1,11 @@
 # Contributing to DealPatch
 
 DealPatch is an educational, local-first workspace with fictional data. Start
-with the [README](README.md) and [security policy](SECURITY.md).
+with the [README](../README.md) and [security policy](SECURITY.md).
 
 Use Node.js 24 (the validated runtime) and npm. Clone the repository, then run
 `npm install` and `npm run dev`. No credentials, `.env`, database setup or accounts
-are needed. See [README](README.md) for product routes.
+are needed. See [README](../README.md) for product routes.
 
 Before opening a pull request, run:
 
@@ -21,7 +21,7 @@ npm audit --omit=dev
 ```
 
 Install browser runtimes once with `npx playwright install chromium firefox webkit`.
-See [browser tests](tests/e2e/README.md) for platform-specific screenshots and smoke
+See [browser tests](../tests/e2e/README.md) for platform-specific screenshots and smoke
 coverage. Do not regenerate baselines merely to hide a regression.
 
 Keep routes small, logic feature-local and domain types framework-independent.

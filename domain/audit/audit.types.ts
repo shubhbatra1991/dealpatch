@@ -13,7 +13,7 @@ export type AuditAction =
  */
 export interface AuditEvent {
   readonly id: string;
-  /** Entity category is an open string in DATA_MODEL.md. */
+  /** Nonempty entity category. */
   readonly entityType: string;
   readonly entityId: string;
   readonly action: AuditAction;

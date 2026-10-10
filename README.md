@@ -92,6 +92,11 @@ npm run dev
 Open [DealPatch](http://localhost:3000) or go directly to the
 [workspace](http://localhost:3000/workspace).
 
+## Contributing and security
+
+See the [Contributing guide](.github/CONTRIBUTING.md) and
+[Security policy](.github/SECURITY.md).
+
 ## License
 
 Licensed under the [MIT License](LICENSE).

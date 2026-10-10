@@ -1,5 +1,4 @@
-// DATA_MODEL.md names ContactStatus but leaves its allowed values unspecified.
-// Preserve the existing V1 lifecycle until that document defines otherwise.
+// Supported contact lifecycle values.
 export type ContactStatus = "Active" | "Inactive";
 
 export interface Contact {
