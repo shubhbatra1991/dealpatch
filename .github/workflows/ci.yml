@@ -48,7 +48,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Chromium release, review and landing interaction smoke
         if: github.event_name != 'workflow_dispatch'
-        run: npx playwright test tests/e2e/release.spec.ts tests/e2e/reviews.spec.ts tests/e2e/landing-motion.spec.ts --project=chromium
+        run: npx playwright test tests/e2e/release.spec.ts tests/e2e/reviews.spec.ts tests/e2e/review-history.spec.ts tests/e2e/landing-motion.spec.ts --project=chromium
       - name: Accessibility smoke
         if: github.event_name != 'workflow_dispatch'
         run: >-

@@ -8,7 +8,7 @@ import { ThemeControl } from "./theme-control";
 export function AppHeader() {
   const keyboard = useWorkspaceKeyboard();
   const pathname = usePathname();
-  const page = ({ "/workspace": "Overview", "/workspace/pipeline": "Pipeline", "/workspace/accounts": "Accounts", "/workspace/contacts": "Contacts", "/workspace/reviews": "Review Queue", "/workspace/activity": "Activity" } as Record<string, string>)[pathname] ?? (pathname.startsWith("/workspace/accounts/") ? "Accounts" : pathname.startsWith("/workspace/contacts/") ? "Contacts" : pathname.startsWith("/workspace/deals/") ? "Deal" : "Workspace");
+  const page = ({ "/workspace": "Overview", "/workspace/pipeline": "Pipeline", "/workspace/accounts": "Accounts", "/workspace/contacts": "Contacts", "/workspace/reviews": "Review Queue", "/workspace/reviews/history": "Review History", "/workspace/activity": "Activity" } as Record<string, string>)[pathname] ?? (pathname.startsWith("/workspace/accounts/") ? "Accounts" : pathname.startsWith("/workspace/contacts/") ? "Contacts" : pathname.startsWith("/workspace/deals/") ? "Deal" : "Workspace");
   return (
     <header className="workspace-header flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border bg-surface px-3 sm:px-5">
       <div className="flex min-w-0 flex-1 items-center gap-2 text-xs" aria-label={`Sales workspace, ${page}`}>

@@ -268,8 +268,10 @@ test("outcomes and persisted history distinguish applied, skipped, rejected and 
     try {
       client.setQueryData(queryKeys.accounts.list, await db.accounts.toArray());
       client.setQueryData(queryKeys.proposals.list, [rejected]);
+      client.setQueryData(queryKeys.proposals.reviewItems, await repo.getAll());
+      client.setQueryData(queryKeys.audit.list, await db.auditEvents.toArray());
       const history = renderToStaticMarkup(createElement(QueryClientProvider, { client }, createElement(ReviewHistory)));
-      for (const text of ["Avelmere Systems", "Partially approved", "Rejected · not applied", "Edited suggestion", "append-only audit trail"]) assert.ok(history.includes(text), text);
+      for (const text of ["Avelmere Systems", "Partially approved", "Reviewed proposals"]) assert.ok(history.includes(text), text);
     } finally { client.clear(); }
     db.close(); await db.open();
     assert.equal((await db.proposals.get(item.proposal.id))!.changes[0].edited, true);

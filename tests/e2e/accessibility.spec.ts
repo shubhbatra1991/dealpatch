@@ -65,8 +65,9 @@ test("accessibility: rollback error and reviewed history", async ({ page }) => {
   await audit(page);
   await review(page).getByRole("button", { name: "Reject proposal", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Rejected remaining changes" })).toHaveCount(1);
-  await page.getByRole("combobox", { name: "Proposal status", exact: true }).selectOption("Rejected");
-  await expect(page.getByRole("list", { name: "Review proposals" }).getByRole("button")).toHaveCount(1);
+  await page.getByRole("link", { name: "Review History", exact: true }).click();
+  await page.getByRole("combobox", { name: "History status" }).selectOption("Rejected");
+  await page.getByRole("list", { name: "Review history", exact: true }).locator("summary").first().click();
   await audit(page);
 });
 

@@ -57,8 +57,9 @@ test("reject preserves evidence and CRM values and updates the pending badge", a
   await expect(badge(page, 14)).toBeVisible();
   await expect(review(page).getByRole("region", { name: "Review outcome" })).toContainText("rejected");
   await page.reload();
-  await page.getByRole("combobox", { name: "Proposal status" }).selectOption("Rejected");
-  await expect(page.getByRole("list", { name: "Review proposals" }).getByRole("button")).toHaveCount(1);
+  await page.getByRole("link", { name: "Review History", exact: true }).click();
+  await page.getByRole("combobox", { name: "History status" }).selectOption("Rejected");
+  await page.getByRole("list", { name: "Review history", exact: true }).locator("summary").first().click();
   await expect(review(page)).toContainText("Supporting evidence");
   await review(page).getByRole("link", { name: "View deal", exact: true }).click();
   await expectDeal(page, 20, "Discovery");

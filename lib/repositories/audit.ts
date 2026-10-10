@@ -5,6 +5,11 @@ import { initializeWorkspace } from "../db/workspace";
 /** Read-only history API. Appends occur inside the owning mutation transaction. */
 export function createAuditRepository(database?: DealPatchDatabase) {
   return {
+    async getAll() {
+      const db = database ?? getDatabase();
+      await initializeWorkspace(db);
+      return (await db.auditEvents.toArray()).map(event => auditEventSchema.parse(event));
+    },
     async getByAccountId(accountId: string) {
       const db = database ?? getDatabase();
       await initializeWorkspace(db);
