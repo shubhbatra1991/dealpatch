@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.104.1",
-    "@tanstack/react-table": "^8.21.3",
+    "@tanstack/react-table": "^9.2.6",
     "@tanstack/react-virtual": "^3.14.13",
     "dexie": "^4.4.6",
     "next": "16.3.8",
