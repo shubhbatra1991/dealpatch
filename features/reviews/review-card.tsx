@@ -12,6 +12,7 @@ import { useReviewCardActions } from "./use-review-card-actions";
 import { isPendingReview, proposalStatusLabel } from "./review-model";
 import { ReviewOutcome } from "./review-outcome";
 import { ReviewAudit } from "./review-audit";
+import { reviewHistoryHref } from "./review-history-model";
 
 export function ReviewCard({ item, onReviewed, active, onActivate, dialogOpen, onOpenChange, restoreFocus }: { item: ReviewItem; onReviewed: (message: string) => void; active: boolean; onActivate: () => void; dialogOpen?: boolean; onOpenChange?: (open: boolean) => void; restoreFocus?: () => void }) {
   const { proposal } = item;
@@ -43,6 +44,7 @@ export function ReviewCard({ item, onReviewed, active, onActivate, dialogOpen, o
       <Link href={`/workspace/accounts/${encodeURIComponent(proposal.accountId)}`} className="rounded-sm text-accent underline">View account</Link>
       {proposal.dealId && <Link href={`/workspace/deals/${encodeURIComponent(proposal.dealId)}`} className="rounded-sm text-accent underline">View deal</Link>}
       <Link href={`/workspace/activity?activity=${encodeURIComponent(proposal.sourceActivityId)}`} className="rounded-sm text-accent underline">View source activity</Link>
+      {proposal.status !== "Pending" && <Link href={reviewHistoryHref(proposal.id)} className="rounded-sm text-accent underline">View review history</Link>}
     </nav>
     <div className="border-t border-border px-3 py-3 sm:px-4">
       <h3 className="text-xs font-semibold text-text">Source activity</h3>

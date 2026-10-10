@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { BrandMark } from "../shared/brand-mark";
-import { FiActivity, FiBriefcase, FiCheckSquare, FiColumns, FiGrid, FiUsers } from "react-icons/fi";
+import { FiActivity, FiBriefcase, FiCheckSquare, FiClock, FiColumns, FiGrid, FiUsers } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { usePendingProposals } from "../../features/reviews/use-pending-proposals";
 import { FavoritesSection } from "../../features/favorites/favorites-section";
@@ -14,6 +14,7 @@ const navigation = [
   { href: "/workspace/accounts", label: "Accounts", icon: FiBriefcase },
   { href: "/workspace/contacts", label: "Contacts", icon: FiUsers },
   { href: "/workspace/reviews", label: "Review Queue", icon: FiCheckSquare },
+  { href: "/workspace/reviews/history", label: "Review History", icon: FiClock },
   { href: "/workspace/activity", label: "Activity", icon: FiActivity },
 ] as const;
 
@@ -22,7 +23,7 @@ export function AppSidebar() {
   const pending = usePendingProposals();
   const groups = [
     { label: "Workspace", items: navigation.filter(item => item.href === "/workspace") },
-    { label: "Workflow", items: navigation.filter(item => ["/workspace/pipeline", "/workspace/reviews", "/workspace/activity"].includes(item.href)) },
+    { label: "Workflow", items: navigation.filter(item => ["/workspace/pipeline", "/workspace/reviews", "/workspace/reviews/history", "/workspace/activity"].includes(item.href)) },
     { label: "Relationships", items: navigation.filter(item => ["/workspace/accounts", "/workspace/contacts"].includes(item.href)) },
   ];
 
@@ -37,7 +38,7 @@ export function AppSidebar() {
         <p className="sr-only mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-text-muted sm:not-sr-only">{group.label}</p>
         <ul aria-label={group.label} className="space-y-0.5">
           {group.items.map(({ href, label, icon: Icon }) => {
-            const active = href === "/workspace" ? pathname === "/workspace" : pathname === href || pathname.startsWith(`${href}/`) || href === "/workspace/pipeline" && pathname.startsWith("/workspace/deals/");
+            const active = href === "/workspace" || href === "/workspace/reviews" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`) || href === "/workspace/pipeline" && pathname.startsWith("/workspace/deals/");
             return (
               <li key={href}>
                 <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`workspace-nav-link relative flex h-8 items-center justify-center gap-2.5 rounded-sm px-2 text-xs sm:justify-start ${active ? "bg-accent-soft font-semibold text-text" : "text-text-muted hover:bg-surface-muted/50 hover:text-text"}`}>

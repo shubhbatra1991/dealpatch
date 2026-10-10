@@ -23,7 +23,7 @@ export function acquireReviewWrite(client: QueryClient) {
 }
 function affectedKeys(changes: readonly ProposalChange[], accountId: string) {
   const roots = { Deal: queryKeys.deals.all, Account: queryKeys.accounts.all, Contact: queryKeys.contacts.all, Activity: queryKeys.activities.all };
-  return [queryKeys.proposals.list, queryKeys.proposals.pending, queryKeys.proposals.queue, queryKeys.proposals.reviewItems, queryKeys.proposals.forAccount(accountId), queryKeys.audit.forAccount(accountId), ...[...new Set(changes.map(change => change.entityType))].map(type => roots[type])];
+  return [queryKeys.proposals.list, queryKeys.proposals.pending, queryKeys.proposals.queue, queryKeys.proposals.reviewItems, queryKeys.proposals.forAccount(accountId), queryKeys.audit.forAccount(accountId), queryKeys.audit.list, ...[...new Set(changes.map(change => change.entityType))].map(type => roots[type])];
 }
 export async function finishReviewWrite(client: QueryClient, changes?: readonly ProposalChange[], accountId?: string) {
   try { await Promise.all((changes && accountId ? affectedKeys(changes, accountId) : cacheKeys).map(queryKey => client.invalidateQueries({ queryKey }))); }

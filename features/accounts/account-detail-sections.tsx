@@ -4,6 +4,7 @@ import type { Contact } from "../../domain/contacts/contact";
 import type { Deal } from "../../domain/deals/deal";
 import type { AuditEvent } from "../../domain/audit/audit.types";
 import type { Proposal } from "../../domain/proposals/proposal";
+import { reviewHistoryHref, reviewHistoryStatus } from "../reviews/review-history-model";
 import { isUnreviewed } from "../../domain/proposals/review";
 import { formatDealValue, formatPipelineDate, stageLabels } from "../pipeline/pipeline-model";
 import { displayFieldValue, displayTimestamp, fieldLabel } from "../reviews/review-format";
@@ -36,7 +37,7 @@ export function AccountActivity({ activities, recent = false, onOpenDeal }: { ac
   </li>)}</ol> : <Empty>No activity recorded for this account yet.</Empty>}</AccountSection>;
 }
 
-const proposalStatus: Record<Proposal["status"], string> = { Pending: "Pending", PartiallyApproved: "Partially approved", Approved: "Approved", Rejected: "Rejected", Superseded: "Superseded" };
+
 
 export function AccountProposals({ proposals, data, pendingOnly = false }: { proposals: Proposal[]; data: AccountDetailData; pendingOnly?: boolean }) {
   const sources = new Map(data.activities.map(activity => [activity.id, activity]));
@@ -44,8 +45,8 @@ export function AccountProposals({ proposals, data, pendingOnly = false }: { pro
     {proposals.length ? <ul className="divide-y divide-border">{proposals.map(proposal => {
       const changes = (data.proposalChanges.get(proposal.id) ?? []).filter(item => !pendingOnly || isUnreviewed(item.change));
       const source = sources.get(proposal.sourceActivityId);
-      return <li key={proposal.id} className="px-3 py-3"><div className="flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-xs font-semibold text-text">{proposalStatus[proposal.status]}</h3><span className="text-[10px] text-text-muted">{proposal.confidence}% confidence</span></div>
-        <p className="mt-1 text-[10px] text-text-muted">Generated <time dateTime={proposal.createdAt}>{displayTimestamp(proposal.createdAt)}</time></p>
+      return <li key={proposal.id} className="px-3 py-3"><div className="flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-xs font-semibold text-text">{reviewHistoryStatus(proposal, data.auditEvents)}</h3><span className="text-[10px] text-text-muted">{proposal.confidence}% confidence</span></div>
+        {reviewHistoryStatus(proposal, data.auditEvents) !== "Pending" && <Link href={reviewHistoryHref(proposal.id)} className="mt-2 inline-block rounded-sm text-xs text-accent underline">Inspect review history</Link>}<p className="mt-1 text-[10px] text-text-muted">Generated <time dateTime={proposal.createdAt}>{displayTimestamp(proposal.createdAt)}</time></p>
         <p className="mt-1 text-[11px] text-text-muted">Source: {source ? `${source.type} · ${source.title}` : "Activity unavailable"}</p>
         <ul aria-label="Proposed field changes" className="mt-2 space-y-2">{changes.map(({ change, current, missing, stale }) => <li key={change.id} className="border-l-2 border-accent pl-2 text-xs">
           <p className="text-[10px] text-text-muted">{change.entityType} · {fieldLabel(change.field)} · {change.status}</p>
@@ -78,5 +79,3 @@ export function AccountTabContent({ tab, data, onOpenDeal }: { tab: AccountTab; 
     <div className="min-w-0 xl:col-span-2"><AccountActivity activities={data.activities.slice(0, 5)} recent onOpenDeal={onOpenDeal} /></div>
   </div>;
 }
-
-

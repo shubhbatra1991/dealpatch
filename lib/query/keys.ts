@@ -10,6 +10,7 @@ export const queryKeys = {
   },
   audit: {
     all: ["audit"] as const,
+    list: ["audit", "list"] as const,
     forAccount: (accountId: string) => ["audit", "account", accountId] as const,
   },
   contacts: {
