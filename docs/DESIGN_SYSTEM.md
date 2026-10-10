@@ -29,10 +29,47 @@ Workspace baselines are preserved unless verified migration changes require upda
 
 Below the hero, the showcase follows the workflow, interactive product tabs,
 human-review evidence, local-first setup, engineering highlights and open-source
-invitation. Engineering highlights are a compact text grid, without statistics or
-commercial claims. The footer provides workspace/source/docs/security/license
-links and understated Next.js, React and TypeScript labels. These additions use
+invitation. Human review uses an editorial decision record, distinct from the
+hero's Review Queue illustration. Pipeline previews include account, deal, stage,
+risk and value; Audit includes fictional timestamps and reversal history.
+Engineering highlights are a compact text grid, without statistics or commercial
+claims. The footer has Product, Project and Built with columns, stacking on small
+screens, followed by the educational-project label and year. These additions use
 the existing one-shot reveals and semantic tokens; no new client island is needed.
+
+Feather icons from the already installed `react-icons/fi` now serve record types,
+navigation, search, favorites, back links, theme labels and landing external links.
+There was no Lucide dependency to retain and no package was added. Named imports
+keep one family and avoid a second library. Decorative SVGs are hidden from
+assistive technology; buttons retain labels and favorite pressed/filled states.
+No workspace layout, query, persistence or record behavior changes.
+
+The landing page uses normal document scrolling. The earlier global `html`
+overflow lock is absent; workspace scrolling remains scoped to its shell. Browser
+regressions cover wheel input, native scrollbar dragging (headless scrollbars
+explicitly enabled), PageDown, Space, End/Home and Chromium mobile touch input.
+Physical trackpad and phone hardware are not covered by this emulation.
+
+Landing finishing build observation (10 October 2026): the generated `/` HTML
+references ten unique local scripts totaling 598,903 raw bytes / 184,181 summed
+gzip bytes. This was measured from `.next/server/app/index.html`, reading each
+referenced framework/public script and applying Node `zlib.gzipSync` individually.
+It includes framework and theme bootstrap code, not just landing code, and is not
+a network or latency benchmark. None of these scripts contains a Dexie marker;
+browser tests also assert no IndexedDB initialization before workspace entry.
+Static content remains server-rendered and the existing client islands, observer
+and cancellable timer behavior are unchanged. No animation package was added.
+
+Landing finishing validation (10 October 2026): typecheck, lint, 150 unit tests,
+production build and all 73 Playwright tests pass. Production dependency audit
+reports zero vulnerabilities. Four-theme desktop/mobile landing axe scans, tab and
+footer keyboard paths, reduced motion, forced colors and 320–1920px reflow checks
+pass. Existing real IndexedDB review, stress and Chromium/Firefox/WebKit release
+flows also pass. Eight landing and 26 workspace screenshot baselines were updated
+deliberately for the landing finishing and shared Feather icon changes; the
+documentation landing capture was refreshed. Desktop/mobile captures were visually
+reviewed. Physical trackpad/phone and real screen-reader verification remain manual
+follow-up limitations, not claims made by these automated checks.
 
 ## Surfaces and hierarchy
 

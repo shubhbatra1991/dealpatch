@@ -86,6 +86,8 @@ Screenshot baselines target Chromium on Windows. See [browser testing](tests/e2e
 
 [All documentation](docs/Readme.md) · [Contributing](CONTRIBUTING.md) ·
 [Security disclosure](SECURITY.md) · [Release readiness](docs/RELEASE_READINESS.md).
+[GitHub security and CI](docs/GITHUB_SECURITY.md) documents PR checks, full release
+validation and manual repository settings.
 
 Public source/docs/security/license links are configured in `lib/project.ts`,
 without environment variables or a deployment origin.

@@ -193,3 +193,17 @@ npm audit --omit=dev
 See the root [security policy](../SECURITY.md) for disclosure, supported scope and
 current accepted dependency risks, and [release readiness](./RELEASE_READINESS.md)
 for the latest validation results.
+
+## Public Repository Boundary
+
+All files committed to the DealPatch public repository must be considered
+public information.
+
+API keys, credentials, signing keys, private infrastructure configuration,
+production secrets and real customer data must never be committed to this
+repository. Git history, documentation, screenshots and fixtures are public too.
+
+Future production secrets must be supplied through deployment-platform settings,
+such as Vercel environment variables, and kept out of browser-exposed values.
+Future private infrastructure must live outside the public application repository.
+V1 remains local-only and requires no secrets or environment configuration.

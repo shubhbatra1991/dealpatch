@@ -1,5 +1,7 @@
 "use client";
 
+import { FiArrowLeft } from "react-icons/fi";
+
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Deal } from "../../domain/deals/deal";
@@ -22,7 +24,7 @@ export function ContactDetailView({ detail }: { detail: ReturnType<typeof buildC
   const selected = data.opportunities.find(deal => deal.id === selectedId);
   const openDeal = (deal: Deal) => setSelectedId(deal.id);
   return <section aria-labelledby="contact-title" className="space-y-3 pb-4">
-    <Link href="/workspace/contacts" className="inline-block rounded-sm text-xs text-text-muted hover:text-text">← All contacts</Link>
+    <Link href="/workspace/contacts" className="inline-block rounded-sm text-xs text-text-muted hover:text-text"><FiArrowLeft aria-hidden="true" className="mr-1 inline size-3" />All contacts</Link>
     <header className="border-b border-border pb-3"><div className="flex items-start justify-between gap-3"><div className="flex min-w-0 items-center gap-2"><h1 id="contact-title" className="text-lg font-semibold tracking-tight">{contactName(contact)}</h1><FavoriteButton entityType="contact" entityId={contact.id} recordName={contactName(contact)} /></div><span className="rounded-sm border border-border px-2 py-0.5 text-[11px] text-text-muted">{contact.status}</span></div><dl className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-xs">{[
       ["Role", contact.role || "Not set"], ["Account", account ? <Link key="account" href={accountHref(account.id)} className="rounded-sm text-accent hover:underline">{account.name}</Link> : "Unavailable account"], ["Email", contact.email || "Not set"], ["Phone", contact.phone || "Not set"], ["Region", account?.region || "Not set"],
     ].map(([label, value]) => <div key={String(label)} className="flex gap-1"><dt className="text-text-muted">{label}:</dt><dd className="break-all text-text">{value}</dd></div>)}</dl></header>
@@ -44,6 +46,6 @@ export function ContactDetailWorkspace({ contactId }: { contactId: string }) {
   const audit = useAccountAudit(contact?.accountId ?? "");
   const queries = [contacts, accounts, deals, activities, proposals, audit];
   const detail = useMemo(() => contact && contacts.data && accounts.data && deals.data && activities.data && proposals.data && audit.data ? buildContactDetail(contact, accounts.data, contacts.data, deals.data, activities.data, proposals.data, audit.data, new Date()) : null, [contact, contacts.data, accounts.data, deals.data, activities.data, proposals.data, audit.data]);
-  if (contacts.data && !contact) return <section aria-labelledby="contact-missing" className="space-y-3"><Link href="/workspace/contacts" className="rounded-sm text-xs text-accent hover:underline">← All contacts</Link><h1 id="contact-missing" className="text-lg font-semibold">Contact not found</h1><p className="text-xs text-text-muted">This contact does not exist in your local workspace.</p></section>;
+  if (contacts.data && !contact) return <section aria-labelledby="contact-missing" className="space-y-3"><Link href="/workspace/contacts" className="rounded-sm text-xs text-accent hover:underline"><FiArrowLeft aria-hidden="true" className="mr-1 inline size-3" />All contacts</Link><h1 id="contact-missing" className="text-lg font-semibold">Contact not found</h1><p className="text-xs text-text-muted">This contact does not exist in your local workspace.</p></section>;
   return <><ContactsQueryState failed={queries.some(query => query.isError)} ready={Boolean(detail)} fetching={queries.some(query => query.isFetching)} retry={() => { for (const query of queries) void query.refetch(); }} />{detail && <ContactDetailView detail={detail} />}</>;
 }

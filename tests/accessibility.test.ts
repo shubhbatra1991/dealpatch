@@ -37,9 +37,10 @@ test("record-specific favorite names retain the pressed state and hide decorativ
   try {
     client.setQueryData(queryKeys.favorites.list, []);
     assert.match(render(), /aria-label="Add Avelmere Systems to favorites"[^>]*aria-pressed="false"/);
+    assert.match(render(), /<svg[^>]*fill="none"[^>]*aria-hidden="true"/);
     client.setQueryData(queryKeys.favorites.list, [{ id: "favorite_001", entityType: "account", entityId: target.entityId, createdAt: "2026-10-01T00:00:00.000Z" }]);
     const html = render();
     assert.match(html, /aria-label="Remove Avelmere Systems from favorites"[^>]*aria-pressed="true"/);
-    assert.match(html, /<span aria-hidden="true">★<\/span>/);
+    assert.match(html, /<svg[^>]*fill="currentColor"[^>]*aria-hidden="true"/);
   } finally { client.clear(); }
 });

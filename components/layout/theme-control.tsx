@@ -1,5 +1,6 @@
 "use client";
 
+import { FiClock, FiCloud, FiMoon, FiSun, FiSunset } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { nextThemeBoundary, parseThemePreference, readThemePreference, resolveTheme, themeModes, themeStorageKey, writeThemePreference, type ThemeMode, type ThemePreference } from "../../lib/theme/theme";
 
@@ -48,8 +49,10 @@ export function ThemeControl() {
     };
   }, []);
 
+  const ThemeIcon = preference === "auto" ? FiClock : ({ morning: FiSun, afternoon: FiCloud, evening: FiSunset, night: FiMoon })[preference];
+
   return <div className="flex shrink-0 items-center gap-1">
-    <label htmlFor="workspace-theme" className="sr-only text-[11px] text-text-muted sm:not-sr-only">Theme</label>
+    <label htmlFor="workspace-theme" className="sr-only text-[11px] text-text-muted sm:not-sr-only"><ThemeIcon aria-hidden="true" className="mr-1 inline size-3" />Theme</label>
     <select id="workspace-theme" value={preference} onChange={event => {
       const next = parseThemePreference(event.target.value);
       let saved = false;

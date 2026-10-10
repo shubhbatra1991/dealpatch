@@ -8,6 +8,7 @@ Start with the root [README](../README.md) for setup and product routes.
 - [Design system](DESIGN_SYSTEM.md)
 - [Engineering rules](ENGINEERING_RULES.md)
 - [Security principles](SECURITY.md) and [public disclosure policy](../SECURITY.md)
+- [GitHub security and CI](GITHUB_SECURITY.md)
 - [Performance](PERFORMANCE.md)
 - [Accessibility](ACCESSIBILITY.md)
 - [Theming](THEMING.md)

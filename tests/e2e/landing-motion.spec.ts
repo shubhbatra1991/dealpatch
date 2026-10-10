@@ -69,7 +69,7 @@ test("landing motion: hidden document and offscreen preview stop the timeline", 
   await expect(demo(page)).toHaveAttribute("data-playing", "true");
   await page.clock.runFor(500);
   await expect(demo(page)).toHaveAttribute("data-step", "1");
-  await page.getByRole("heading", { name: "Open source, under the MIT license.", exact: true }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Explore DealPatch", exact: true }).scrollIntoViewIfNeeded();
   await expect(demo(page)).toHaveAttribute("data-playing", "false");
   await page.clock.runFor(5000);
   await expect(demo(page)).toHaveAttribute("data-step", "1");
@@ -111,13 +111,18 @@ test("landing motion: workflow progresses once and sections reveal once", async 
 test("landing motion: product tabs support pointer, arrow keys, Home/End and axe", async ({ page }) => {
   await page.goto("/");
   const tabs = page.getByRole("tablist", { name: "Product views" });
+  const pipeline = page.getByRole("tabpanel", { name: "Pipeline", exact: true });
+  for (const name of ["Account", "Deal", "Stage", "Risk", "Value"]) await expect(pipeline.getByRole("columnheader", { name, exact: true })).toBeVisible();
   await tabs.getByRole("tab", { name: "Activity", exact: true }).click();
   await expect(page.getByRole("tabpanel", { name: "Activity", exact: true })).toContainText("Local simulated analysis");
+  await expect(page.getByRole("tabpanel", { name: "Activity", exact: true })).toContainText("Avelmere Systems");
   await page.keyboard.press("ArrowRight");
   await expect(tabs.getByRole("tab", { name: "Review", exact: true })).toBeFocused();
   await expect(page.getByRole("tabpanel", { name: "Review", exact: true })).toContainText("20%");
+  await expect(page.getByRole("tabpanel", { name: "Review", exact: true })).toContainText("Approve selected · Edit · Reject");
   await page.keyboard.press("End");
   await expect(page.getByRole("tabpanel", { name: "Audit", exact: true })).toContainText("Approval undone");
+  await expect(page.getByRole("tabpanel", { name: "Audit", exact: true })).toContainText("1 Oct · 10:42 UTC");
   await page.keyboard.press("Home");
   await expect(tabs.getByRole("tab", { name: "Pipeline", exact: true })).toBeFocused();
   await page.keyboard.press("Tab");
