@@ -68,6 +68,20 @@ removes local workspace data.
 
 Use Node.js 24 and npm.
 
+To contribute, **Fork** the repository on GitHub first, then clone your fork and
+create a feature branch before making changes:
+
+```bash
+git clone https://github.com/<your-username>/dealpatch.git
+cd dealpatch
+git switch -c your-feature-name
+npm install
+npm run dev
+```
+
+If you only want to run DealPatch locally without contributing, you can clone
+the repository directly instead:
+
 ```bash
 git clone https://github.com/shubhbatra1991/dealpatch.git
 cd dealpatch

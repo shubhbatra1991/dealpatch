@@ -13,7 +13,7 @@
     "test:e2e": "playwright test",
     "test:performance": "playwright test --grep performance: --workers=1",
     "test:a11y": "playwright test accessibility.spec.ts",
-    "test:compile": "tsc -p tsconfig.json --noEmit false --noEmitOnError --module commonjs --moduleResolution node --incremental false --rootDir . --outDir node_modules/.cache/dealpatch-node",
+    "test:compile": "tsc -p tsconfig.json --noEmit false --noEmitOnError --module node16 --moduleResolution node16 --incremental false --rootDir . --outDir node_modules/.cache/dealpatch-node",
     "test": "npm run test:compile && cd node_modules/.cache/dealpatch-node && node --test \"tests/*.test.js\"",
     "validate:seed": "npm run test:compile && node node_modules/.cache/dealpatch-node/scripts/validate-seed.js",
     "test:seed": "npm run test:compile && cd node_modules/.cache/dealpatch-node && node --test tests/seed.test.js",
@@ -28,11 +28,11 @@
   "dependencies": {
     "@tanstack/react-query": "^5.104.1",
     "@tanstack/react-table": "^8.21.3",
-    "@tanstack/react-virtual": "^3.14.13",
+    "@tanstack/react-virtual": "^3.14.14",
     "dexie": "^4.4.6",
-    "next": "16.3.8",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-icons": "^5.7.0",
     "zod": "^4.6.5"
   },
@@ -40,13 +40,13 @@
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "16.4.0",
     "fake-indexeddb": "^6.2.5",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   }
 }

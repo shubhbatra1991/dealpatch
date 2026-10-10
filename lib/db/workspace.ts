@@ -22,7 +22,7 @@ export async function initializeWorkspace(database = getDatabase()): Promise<voi
 
   // Imports and validation must happen outside the IndexedDB transaction.
   // Existing workspaces never need to load the JSON chunk.
-  const { loadSeedData } = await import("./seed");
+  const { loadSeedData } = await import("./seed.ts");
   const seed = loadSeedData();
   await database.transaction("rw", database.tables, async () => {
     // Another tab or Strict Mode effect may have seeded while we were loading.
@@ -33,7 +33,7 @@ export async function initializeWorkspace(database = getDatabase()): Promise<voi
 
 /** Explicitly discard local edits and atomically restore the demo snapshot. */
 export async function resetWorkspace(database = getDatabase()): Promise<void> {
-  const { loadSeedData } = await import("./seed");
+  const { loadSeedData } = await import("./seed.ts");
   const seed = loadSeedData();
   await database.transaction("rw", database.tables, async () => {
     for (const table of database.tables) await table.clear();

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BrandMark } from "../shared/brand-mark";
 import { FiActivity, FiBriefcase, FiCheckSquare, FiColumns, FiGrid, FiUsers } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { usePendingProposals } from "../../features/reviews/use-pending-proposals";
@@ -28,7 +29,7 @@ export function AppSidebar() {
   return (
     <aside className="workspace-sidebar flex w-14 shrink-0 flex-col border-r border-border bg-bg-subtle sm:w-48">
       <div className="flex h-12 shrink-0 items-center justify-center border-b border-border px-3 sm:justify-start sm:gap-2.5">
-        <span aria-hidden="true" className="flex size-7 shrink-0 items-center justify-center rounded-sm bg-accent text-xs font-bold text-on-accent">DP</span>
+        <BrandMark size={28} /><span className="sr-only sm:hidden">DealPatch</span>
         <div className="hidden min-w-0 sm:block"><p className="text-xs font-semibold text-text">DealPatch</p><p className="mt-0.5 text-[10px] text-text-muted">Demo workspace</p></div>
       </div>
       <nav aria-label="Main navigation" className="min-h-0 flex-1 space-y-5 overflow-y-auto px-2 py-3">
