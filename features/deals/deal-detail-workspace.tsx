@@ -1,5 +1,7 @@
 "use client";
 
+import { FiArrowLeft } from "react-icons/fi";
+
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { buildDealDetail, dealTabs, type DealDetail, type DealTab } from "./deal-detail-model";
@@ -31,7 +33,7 @@ export function DealDetailWorkspace({ dealId }: { dealId: string }) {
   const missing = deals.data !== undefined && !deal;
   const failed = queries.some(query => query.isError);
   return <section aria-labelledby={detail ? "deal-title" : "deal-state-title"} className="mx-auto max-w-[1440px] space-y-3 pb-4">
-    <Link href="/workspace/pipeline" className="inline-block rounded-sm text-xs text-text-muted underline-offset-4 hover:text-accent hover:underline">← Back to Pipeline</Link>
+    <Link href="/workspace/pipeline" className="inline-block rounded-sm text-xs text-text-muted underline-offset-4 hover:text-accent hover:underline"><FiArrowLeft aria-hidden="true" className="mr-1 inline size-3" />Back to Pipeline</Link>
     {!detail && <h1 id="deal-state-title" className="text-lg font-semibold">{missing ? "Deal not found" : "Deal details"}</h1>}
     {failed && <div role="alert" className="flex flex-wrap items-center gap-3 rounded-sm border border-danger-border bg-danger-soft p-3 text-xs text-danger"><p>{detail ? "Unable to refresh deal data. Showing the last loaded values." : "Unable to load deal data from local storage."}</p><button type="button" disabled={queries.some(query => query.isFetching)} onClick={() => { setNow(new Date()); for (const query of queries) void query.refetch(); }} className="rounded-sm underline disabled:border-dashed">Retry</button></div>}
     {!detail && !missing && !failed && <p role="status" aria-busy="true" className="p-3 text-xs text-text-muted">Loading deal data…</p>}

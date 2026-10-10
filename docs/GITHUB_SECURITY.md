@@ -111,6 +111,36 @@ CI or a trusted checkout. No signing or package publishing is introduced.
 
 ## Recommended GitHub UI settings — not verified or enabled here
 
+### Dependency Review prerequisite and failed-run recovery
+
+If **Review dependency changes** fails with “Dependency review is not supported
+on this repository”, check the repository's Dependency graph setting first. The
+action requires that feature; adding token permissions or ignoring the failure
+does not enable it.
+
+A repository administrator must open
+[DealPatch security settings](https://github.com/shubhbatra1991/dealpatch/settings/security_analysis),
+then **Advanced Security → Dependency Graph → Enable** (older GitHub layouts may
+call the page **Code security and analysis**). See
+[GitHub's Dependency graph instructions](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/enable-dependency-graph).
+Allow the manifest/lockfile graph to populate, then rerun the failed Dependency
+Review job. If the repository is private, also verify that dependency review is
+available for its plan/security configuration. No setting has been enabled or
+verified from this checkout.
+
+Keep `fail-on-severity: high`, read-only permissions and the required check. Do
+not use `continue-on-error`, skip the action, or enable automatic merging to make
+an unavailable security control appear successful.
+
+If CI reports missing lockfile entries, regenerate `package-lock.json` with the
+npm version that reproduces the hosted error, then validate a clean install with
+that version before committing. npm 11.6.2 accepted the incomplete optional WASM
+graph that npm 12.2.0 rejected for missing `@emnapi/core` and `@emnapi/runtime`
+1.11.3 entries. A plain npm 11 lockfile-only install did not repair those entries;
+npm 12 regeneration in an isolated directory without installed modules did.
+Commit the repaired lockfile and rerun CI on that commit; rerunning an old commit
+will continue to use its broken lockfile. Keep `npm ci` in CI.
+
 For `shubhbatra1991/dealpatch`, enable where available:
 
 - Secret scanning and push protection.
@@ -154,8 +184,11 @@ decision and advisory are documented in [SECURITY.md](../SECURITY.md). No forced
 fix, tooling downgrade or global advisory exemption is applied. New dependency
 changes are reviewed separately; audit results change as advisories are published.
 
-Node.js 24 and npm 11 are the expected toolchain (locally validated with Node
-24.19.0 / npm 11.6.2); the lockfile remains committed. `main` is the supported
+Node.js 24 is the expected toolchain. `setup-node` uses the npm bundled with the
+selected Node patch, so its npm major version can change; CI logs both versions.
+The lockfile is committed and must validate with the hosted npm version, not just
+the local one (Node 24.19.0 / npm 11.6.2 locally, npm 12.2.0 also validated).
+`main` is the supported
 development branch, not a promise of historical release support. There is no
 automatic merge, publish or deployment workflow. Review full validation and audit
 results before manually preparing a release.
@@ -178,6 +211,28 @@ This is local Windows validation, not a successful hosted CI/CodeQL/dependency
 review run or Ubuntu execution claim. Confirm the first GitHub runs and configure
 required checks manually after these files are published. No push, deployment or
 repository-setting change was performed.
+
+## Hosted clean-install failure repair — 10 October 2026
+
+Reproduced the reported missing `@emnapi/core` / `@emnapi/runtime` 1.11.3 error
+with npm 12.2.0. Regenerated the lockfile's optional/bundled dependency metadata
+with that npm version in an isolated directory. Existing locked package versions
+and `package.json` are unchanged. npm 12 clean installation now succeeds; npm 11
+validation and npm 12's Linux x64 dry-run plan also pass. The Linux plan is not an
+actual Ubuntu execution result.
+
+After clean installation, typecheck, lint, all 150 unit tests, production build
+and all 25 ordinary CI Chromium smoke checks pass. Production audit has zero
+findings; the five documented development-tool findings remain. npm 12 reports
+that the unapproved `unrs-resolver` postinstall script was blocked; no broad script
+approval was added, and lint/build still pass with the installed platform binding.
+The CI workflow now reports Node/npm versions before `npm ci`.
+
+Dependency Review's reported unsupported-repository error still requires an
+administrator to enable Dependency Graph using the settings instructions above,
+wait for graph population, and rerun the job. The vulnerability threshold and
+workflow permissions are unchanged. GitHub settings and hosted check success
+have not been verified from this checkout.
 
 ## Boundary review and revalidation — 10 October 2026
 

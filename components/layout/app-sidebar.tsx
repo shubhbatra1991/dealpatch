@@ -1,18 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { FiActivity, FiBriefcase, FiCheckSquare, FiColumns, FiGrid, FiUsers } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import { usePendingProposals } from "../../features/reviews/use-pending-proposals";
 import { FavoritesSection } from "../../features/favorites/favorites-section";
 import { SavedViewsSection } from "../../features/saved-views/saved-views-section";
 
 const navigation = [
-  { href: "/workspace", label: "Overview", icon: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z" },
-  { href: "/workspace/pipeline", label: "Pipeline", icon: "M4 4v16 M12 4v16 M20 4v16 M4 8h4 M12 12h4 M20 16h1" },
-  { href: "/workspace/accounts", label: "Accounts", icon: "M4 21V7h16v14 M8 7V3h8v4 M8 11h1 M15 11h1 M8 15h1 M15 15h1 M10 21v-3h4v3" },
-  { href: "/workspace/contacts", label: "Contacts", icon: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8 M20 8v6 M17 11h6" },
-  { href: "/workspace/reviews", label: "Review Queue", icon: "M9 3H5v18h14V3h-4 M9 2h6v4H9z M8 13l3 3 5-6" },
-  { href: "/workspace/activity", label: "Activity", icon: "M2 12h5l3-8 4 16 3-8h5" },
+  { href: "/workspace", label: "Overview", icon: FiGrid },
+  { href: "/workspace/pipeline", label: "Pipeline", icon: FiColumns },
+  { href: "/workspace/accounts", label: "Accounts", icon: FiBriefcase },
+  { href: "/workspace/contacts", label: "Contacts", icon: FiUsers },
+  { href: "/workspace/reviews", label: "Review Queue", icon: FiCheckSquare },
+  { href: "/workspace/activity", label: "Activity", icon: FiActivity },
 ] as const;
 
 export function AppSidebar() {
@@ -34,12 +35,12 @@ export function AppSidebar() {
         {groups.map(group => <div key={group.label}>
         <p className="sr-only mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-text-muted sm:not-sr-only">{group.label}</p>
         <ul aria-label={group.label} className="space-y-0.5">
-          {group.items.map(({ href, label, icon }) => {
+          {group.items.map(({ href, label, icon: Icon }) => {
             const active = href === "/workspace" ? pathname === "/workspace" : pathname === href || pathname.startsWith(`${href}/`) || href === "/workspace/pipeline" && pathname.startsWith("/workspace/deals/");
             return (
               <li key={href}>
                 <Link href={href} aria-current={active ? "page" : undefined} title={label} className={`workspace-nav-link relative flex h-8 items-center justify-center gap-2.5 rounded-sm px-2 text-xs sm:justify-start ${active ? "bg-accent-soft font-semibold text-text" : "text-text-muted hover:bg-surface-muted/50 hover:text-text"}`}>
-                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="size-4 shrink-0"><path d={icon} /></svg>
+                  <Icon aria-hidden="true" strokeWidth={1.5} className="size-4 shrink-0" />
                   <span className="sr-only sm:not-sr-only">{label}</span>
                   {href === "/workspace/reviews" && (
                     <span className="absolute top-0.5 right-0.5 rounded-sm bg-surface-muted px-1 text-[10px] leading-4 text-text tabular-nums sm:static sm:ml-auto sm:px-1.5 sm:text-xs sm:leading-5">

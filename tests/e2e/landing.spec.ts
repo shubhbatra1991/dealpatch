@@ -4,6 +4,53 @@ import { projectLinks } from "../../lib/project";
 
 const theme = (page: import("@playwright/test").Page) => page.getByRole("combobox", { name: "Theme", exact: true });
 
+test("landing: native scrollbar can be dragged", async ({ playwright }) => {
+  // Playwright normally hides browser scrollbars in headless mode.
+  const browser = await playwright.chromium.launch({ ignoreDefaultArgs: ["--hide-scrollbars"] });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    await page.goto("http://localhost:3100/");
+    const gutter = await page.evaluate(() => innerWidth - document.documentElement.clientWidth);
+    expect(gutter).toBeGreaterThan(0);
+    await page.mouse.move(1440 - gutter / 2, 50);
+    await page.mouse.down();
+    await page.mouse.move(1440 - gutter / 2, 700, { steps: 15 });
+    await page.mouse.up();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(900);
+  } finally { await browser.close(); }
+});
+
+test("landing: PageDown and Space scroll without trapping keyboard input", async ({ page }) => {
+  await page.goto("/");
+  for (const key of ["PageDown", "Space"]) {
+    await page.keyboard.press("Home");
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+    const finished = page.evaluate(() => new Promise<void>(resolve => document.addEventListener("scrollend", () => resolve(), { once: true })));
+    await page.keyboard.press(key);
+    await finished;
+    expect(await page.evaluate(() => scrollY)).toBeGreaterThan(0);
+  }
+});
+
+test("landing: native touch gesture scrolls the mobile document", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  try {
+    const page = await context.newPage();
+    await page.goto("http://localhost:3100/");
+    const session = await context.newCDPSession(page);
+    // Dispatch a swipe through the browser input pipeline, not scrollTo or a
+    // synthetic DOM event. Frame spacing lets Chromium recognize touch panning.
+    await session.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: 195, y: 650 }] });
+    for (let y = 630; y >= 150; y -= 20) {
+      await session.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: 195, y }] });
+      await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+    }
+    await session.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  } finally { await context.close(); }
+});
+
 test("landing: mouse wheel and keyboard can scroll the document", async ({ page }) => {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 844 });
@@ -37,18 +84,21 @@ test("landing: all lower sections and footer are reachable and keyboard accessib
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
   const review = page.locator("#human-review");
-  for (const principle of ["Visibility.", "Control.", "Traceability.", "Undoability."]) await expect(review.getByText(principle, { exact: true })).toBeVisible();
+  for (const principle of ["Visibility.", "Evidence.", "Control.", "Traceability.", "Undoability."]) await expect(review.getByText(principle, { exact: true })).toBeVisible();
   await expect(review.getByRole("blockquote")).toContainText("The sponsor confirmed");
-  for (const title of ["Accessibility-first", "Keyboard navigation", "Virtualized large datasets", "Optimistic updates", "Stale-change protection", "Automated tests", "Cross-browser validation"]) await expect(page.locator("#engineering").getByRole("heading", { name: title, exact: true })).toBeVisible();
+  for (const title of ["Accessibility-first", "Keyboard navigation", "Virtualized large datasets", "Optimistic updates", "Stale-change protection", "Automated tests", "Cross-browser validation", "Local persistence", "Automated accessibility testing", "Performance profiling"]) await expect(page.locator("#engineering").getByRole("heading", { name: title, exact: true })).toBeVisible();
   const source = page.locator("#open-source");
   await source.getByRole("link", { name: "Explore workspace", exact: true }).focus();
   await page.keyboard.press("Tab");
   await expect(source.getByRole("link", { name: "View source", exact: true })).toBeFocused();
   const footer = page.getByRole("contentinfo");
-  await expect(footer).toContainText("Open-source educational CRM workspace");
+  await expect(footer).toContainText("Open-source educational B2B sales workspace.");
   await expect(footer.getByRole("list", { name: "Built with" })).toHaveText("Next.jsReactTypeScript");
+  await expect(footer.locator(".landing-footer-bottom")).toContainText(String(new Date().getFullYear()));
+  const product = footer.getByRole("navigation", { name: "Footer product links" });
+  for (const [name, href] of [["Explore workspace", "/workspace"], ["How it works", "#how-it-works"], ["Product showcase", "#product"]]) await expect(product.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
   const links = footer.getByRole("navigation", { name: "Project links" });
-  await links.getByRole("link", { name: "Workspace", exact: true }).focus();
+  await footer.getByRole("navigation", { name: "Footer product links" }).getByRole("link", { name: "Product showcase", exact: true }).focus();
   for (const name of ["GitHub", "Documentation", "Security", "MIT License"]) {
     await page.keyboard.press("Tab");
     const link = links.getByRole("link", { name, exact: true });

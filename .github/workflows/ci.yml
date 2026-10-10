@@ -32,6 +32,10 @@ jobs:
           node-version: '24'
           cache: npm
           cache-dependency-path: package-lock.json
+      - name: Report Node.js and npm versions
+        run: |
+          node --version
+          npm --version
       - run: npm ci
       - run: npm run check:repository
       - run: npm run typecheck

@@ -1,5 +1,7 @@
 "use client";
 
+import { FiStar } from "react-icons/fi";
+
 import Link from "next/link";
 import { useState } from "react";
 import { useMutationState } from "@tanstack/react-query";
@@ -40,7 +42,7 @@ export function FavoritesSection() {
   const favorites = useFavorites();
   // Keep a failed removal visible even if its optimistic update unmounted the star.
   const latestWrite = useMutationState({ filters: { mutationKey: queryKeys.favorites.writes }, select: mutation => mutation.state }).at(-1);
-  return <section aria-labelledby="favorites-label" className="border-t border-border pt-4"><h2 id="favorites-label" className="px-2 text-[10px] font-semibold uppercase tracking-widest text-text-muted"><span className="sr-only sm:not-sr-only">Favorites</span><span aria-hidden="true" className="sm:hidden">★</span></h2>
+  return <section aria-labelledby="favorites-label" className="border-t border-border pt-4"><h2 id="favorites-label" className="px-2 text-[10px] font-semibold uppercase tracking-widest text-text-muted"><span className="sr-only sm:not-sr-only">Favorites</span><FiStar aria-hidden="true" className="size-4 sm:hidden" /></h2>
     {latestWrite?.status === "error" && <p role="alert" className="px-2 pt-2 text-xs text-danger">Favorite could not be saved. Your previous favorites were restored.</p>}
     {favorites.isError ? <p role="alert" className="px-2 pt-2 text-xs text-danger">Favorites unavailable. <button type="button" onClick={() => void favorites.refetch()} className="underline">Retry</button></p>
       : !favorites.data ? <p role="status" className="px-2 pt-2 text-xs text-text-muted">Loading favorites…</p>
