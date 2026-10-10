@@ -1,95 +1,83 @@
 # DealPatch
 
-Human-reviewed automation for modern sales workflows.
+DealPatch is an open-source, local-first B2B sales workspace exploring transparent,
+human-reviewed CRM automation. It is an educational and portfolio project using
+fictional data.
 
-DealPatch is an open-source, local-first B2B sales workspace for learning,
-experimentation and portfolio demonstration. Activities produce proposed CRM
-updates with evidence and before/after diffs. A person edits, approves, partially
-approves or rejects suggestions. Applied changes remain auditable and undoable.
+## Human-reviewed automation
 
-V1 uses deterministic local simulated intelligence, not an external LLM. All
-companies and people are fictional. This is an educational project, not a
-production-ready CRM.
+Activity → simulated analysis → proposed CRM change → human review → approve / edit / reject → audit / undo
 
-## Run locally
+Changes are never applied automatically. Users can inspect supporting evidence,
+approve selected fields, and edit or reject proposals. Applied changes remain
+auditable and undoable.
 
-```sh
+## Screenshots
+
+### Landing page
+
+![DealPatch landing page](documentation/Images/landing.png)
+
+### Workspace overview
+
+![DealPatch overview dashboard](documentation/Images/overview.png)
+
+### Review Queue
+
+![DealPatch Review Queue](documentation/Images/review-queue.png)
+
+### Deal detail
+
+![DealPatch deal detail](documentation/Images/deal-detail.png)
+
+## What DealPatch includes
+
+- Sales pipeline, accounts and contacts, and deal/opportunity detail
+- Activity analysis and human-reviewed proposals with field-level diffs
+- Partial approval and stale-change protection
+- Optimistic updates with rollback, undo and audit history
+- Favorites and Saved Views
+- Global search and keyboard navigation
+- Time-aware Morning / Afternoon / Evening / Night themes
+- Local IndexedDB persistence
+
+## Local-first demo
+
+- Fictional data only; no real customer data
+- No account required
+- No external database or AI provider
+- No API keys or environment variables required
+- Data persists locally in the browser
+
+DealPatch is not intended to be a production CRM service. Clearing browser storage
+removes local workspace data.
+
+## Tech stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- TanStack Query
+- TanStack Table / Virtual
+- Dexie / IndexedDB
+- Zod
+- Playwright
+
+## Running locally
+
+Use Node.js 24 and npm.
+
+```bash
 git clone https://github.com/shubhbatra1991/dealpatch.git
 cd dealpatch
 npm install
 npm run dev
 ```
 
-Use Node.js 24 and npm (validated with Node 24.19.0 / npm 11.6.2).
+Open [DealPatch](http://localhost:3000) or go directly to the
+[workspace](http://localhost:3000/workspace).
 
-Open [the showcase](http://localhost:3000/) or
-[the workspace](http://localhost:3000/workspace).
-No account, API keys, environment variables, external database or AI provider are
-required. Data persists in this browser's IndexedDB. Clearing browser storage
-removes local work; it is not secure storage or a backup.
-
-## Routes and layers
-
-- `/`: public showcase with a static illustrative review preview.
-- `/workspace`: Overview.
-- `/workspace/pipeline`: opportunities, filters and saved views.
-- `/workspace/accounts` and `/workspace/accounts/[accountId]`.
-- `/workspace/contacts` and `/workspace/contacts/[contactId]`.
-- `/workspace/deals/[dealId]`: opportunity context and change history.
-- `/workspace/activity`: activity → simulated analysis → review proposal.
-- `/workspace/reviews`: human review, conflicts, outcomes and audit history.
-
-The landing page does not initialize the workspace database or mount its shell,
-search or QueryClient. Both layers share Morning, Afternoon, Evening, Night and
-Automatic themes. CRM links use `/workspace/...`; old root workspace paths have
-no compatibility redirects. Existing browser data is preserved.
-
-## Engineering patterns
-
-Next.js App Router, React, TypeScript and Tailwind; TanStack Query/Table/Virtual;
-Dexie/IndexedDB; Zod validation. The workspace demonstrates dense virtualized
-surfaces, keyboard navigation, optimistic approval, atomic local writes,
-stale-value protection, safe Undo and append-only audit events.
-
-## Screenshots
-
-![Review Queue with fictional CRM diffs](docs/images/review-queue.png)
-
-<details>
-<summary>Landing page, Overview and Deal Detail</summary>
-
-![DealPatch landing page](docs/images/landing.png)
-![Overview with fictional workspace data](docs/images/overview.png)
-![Deal Detail with related context and pending reviews](docs/images/deal-detail.png)
-
-</details>
-
-## Validate
-
-```sh
-npm run typecheck
-npm run lint
-npm test
-npm run build
-npm run test:e2e
-```
-
-Install browsers once with `npx playwright install chromium firefox webkit`. E2E tests
-run the production build on port 3100, with fresh contexts and real IndexedDB.
-Screenshot baselines target Chromium on Windows. See [browser testing](tests/e2e/README.md),
-[accessibility](docs/ACCESSIBILITY.md) and [performance](docs/PERFORMANCE.md).
-
-## Documentation
-
-[Architecture](docs/ARCHITECTURE.md) · [Design system](docs/DESIGN_SYSTEM.md) ·
-[Theming](docs/THEMING.md) · [Security](docs/SECURITY.md) · [Roadmap](docs/ROADMAP.md).
-
-[All documentation](docs/Readme.md) · [Contributing](CONTRIBUTING.md) ·
-[Security disclosure](SECURITY.md) · [Release readiness](docs/RELEASE_READINESS.md).
-[GitHub security and CI](docs/GITHUB_SECURITY.md) documents PR checks, full release
-validation and manual repository settings.
-
-Public source/docs/security/license links are configured in `lib/project.ts`,
-without environment variables or a deployment origin.
+## License
 
 Licensed under the [MIT License](LICENSE).
