@@ -3,6 +3,6 @@ const source = "https://github.com/shubhbatra1991/dealpatch";
 export const projectLinks = {
   source,
   documentation: `${source}/blob/main/README.md`,
-  security: `${source}/blob/main/SECURITY.md`,
+  security: `${source}/blob/main/.github/SECURITY.md`,
   license: `${source}/blob/main/LICENSE`,
 } as const;

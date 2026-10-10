@@ -22,6 +22,6 @@ for (const file of files) {
     if (!existsSync(resolve(root, dirname(file), decodeURIComponent(target)))) issues.push(`Missing Markdown target: ${file} -> ${target}`);
   }
 }
-for (const name of ["README.md", "SECURITY.md", "LICENSE", "AGENTS.md", "CONTRIBUTING.md"]) if (!files.includes(name)) issues.push(`Missing/ignored required file: ${name}`);
+for (const name of ["README.md", ".github/SECURITY.md", "LICENSE", ".github/CONTRIBUTING.md"]) if (!files.includes(name)) issues.push(`Missing/ignored required file: ${name}`);
 if (issues.length) { console.error(issues.join("\n")); process.exitCode = 1; }
 else console.log(`Repository check passed: ${files.length} candidate files; Markdown targets, required docs, artifact and credential/path signatures checked.`);
