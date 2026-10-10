@@ -123,6 +123,7 @@
 .landing-footer .landing-stack { flex-direction: column; gap: 8px; margin: 0; font-size: 11px; }
 .landing-footer-bottom { display: flex; flex-wrap: wrap; gap: 8px 24px; border-top: 1px solid var(--border); padding-top: 20px; color: var(--text-subtle); font-size: 10px; }
 .landing-footer-bottom > span:last-child { margin-left: auto; }
+.landing-footer-bottom a { text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 900px) { .landing-footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .landing-decision { padding: 16px; } .landing-footer-grid { gap: 28px 20px; } .landing-footer-grid > div:first-child { grid-column: 1 / -1; } }
 @media (max-width: 1100px) {
