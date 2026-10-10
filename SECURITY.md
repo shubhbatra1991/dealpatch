@@ -6,6 +6,21 @@ The latest DealPatch source is an educational, local-first demo using fictional
 data. No historical release support, authentication, user isolation, remote
 backend or production CRM security guarantees are provided.
 
+## Public-repository boundary
+
+Everything committed to the public DealPatch repository must be treated as public,
+including source, documentation, fixtures, screenshots and Git history.
+
+Never commit API keys, credentials, signing keys, private infrastructure
+configuration, production secrets or real customer data. Use fictional data only.
+Ignoring a file does not protect information already committed.
+
+If a future deployment needs production secrets, store them in deployment-platform
+settings, such as Vercel environment variables, never in this repository. Keep
+secrets server-side; values exposed to browser bundles are public. Future private
+infrastructure must live outside the public application repository. This guidance
+does not add deployment configuration or secrets to the current local-only V1.
+
 ## Reporting an issue
 
 Use the repository's **Security → Report a vulnerability** option if enabled.
@@ -14,6 +29,10 @@ requesting a private reporting channel. Do not post exploit details, credentials
 personal data or real customer records in public. Include affected version/commit,
 impact and safe reproduction information once a suitable channel is established.
 No personal email or response-time guarantee is published.
+
+Never commit credentials or API keys. The project requires no runtime secrets.
+If one is exposed, revoke/rotate it; removing the current file does not remove Git
+history or invalidate the credential.
 
 ## Local-first limitations
 
@@ -49,3 +68,6 @@ interpret a zero production audit as proof of complete security.
 
 See [security principles](docs/SECURITY.md) and
 [release readiness](docs/RELEASE_READINESS.md) for current checks and limitations.
+Repository CI, action pins, dependency review and recommended (unverified) GitHub
+settings are documented in [GitHub security](docs/GITHUB_SECURITY.md). This root
+file remains the canonical disclosure policy so existing public links keep working.

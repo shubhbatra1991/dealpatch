@@ -5,9 +5,9 @@ import { dirname, resolve } from "node:path";
 const root = process.cwd();
 const files = [...new Set(execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard"], { encoding: "utf8" }).split("\0"))].filter(file => file && existsSync(file));
 const issues = [];
-const junk = /(^|\/)(node_modules|\.next|coverage|playwright-report|test-results|\.vscode|\.idea)\/|\.(tsbuildinfo|log|db|sqlite3?|tmp|bak)$|(^|\/)\.env(?:\.|$)/;
+const junk = /(^|\/)(node_modules|\.next|coverage|playwright-report|test-results|\.vscode|\.idea|\.ssh|\.aws|\.azure)\/|\.(tsbuildinfo|log|db|sqlite3?|tmp|bak|pem|key|p12|pfx)$|(^|\/)\.env(?:\.|$)|(^|\/)(id_rsa|id_ecdsa|id_ed25519|credentials\.json|service-account[^/]*\.json)$/;
 // High-signal credential signatures; findings report filenames only, never values.
-const credential = /(?:AKIA|ASIA)[A-Z0-9]{16}|ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|sk-[A-Za-z0-9_-]{32,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
+const credential = /(?:AKIA|ASIA)[A-Z0-9]{16}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|npm_[A-Za-z0-9]{36,}|sk-[A-Za-z0-9_-]{32,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/;
 const machinePath = /[A-Za-z]:[\\/]Users[\\/]|\/(?:Users|home)\/[A-Za-z0-9_.-]+\//;
 for (const file of files) {
   if (junk.test(file)) issues.push(`Generated/local artifact: ${file}`);

@@ -38,3 +38,7 @@ PRs should explain the problem, resulting behavior, validation and remaining
 limitations. Include fictional screenshots for visible changes. Keep unrelated
 refactors out. Never include local databases, generated artifacts or credentials.
 Report security issues through [SECURITY.md](SECURITY.md).
+
+Never commit credentials or API keys. Review the [GitHub security and CI guide](docs/GITHUB_SECURITY.md)
+for the PR smoke/full-release split, dependency policy and manual repository settings.
+CI uses `npm ci` with the committed lockfile; do not replace it with `npm install`.

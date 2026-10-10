@@ -161,3 +161,6 @@ desktop and mobile widths. Programmatic `scrollIntoView` alone can still move a
 document with `overflow: hidden`, so section-reachability checks do not replace
 this user-input test. Document scrolling is allowed globally; the workspace's
 viewport-height shell retains its own internal scroll container.
+The End/Home sequence waits for the browser's `scrollend` event before changing
+direction: a visible footer alone can precede the end of native keyboard
+scrolling. This preserves real wheel/key input without arbitrary sleeps or retries.

@@ -11,7 +11,13 @@ test("landing: mouse wheel and keyboard can scroll the document", async ({ page 
     await page.mouse.move(width / 2, 400);
     await page.mouse.wheel(0, 700);
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    // A visible footer can precede completion of the browser's native End scroll.
+    // Wait for scrollend before reversing direction with Home.
+    const endScroll = page.evaluate(() => new Promise<void>(resolve => {
+      document.addEventListener("scrollend", () => resolve(), { once: true });
+    }));
     await page.keyboard.press("End");
+    await endScroll;
     await expect(page.getByRole("contentinfo")).toBeInViewport();
     await page.keyboard.press("Home");
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);

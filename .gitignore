@@ -25,6 +25,17 @@
 # misc
 .DS_Store
 *.pem
+*.key
+*.p12
+*.pfx
+.ssh/
+.aws/
+.azure/
+id_rsa
+id_ecdsa
+id_ed25519
+/credentials.json
+/service-account*.json
 
 # debug
 npm-debug.log*
@@ -32,7 +43,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Local environment files; DealPatch requires no runtime secrets.
 .env*
 
 # vercel

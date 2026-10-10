@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Build and browser checks
+    # Full screenshots use committed Windows baselines; ordinary PRs stay on Linux.
+    runs-on: ${{ github.event_name == 'workflow_dispatch' && 'windows-latest' || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npm run check:repository
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --omit=dev
+      - name: Install Chromium
+        if: github.event_name != 'workflow_dispatch'
+        run: npx playwright install --with-deps chromium
+      - name: Chromium release, review and landing interaction smoke
+        if: github.event_name != 'workflow_dispatch'
+        run: npx playwright test tests/e2e/release.spec.ts tests/e2e/reviews.spec.ts tests/e2e/landing-motion.spec.ts --project=chromium
+      - name: Accessibility smoke
+        if: github.event_name != 'workflow_dispatch'
+        run: >-
+          npx playwright test tests/e2e/accessibility.spec.ts --project=chromium
+          --grep 'accessibility: (route /workspace/reviews|command palette and review editor|reduced motion and forced colors)$'
+      - name: Landing scrolling smoke
+        if: github.event_name != 'workflow_dispatch'
+        run: npx playwright test tests/e2e/landing.spec.ts --project=chromium --grep 'mouse wheel and keyboard'
+      - name: Install full browser set
+        if: github.event_name == 'workflow_dispatch'
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Full release validation
+        if: github.event_name == 'workflow_dispatch'
+        run: npm run test:e2e
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: browser-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
